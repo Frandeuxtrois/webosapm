@@ -96,7 +96,18 @@ function AppContent() {
       />
 
       <main>
-        {currentView === 'home' && <><Hero /><Plans /><Services /><Contact /></>}
+        {/* CORRECCIÓN: Agregados Institutional y Procedures al renderizado de la Home */}
+        {currentView === 'home' && (
+          <>
+            <Hero />
+            <Plans />
+            <Services />
+            <Institutional />
+            <Procedures />
+            <Contact />
+          </>
+        )}
+
         {currentView === 'centro-medico' && <CentroMedico />}
         {currentView === 'seccionales' && <Seccionales />}
         {currentView === 'telefonos-utiles' && <TelefonosUtiles />}
