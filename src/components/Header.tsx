@@ -21,16 +21,13 @@ export const Header: React.FC<HeaderProps> = ({
   onHomeClick,
   onSectionClick
 }) => {
-  // Estados iniciales
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    // Forzamos el cierre de todo al montar el componente
     setIsOpen(false);
     setActiveDropdown(null);
-
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -64,7 +61,17 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* NAVEGACIÓN DESKTOP */}
-          <nav className="hidden md:flex space-x-6 lg:space-x-10 items-center h-full">
+          <nav className="hidden md:flex space-x-5 lg:space-x-8 items-center h-full">
+
+            {/* OPCIÓN: INICIO (Agregada) */}
+            <button
+              onClick={() => { onHomeClick?.(); setIsOpen(false); }}
+              className="text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider transition-colors leading-none"
+            >
+              Inicio
+            </button>
+
+            {/* OPCIÓN: CENTRO MÉDICO */}
             <button
               onClick={() => { onCentroMedicoClick?.(); setIsOpen(false); }}
               className="text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider transition-colors leading-none"
@@ -84,13 +91,22 @@ export const Header: React.FC<HeaderProps> = ({
                   </a>
                 )}
 
-                {/* Submenú Desktop - Usamos 'hidden' y 'group-hover:block' para evitar el parpadeo */}
+                {/* Submenú Desktop - Corregido el GAP con padding superior en el contenedor */}
                 {group.items && (
-                  <div className="absolute right-0 top-full mt-2 w-64 rounded-2xl shadow-2xl bg-white border border-gray-100 hidden group-hover:block animate-in fade-in zoom-in-95 duration-200">
-                    <div className="py-3 px-1 text-[#1C75BB]">
-                      {group.items.map((item) => (
-                        <a key={item.label} href={item.href} onClick={(e) => handleNavClick(e, item.href)} className="block px-5 py-3 text-[11px] font-bold hover:bg-slate-50 hover:text-[#00AEEF] rounded-xl transition-colors uppercase tracking-tight">{item.label}</a>
-                      ))}
+                  <div className="absolute right-0 top-full hidden group-hover:block pt-2 animate-in fade-in zoom-in-95 duration-200">
+                    <div className="w-64 rounded-2xl shadow-2xl bg-white border border-gray-100 overflow-hidden">
+                      <div className="py-2 text-[#1C75BB]">
+                        {group.items.map((item) => (
+                          <a
+                            key={item.label}
+                            href={item.href}
+                            onClick={(e) => handleNavClick(e, item.href)}
+                            className="block px-5 py-3 text-[11px] font-bold hover:bg-slate-50 hover:text-[#00AEEF] transition-colors uppercase tracking-tight"
+                          >
+                            {item.label}
+                          </a>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -102,10 +118,13 @@ export const Header: React.FC<HeaderProps> = ({
                 <button className="text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider px-2 leading-none transition-colors flex items-center">
                   Ingresar <ChevronDown className="ml-1 h-4 w-4" />
                 </button>
-                <div className="absolute right-0 top-full mt-2 w-52 rounded-2xl shadow-2xl bg-white border border-gray-100 hidden group-hover:block animate-in fade-in zoom-in-95 duration-200">
-                  <div className="py-3 px-1 text-[#1C75BB]">
-                    <button onClick={() => onActionClick?.('afiliado')} className="w-full text-left block px-5 py-3 text-[11px] font-bold hover:bg-slate-50 hover:text-[#00AEEF] rounded-xl transition-colors uppercase">Portal Afiliados</button>
-                    <button onClick={() => onActionClick?.('prestador')} className="w-full text-left block px-5 py-3 text-[11px] font-bold hover:bg-slate-50 hover:text-[#00AEEF] rounded-xl transition-colors uppercase">Portal Prestadores</button>
+                {/* Corregido el GAP aquí también */}
+                <div className="absolute right-0 top-full hidden group-hover:block pt-2 animate-in fade-in zoom-in-95 duration-200">
+                  <div className="w-52 rounded-2xl shadow-2xl bg-white border border-gray-100 overflow-hidden">
+                    <div className="py-2 text-[#1C75BB]">
+                      <button onClick={() => onActionClick?.('afiliado')} className="w-full text-left block px-5 py-3 text-[11px] font-bold hover:bg-slate-50 hover:text-[#00AEEF] transition-colors uppercase">Portal Afiliados</button>
+                      <button onClick={() => onActionClick?.('prestador')} className="w-full text-left block px-5 py-3 text-[11px] font-bold hover:bg-slate-50 hover:text-[#00AEEF] rounded-xl transition-colors uppercase">Portal Prestadores</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -113,8 +132,8 @@ export const Header: React.FC<HeaderProps> = ({
 
             <Button
               onClick={() => onActionClick?.('afiliado')}
-              className={`ml-4 py-2.5 px-8 text-[11px] font-black uppercase tracking-[0.1em] transition-all rounded-xl shadow-lg 
-              ${isLoggedIn ? 'bg-white border-2 border-[#00AEEF] text-[#00AEEF]' : 'bg-[#00AEEF] text-white hover:bg-[#1C75BB]'}`}
+              className={`ml-4 py-2.5 px-8 text-[11px] font-black uppercase tracking-[0.15em] transition-all rounded-xl shadow-lg 
+              ${isLoggedIn ? 'bg-white border-2 border-celeste text-celeste hover:bg-celeste hover:text-white' : 'bg-[#00AEEF] text-white hover:bg-[#1C75BB]'}`}
             >
               {isLoggedIn ? 'Mi Perfil' : 'Quiero Afiliarme!'}
             </Button>
@@ -129,10 +148,11 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* MENÚ MÓVIL REPARADO: Solo existe en el DOM si 'isOpen' es true */}
+      {/* MENÚ MÓVIL */}
       {isOpen && (
         <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-2xl border-t border-gray-100 animate-in slide-in-from-top duration-300">
           <div className="px-6 pt-4 pb-10 space-y-3 h-screen overflow-y-auto bg-white">
+            <button onClick={() => { onHomeClick?.(); setIsOpen(false); }} className="w-full text-left py-4 text-sm font-black text-[#1C75BB] uppercase border-b border-gray-50">Inicio</button>
             <button onClick={() => { onCentroMedicoClick?.(); setIsOpen(false); }} className="w-full text-left py-4 text-sm font-black text-[#1C75BB] uppercase border-b border-gray-50">Centro Médico</button>
 
             {NAV_STRUCTURE.map((group) => (
@@ -161,12 +181,12 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="bg-slate-50 rounded-3xl p-5 border border-gray-100 text-center">
                   <span className="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Ingresar</span>
                   <div className="grid grid-cols-2 gap-3">
-                    <button onClick={() => { setIsOpen(false); onActionClick?.('afiliado'); }} className="py-3 bg-white text-[#1C75BB] font-bold text-[10px] uppercase rounded-xl border border-gray-200 shadow-sm">Afiliado</button>
-                    <button onClick={() => { setIsOpen(false); onActionClick?.('prestador'); }} className="py-3 bg-white text-[#1C75BB] font-bold text-[10px] uppercase rounded-xl border border-gray-200 shadow-sm">Prestador</button>
+                    <button onClick={() => { onActionClick?.('afiliado'); setIsOpen(false); }} className="py-3 bg-white text-[#1C75BB] font-bold text-[10px] uppercase rounded-xl border border-gray-200 shadow-sm">Afiliado</button>
+                    <button onClick={() => { onActionClick?.('prestador'); setIsOpen(false); }} className="py-3 bg-white text-[#1C75BB] font-bold text-[10px] uppercase rounded-xl border border-gray-200 shadow-sm">Prestador</button>
                   </div>
                 </div>
               )}
-              <Button onClick={() => { setIsOpen(false); onActionClick?.('afiliado'); }} className="w-full py-4 text-xs font-black uppercase justify-center bg-[#00AEEF] text-white shadow-xl rounded-full">
+              <Button onClick={() => { onActionClick?.('afiliado'); setIsOpen(false); }} className="w-full py-4 text-xs font-black uppercase justify-center bg-[#00AEEF] text-white shadow-xl rounded-full">
                 {isLoggedIn ? 'Mi Perfil' : 'Quiero afiliarme'}
               </Button>
             </div>

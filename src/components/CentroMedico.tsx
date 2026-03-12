@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
     MapPin, Phone, Clock, Stethoscope,
-    CreditCard, HeartPulse, Info, Navigation, MessageCircle
-} from 'lucide-react'; // Agregado MessageCircle para WhatsApp
+    CreditCard, Info, Navigation, MessageCircle, HandHeart
+} from 'lucide-react';
 import { Button } from './ui/Button';
 
 const IMAGES = [
@@ -16,7 +16,7 @@ const IMAGES = [
 const MEDICAL_SPECIALTIES = [
     "Cardiología", "Cirugía General", "Clínica Médica", "Dermatología",
     "Diabetología", "Endocrinología", "Gastroenterología", "Ginecología",
-    "Kinesiología", "Neumonología", "Nutrición", "Osteopatía",
+    "Kinesiología", "Nutrición", "Osteopatía",
     "Otorrinolaringología", "Pediatría", "Traumatología", "Urología"
 ];
 
@@ -62,7 +62,6 @@ export const CentroMedico: React.FC = () => {
                     </p>
                 </div>
 
-                {/* Barra de Contacto - Actualizada con WhatsApp */}
                 <div className="absolute bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-gray-100 py-4 md:py-8 px-4 flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 shadow-2xl">
                     <div className="flex items-center gap-2">
                         <MapPin className="text-[#00AEEF]" size={18} />
@@ -70,41 +69,39 @@ export const CentroMedico: React.FC = () => {
                     </div>
                     <div className="hidden md:block h-6 w-[1px] bg-gray-200"></div>
 
-                    {/* Teléfono Fijo */}
                     <div className="flex items-center gap-2">
                         <Phone className="text-[#00AEEF]" size={18} />
                         <p className="font-bold text-[10px] md:text-xs uppercase">(011) 2034 - 1000</p>
                     </div>
                     <div className="hidden md:block h-6 w-[1px] bg-gray-200"></div>
 
-                    {/* WhatsApp Turnos (Agregado) */}
                     <a
-                        href="https://wa.me/5491123010833" // Reemplaza con el número real
+                        href="https://wa.me/5491123010833"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-2 hover:scale-105 transition-transform"
                     >
                         <MessageCircle className="text-[#00AEEF]" size={18} />
-                        <p className="font-bold text-[10px] md:text-xs uppercase text-[#1C75BB]">WhatsApp +54 9 11 2301-0833</p>
+                        <p className="font-bold text-[10px] md:text-xs uppercase text-[#1C75BB]">WhatsApp Turnos</p>
                     </a>
                     <div className="hidden md:block h-6 w-[1px] bg-gray-200"></div>
 
                     <div className="flex items-center gap-2">
                         <Clock className="text-[#00AEEF]" size={18} />
-                        <p className="font-bold text-[10px] md:text-xs uppercase">Lun a Vie 8:00 - 20:00</p>
+                        <p className="font-bold text-[10px] md:text-xs uppercase">Lun a Vie 8:00 - 19:00</p>
                     </div>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-6 lg:px-16 py-12 md:py-24">
+            <div className="max-w-7xl mx-auto px-6 lg:px-16 py-12 md:py-24 font-sans">
 
                 {/* ESPECIALIDADES MÉDICAS */}
                 <div className="mb-24">
-                    <div className="flex items-center gap-4 mb-10">
+                    <div className="flex items-center gap-4 mb-10 text-[#1C75BB]">
                         <div className="p-3 bg-[#00AEEF]/10 rounded-2xl text-[#00AEEF]">
                             <Stethoscope size={32} />
                         </div>
-                        <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-[#1C75BB]">Especialidades</h2>
+                        <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight">Especialidades</h2>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
@@ -117,18 +114,22 @@ export const CentroMedico: React.FC = () => {
                     </div>
                 </div>
 
-                {/* BLOQUE ODONTOLOGÍA */}
+                {/* SECCIÓN ODONTOLOGÍA Y PAGOS */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-24">
-                    <div className="lg:col-span-2 bg-[#1C75BB] rounded-[3rem] p-10 md:p-16 text-white shadow-2xl relative overflow-hidden group">
-                        <HeartPulse className="absolute -right-10 -bottom-10 w-64 h-64 opacity-5 group-hover:scale-110 transition-transform duration-1000" />
+
+                    {/* Bloque Odontología: Blanco con relieve */}
+                    <div className="lg:col-span-2 bg-white rounded-[3rem] p-10 md:p-16 border border-gray-100 shadow-xl relative overflow-hidden group">
+                        {/* Icono HandHeart como marca de agua */}
+                        <HandHeart className="absolute -right-6 -bottom-6 w-48 h-48 md:w-64 md:h-64 opacity-[0.05] text-[#00AEEF] group-hover:scale-110 transition-transform duration-1000" />
+
                         <div className="relative z-10">
-                            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-10 flex items-center gap-4">
-                                <span className="bg-white text-[#1C75BB] px-4 py-1 rounded-2xl text-2xl">ODONTOLOGÍA</span>
+                            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-10 flex items-center gap-4 text-[#1C75BB]">
+                                <span className="bg-[#00AEEF] text-white px-4 py-1 rounded-2xl text-2xl shadow-lg shadow-blue-500/20 tracking-normal">ODONTOLOGÍA</span>
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                                 {DENTAL_SPECIALTIES.map((item, idx) => (
-                                    <div key={idx} className="flex items-center border-b border-white/20 pb-3 hover:border-white transition-colors">
-                                        <p className="font-bold text-lg uppercase tracking-tight">{item}</p>
+                                    <div key={idx} className="flex items-center border-b border-gray-100 pb-3 hover:border-[#00AEEF] transition-colors">
+                                        <p className="font-bold text-lg uppercase tracking-tight text-[#1C75BB]">{item}</p>
                                     </div>
                                 ))}
                             </div>
@@ -136,23 +137,15 @@ export const CentroMedico: React.FC = () => {
                     </div>
 
                     {/* Tarjeta Medios de Pago */}
-                    <div className="bg-[#F8FAFC] rounded-[3rem] p-10 border border-gray-100 shadow-lg flex flex-col justify-between">
-                        <div>
-                            <CreditCard size={40} className="text-[#00AEEF] mb-8" />
-                            <h3 className="text-2xl font-black uppercase tracking-tight mb-4 text-[#1C75BB] leading-tight">Medios de Pago</h3>
-                            <p className="text-gray-500 font-medium text-sm leading-relaxed mb-8">
-                                Aceptamos todas las tarjetas para trabajos de <strong>Prótesis y Ortodoncia</strong>.
-                            </p>
-                            <div className="p-5 bg-white border border-[#00AEEF]/20 border-l-[6px] border-l-[#00AEEF] rounded-r-2xl shadow-sm">
-                                <p className="text-[#1C75BB] font-black text-2xl leading-none">3 Cuotas</p>
-                                <p className="text-[10px] uppercase font-bold text-gray-400 mt-2 tracking-widest text-left">Sin interés bancario</p>
-                            </div>
-                        </div>
-                        <div className="mt-8 flex items-start gap-3 bg-[#00AEEF]/5 p-4 rounded-2xl border border-[#00AEEF]/10">
-                            <Info className="text-[#00AEEF] shrink-0 mt-0.5" size={18} />
-                            <p className="text-[10px] font-bold text-[#1C75BB] leading-normal uppercase text-left">
-                                Ecuador 949 CABA y Seccionales habilitadas.
-                            </p>
+                    <div className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-lg flex flex-col justify-center text-center md:text-left">
+                        <CreditCard size={40} className="text-[#00AEEF] mb-8 mx-auto md:mx-0" />
+                        <h3 className="text-2xl font-black uppercase tracking-tight mb-4 text-[#1C75BB] leading-tight">Medios de Pago</h3>
+                        <p className="text-gray-500 font-medium text-sm leading-relaxed mb-8 italic">
+                            Aceptamos todos los medios de pago para la atención con nuestros profesionales y servicios médicos.
+                        </p>
+                        <div className="p-5 bg-[#00AEEF]/5 border-l-[6px] border-l-[#00AEEF] rounded-r-2xl shadow-sm">
+                            <p className="text-[#1C75BB] font-black text-xl uppercase tracking-tighter">Atención Integral</p>
+                            <p className="text-[10px] uppercase font-bold text-gray-400 mt-2 tracking-widest italic">Débito y Crédito</p>
                         </div>
                     </div>
                 </div>
@@ -179,17 +172,30 @@ export const CentroMedico: React.FC = () => {
                     </div>
                 </div>
 
-                {/* BOTÓN FINAL */}
-                <div className="text-center px-4">
-                    <p className="text-gray-400 font-bold uppercase tracking-[0.2em] mb-6 text-xs italic">Consultas y turnos telefónicos</p>
+                {/* BOTONES ACCIÓN FINALES */}
+                <div className="flex flex-col md:flex-row items-center justify-center gap-6 px-4 pb-12">
                     <a
                         href="tel:01120341000"
-                        className="inline-flex w-full md:w-auto bg-[#00AEEF] text-white px-10 md:px-20 py-5 rounded-full font-black uppercase tracking-widest text-[13px] md:text-sm hover:bg-[#1C75BB] transition-all shadow-2xl shadow-blue-500/30 active:scale-95 text-center justify-center items-center gap-3"
+                        className="w-full md:w-auto bg-[#1C75BB] text-white px-10 py-5 rounded-full font-black uppercase tracking-widest text-[13px] md:text-sm hover:bg-[#00AEEF] transition-all shadow-xl shadow-blue-900/20 flex items-center justify-center gap-3 active:scale-95"
                     >
                         <Phone size={20} />
-                        Llamar ahora: (011) 2034 - 1000
+                        Llamar: (011) 2034-1000
+                    </a>
+
+                    <a
+                        href="https://wa.me/5491123010833"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full md:w-auto bg-[#25D366] text-white px-10 py-5 rounded-full font-black uppercase tracking-widest text-[13px] md:text-sm hover:bg-[#128C7E] transition-all shadow-xl shadow-green-500/20 flex items-center justify-center gap-3 active:scale-95"
+                    >
+                        <MessageCircle size={20} />
+                        WhatsApp Turnos
                     </a>
                 </div>
+
+                <p className="text-center text-gray-400 font-bold uppercase tracking-[0.2em] mt-8 text-[10px] italic">
+                    Atención personalizada de lunes a viernes de 8:00 - 19:00
+                </p>
 
             </div>
         </section>

@@ -24,8 +24,8 @@ const MOCK_NEWS = [
   },
   {
     id: 3,
-    title: "Centros de Alta Calidad",
-    description: "Accedé a nuestro nuevo Centro Médico OSAPM con tecnología de punta y especialistas seleccionados para brindarte la mejor atención personalizada.",
+    title: "Centro Médico OSAPM",
+    description: "Accedé a nuestro nuevo Centro Médico OSAPM",
     images: [
       '/centromedico.png',
       'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800'
