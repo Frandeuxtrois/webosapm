@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
     MapPin, Phone, Clock, Stethoscope,
-    CreditCard, HeartPulse, Info, Navigation
-} from 'lucide-react'; // Eliminado ChevronRight y Loader2 que no se usaban
+    CreditCard, HeartPulse, Info, Navigation, MessageCircle
+} from 'lucide-react'; // Agregado MessageCircle para WhatsApp
 import { Button } from './ui/Button';
 
 const IMAGES = [
@@ -62,21 +62,36 @@ export const CentroMedico: React.FC = () => {
                     </p>
                 </div>
 
-                {/* Barra de Contacto */}
-                <div className="absolute bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-gray-100 py-4 md:py-8 px-4 flex flex-col md:flex-row justify-center items-center gap-4 md:gap-12 shadow-2xl">
+                {/* Barra de Contacto - Actualizada con WhatsApp */}
+                <div className="absolute bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-gray-100 py-4 md:py-8 px-4 flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 shadow-2xl">
                     <div className="flex items-center gap-2">
-                        <MapPin className="text-[#00AEEF]" size={20} />
-                        <p className="font-bold text-[11px] md:text-sm uppercase">Ecuador 949, CABA</p>
+                        <MapPin className="text-[#00AEEF]" size={18} />
+                        <p className="font-bold text-[10px] md:text-xs uppercase">Ecuador 949, CABA</p>
                     </div>
                     <div className="hidden md:block h-6 w-[1px] bg-gray-200"></div>
+
+                    {/* Teléfono Fijo */}
                     <div className="flex items-center gap-2">
-                        <Phone className="text-[#00AEEF]" size={20} />
-                        <p className="font-bold text-[11px] md:text-sm uppercase">(011) 2034 - 1000</p>
+                        <Phone className="text-[#00AEEF]" size={18} />
+                        <p className="font-bold text-[10px] md:text-xs uppercase">(011) 2034 - 1000</p>
                     </div>
                     <div className="hidden md:block h-6 w-[1px] bg-gray-200"></div>
+
+                    {/* WhatsApp Turnos (Agregado) */}
+                    <a
+                        href="https://wa.me/5491123010833" // Reemplaza con el número real
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 hover:scale-105 transition-transform"
+                    >
+                        <MessageCircle className="text-[#00AEEF]" size={18} />
+                        <p className="font-bold text-[10px] md:text-xs uppercase text-[#1C75BB]">WhatsApp +54 9 11 2301-0833</p>
+                    </a>
+                    <div className="hidden md:block h-6 w-[1px] bg-gray-200"></div>
+
                     <div className="flex items-center gap-2">
-                        <Clock className="text-[#00AEEF]" size={20} />
-                        <p className="font-bold text-[11px] md:text-sm uppercase">Lun a Vie 8:00 - 20:00</p>
+                        <Clock className="text-[#00AEEF]" size={18} />
+                        <p className="font-bold text-[10px] md:text-xs uppercase">Lun a Vie 8:00 - 20:00</p>
                     </div>
                 </div>
             </div>
@@ -114,7 +129,6 @@ export const CentroMedico: React.FC = () => {
                                 {DENTAL_SPECIALTIES.map((item, idx) => (
                                     <div key={idx} className="flex items-center border-b border-white/20 pb-3 hover:border-white transition-colors">
                                         <p className="font-bold text-lg uppercase tracking-tight">{item}</p>
-                                        {/* Flecha eliminada */}
                                     </div>
                                 ))}
                             </div>
@@ -137,7 +151,7 @@ export const CentroMedico: React.FC = () => {
                         <div className="mt-8 flex items-start gap-3 bg-[#00AEEF]/5 p-4 rounded-2xl border border-[#00AEEF]/10">
                             <Info className="text-[#00AEEF] shrink-0 mt-0.5" size={18} />
                             <p className="text-[10px] font-bold text-[#1C75BB] leading-normal uppercase text-left">
-                                Centro Médico y Seccionales habilitadas.
+                                Ecuador 949 CABA y Seccionales habilitadas.
                             </p>
                         </div>
                     </div>
