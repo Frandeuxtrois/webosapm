@@ -14,6 +14,7 @@ import { Seccionales } from './components/Seccionales';
 import { TelefonosUtiles } from './components/TelefonosUtiles';
 import { Tramites } from './components/Tramites';
 import { PreguntasFrecuentes } from './components/PreguntasFrecuentes';
+import { QuieroAfiliarme } from './components/QuieroAfiliarme';
 
 // ADMIN IMPORTS
 import { AdminLogin } from './backoffice/AdminLogin';
@@ -79,6 +80,7 @@ function AppContent() {
       <Header
         isLoggedIn={isLoggedIn}
         onActionClick={(type) => navigateTo(isLoggedIn ? 'portal-afiliado' : `login-${type}`)}
+        onAfiliarseClick={() => navigateTo('quiero-afiliarme')}
         onCentroMedicoClick={() => navigateTo('centro-medico')}
         onHomeClick={() => navigateTo('home')}
         onSectionClick={(hash) => {
@@ -113,6 +115,7 @@ function AppContent() {
         {currentView === 'telefonos-utiles' && <TelefonosUtiles />}
         {currentView === 'tramites' && <Tramites />}
         {currentView === 'preguntas-frecuentes' && <PreguntasFrecuentes />}
+        {currentView === 'quiero-afiliarme' && <QuieroAfiliarme />}
       </main>
 
       <Footer />

@@ -82,7 +82,7 @@ export const CentroMedico: React.FC = () => {
                         className="flex items-center gap-2 hover:scale-105 transition-transform"
                     >
                         <MessageCircle className="text-[#00AEEF]" size={18} />
-                        <p className="font-bold text-[10px] md:text-xs uppercase text-[#1C75BB]">WhatsApp Turnos</p>
+                        <p className="font-bold text-[10px] md:text-xs uppercase text-[#1C75BB]">WhatsApp +54 9 11 2301-0833</p>
                     </a>
                     <div className="hidden md:block h-6 w-[1px] bg-gray-200"></div>
 

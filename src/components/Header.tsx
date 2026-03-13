@@ -9,6 +9,7 @@ import headerLogo from '../assets/headerlogo.png';
 interface HeaderProps {
   isLoggedIn?: boolean;
   onActionClick?: (type: 'afiliado' | 'prestador') => void;
+  onAfiliarseClick?: () => void;
   onCentroMedicoClick?: () => void;
   onHomeClick?: () => void;
   onSectionClick?: (hash: string) => void;
@@ -17,6 +18,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   isLoggedIn,
   onActionClick,
+  onAfiliarseClick,
   onCentroMedicoClick,
   onHomeClick,
   onSectionClick
@@ -131,7 +133,7 @@ export const Header: React.FC<HeaderProps> = ({
             )}
 
             <Button
-              onClick={() => onActionClick?.('afiliado')}
+              onClick={() => isLoggedIn ? onActionClick?.('afiliado') : onAfiliarseClick?.()}
               className={`ml-4 py-2.5 px-8 text-[11px] font-black uppercase tracking-[0.15em] transition-all rounded-xl shadow-lg 
               ${isLoggedIn ? 'bg-white border-2 border-celeste text-celeste hover:bg-celeste hover:text-white' : 'bg-[#00AEEF] text-white hover:bg-[#1C75BB]'}`}
             >
@@ -186,7 +188,7 @@ export const Header: React.FC<HeaderProps> = ({
                   </div>
                 </div>
               )}
-              <Button onClick={() => { onActionClick?.('afiliado'); setIsOpen(false); }} className="w-full py-4 text-xs font-black uppercase justify-center bg-[#00AEEF] text-white shadow-xl rounded-full">
+              <Button onClick={() => { isLoggedIn ? onActionClick?.('afiliado') : onAfiliarseClick?.(); setIsOpen(false); }} className="w-full py-4 text-xs font-black uppercase justify-center bg-[#00AEEF] text-white shadow-xl rounded-full">
                 {isLoggedIn ? 'Mi Perfil' : 'Quiero afiliarme'}
               </Button>
             </div>

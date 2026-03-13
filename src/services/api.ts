@@ -33,5 +33,21 @@ export const apiService = {
         resolve({ success: true, message: 'Consulta enviada correctamente.' });
       }, 800);
     });
+  },
+
+  submitAffiliationForm: async (data: { nombre: string; email: string; telefono: string; condicion: string; mensaje: string }) => {
+    console.log('Sending affiliation data to endpoint:', `${API_BASE_URL}/afiliacion`, data);
+    // const response = await fetch(`${API_BASE_URL}/afiliacion`, {
+    //   method: 'POST',
+    //   body: JSON.stringify(data),
+    //   headers: { 'Content-Type': 'application/json' }
+    // });
+    // return response.json();
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ success: true, message: 'Solicitud de afiliación enviada correctamente.' });
+      }, 800);
+    });
   }
 };
