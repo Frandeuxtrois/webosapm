@@ -8,9 +8,10 @@ import loginLogo from '../assets/login-logo.png';
 interface LoginProps {
   onBack: () => void;
   onLoginSuccess: () => void;
+  onGoToRegister?: () => void;
 }
 
-export const Login: React.FC<LoginProps> = ({ onBack, onLoginSuccess }) => {
+export const Login: React.FC<LoginProps> = ({ onBack, onLoginSuccess, onGoToRegister }) => {
   const { login } = useAuth(); // <--- Usamos la función del cerebro global
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -158,7 +159,7 @@ export const Login: React.FC<LoginProps> = ({ onBack, onLoginSuccess }) => {
 
             <div className="mt-8 pt-6 border-t-2 border-slate-100 text-center">
               <p className="text-sm text-slate-600 mb-3">¿No tenés cuenta en nuestro portal?</p>
-              <button className="inline-flex items-center gap-2 text-[#1C75BB] font-bold hover:text-[#00AEEF] transition-colors px-4 py-2 rounded-lg hover:bg-[#00AEEF]/5"><span>Registrate ahora</span><ArrowRight size={16} /></button>
+              <button onClick={onGoToRegister} className="inline-flex items-center gap-2 text-[#1C75BB] font-bold hover:text-[#00AEEF] transition-colors px-4 py-2 rounded-lg hover:bg-[#00AEEF]/5"><span>Registrate ahora</span><ArrowRight size={16} /></button>
             </div>
           </div>
         </div>

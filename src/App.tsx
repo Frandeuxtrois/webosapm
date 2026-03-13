@@ -8,6 +8,7 @@ import { Procedures } from './components/Procedures';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { Login } from './portalAfiliado/Login';
+import { Register } from './portalAfiliado/Register';
 import { Dashboard } from './portalAfiliado/Dashboard';
 import { CentroMedico } from './components/CentroMedico';
 import { Seccionales } from './components/Seccionales';
@@ -67,7 +68,11 @@ function AppContent() {
   }
 
   if ((currentView === 'login-afiliado' || currentView === 'login-prestador') && !isLoggedIn) {
-    return <Login onBack={() => navigateTo('home')} onLoginSuccess={() => navigateTo('home')} />;
+    return <Login onBack={() => navigateTo('home')} onLoginSuccess={() => navigateTo('home')} onGoToRegister={() => navigateTo('registro')} />;
+  }
+
+  if (currentView === 'registro' && !isLoggedIn) {
+    return <Register onBack={() => navigateTo('home')} onRegisterSuccess={() => navigateTo('login-afiliado')} onGoToLogin={() => navigateTo('login-afiliado')} />;
   }
 
   // Redirección si ya está logueado
