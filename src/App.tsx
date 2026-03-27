@@ -16,10 +16,15 @@ import { TelefonosUtiles } from './components/TelefonosUtiles';
 import { Tramites } from './components/Tramites';
 import { PreguntasFrecuentes } from './components/PreguntasFrecuentes';
 import { QuieroAfiliarme } from './components/QuieroAfiliarme';
+import { NoticiaDetalle } from './components/NoticiaDetalle';
+import { Noticias } from './components/Noticias';
 
 // ADMIN IMPORTS
 import { AdminLogin } from './backoffice/AdminLogin';
 import { AdminDashboard } from './backoffice/AdminDashboard';
+
+import { LoginPrestador } from './portalPrestador/LoginPrestador';
+import { DashboardPrestador } from './portalPrestador/DashboardPrestador';
 
 import { AuthProvider, useAuth } from './context/authContext';
 
@@ -27,6 +32,8 @@ function AppContent() {
   const { isLoggedIn, loading, logout } = useAuth();
   const [currentView, setCurrentView] = useState<string>('home');
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(!!localStorage.getItem('admin_token'));
+  const [isPrestadorLoggedIn, setIsPrestadorLoggedIn] = useState(!!localStorage.getItem('prestador_token'));
+  const [selectedNoticiaId, setSelectedNoticiaId] = useState<number | null>(null);
 
   useEffect(() => {
     const path = window.location.pathname.replace('/', '');
@@ -67,7 +74,29 @@ function AppContent() {
     return <Dashboard onLogout={() => { logout(); navigateTo('home'); }} />;
   }
 
-  if ((currentView === 'login-afiliado' || currentView === 'login-prestador') && !isLoggedIn) {
+  if (currentView === 'portal-prestador') {
+    if (!isPrestadorLoggedIn) {
+      return (
+        <LoginPrestador
+          onLoginSuccess={() => { setIsPrestadorLoggedIn(true); navigateTo('portal-prestador'); }}
+          onBack={() => navigateTo('home')}
+        />
+      );
+    }
+    return (
+      <DashboardPrestador
+        onLogout={() => {
+          localStorage.removeItem('prestador_token');
+          localStorage.removeItem('prestador_refresh_token');
+          localStorage.removeItem('prestador_cuit');
+          setIsPrestadorLoggedIn(false);
+          navigateTo('home');
+        }}
+      />
+    );
+  }
+
+  if (currentView === 'login-afiliado' && !isLoggedIn) {
     return <Login onBack={() => navigateTo('home')} onLoginSuccess={() => navigateTo('home')} onGoToRegister={() => navigateTo('registro')} />;
   }
 
@@ -76,7 +105,7 @@ function AppContent() {
   }
 
   // Redirección si ya está logueado
-  if (isLoggedIn && (currentView === 'login-afiliado' || currentView === 'login-prestador')) {
+  if (isLoggedIn && currentView === 'login-afiliado') {
     navigateTo('home');
   }
 
@@ -84,9 +113,16 @@ function AppContent() {
     <div className="min-h-screen bg-white font-sans text-[#1C75BB]">
       <Header
         isLoggedIn={isLoggedIn}
-        onActionClick={(type) => navigateTo(isLoggedIn ? 'portal-afiliado' : `login-${type}`)}
+        onActionClick={(type) => {
+          if (type === 'prestador') {
+            navigateTo('portal-prestador');
+          } else {
+            navigateTo(isLoggedIn ? 'portal-afiliado' : `login-${type}`);
+          }
+        }}
         onAfiliarseClick={() => navigateTo('quiero-afiliarme')}
         onCentroMedicoClick={() => navigateTo('centro-medico')}
+        onNoticiasClick={() => navigateTo('noticias')}
         onHomeClick={() => navigateTo('home')}
         onSectionClick={(hash) => {
           if (hash === '#tramites') return navigateTo('tramites');
@@ -106,7 +142,7 @@ function AppContent() {
         {/* CORRECCIÓN: Agregados Institutional y Procedures al renderizado de la Home */}
         {currentView === 'home' && (
           <>
-            <Hero />
+            <Hero onNoticiaClick={(id) => { setSelectedNoticiaId(id); navigateTo('noticia-detalle'); }} />
             <Plans />
             <Services />
             <Institutional />
@@ -121,6 +157,16 @@ function AppContent() {
         {currentView === 'tramites' && <Tramites />}
         {currentView === 'preguntas-frecuentes' && <PreguntasFrecuentes />}
         {currentView === 'quiero-afiliarme' && <QuieroAfiliarme />}
+        {currentView === 'noticias' && (
+          <Noticias onNoticiaClick={(id) => { setSelectedNoticiaId(id); navigateTo('noticia-detalle'); }} />
+        )}
+        {currentView === 'noticia-detalle' && selectedNoticiaId && (
+          <NoticiaDetalle
+            id={selectedNoticiaId}
+            onBack={() => navigateTo('noticias')}
+            onNoticiaClick={(id) => { setSelectedNoticiaId(id); navigateTo('noticia-detalle'); }}
+          />
+        )}
       </main>
 
       <Footer />

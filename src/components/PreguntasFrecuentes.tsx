@@ -1,36 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Minus, HelpCircle, MessageCircle, Phone, ArrowRight } from 'lucide-react';
-
-const PREGUNTAS_DATA = [
-    {
-        question: "¿Dónde llamo si tengo una Urgencia Médica?",
-        answer: "En esta WEB tenés los números de teléfono para cada situación: Urgencia, Derivación, Atención al afiliado. Además dichos teléfonos están disponibles en nuestra APP.",
-        category: "Emergencias"
-    },
-    {
-        question: "¿Cómo tramito una autorización?",
-        answer: "Podés tramitar las autorizaciones de prácticas enviando la receta médica al mail de tu seccional o desde la autogestión de este sitio ingresando con tu usuario, seleccionas el trámite, adjuntas la receta y enviás. Podés hacer el seguimiento de tu autorización desde esta página y descargarla cuando esté lista.",
-        category: "Trámites"
-    },
-    {
-        question: "¿Cómo obtengo mi credencial?",
-        answer: "Ingresando con tu usuario podés generar tu credencial digital. También podés obtenerla de forma instantánea descargando nuestra APP oficial en tu celular.",
-        category: "Afiliados"
-    },
-    {
-        question: "¿Hay atención presencial en las Seccionales?",
-        answer: "Debido al contexto actual, te sugerimos usar los canales digitales. Si es imprescindible que concurras a nuestras oficinas, contactate vía mail o telefónicamente y solicitá un turno previo. Es una forma de cuidarnos entre todos.",
-        category: "Atención"
-    },
-    {
-        question: "¿Ante síntomas o sospecha de Covid cómo debo proceder?",
-        answer: "Mantenete aislado y avisá a tus contactos estrechos. Podés acudir a la Guardia más cercana o solicitar médico a domicilio (tené en cuenta que hay demoras). El profesional de salud te indicará los pasos a seguir. Si el resultado es positivo, contactate con nuestra Obra Social para el seguimiento.",
-        category: "Salud"
-    }
-];
+import { apiService, PreguntaFrecuente } from '../services/api';
 
 export const PreguntasFrecuentes: React.FC = () => {
+    const [preguntas, setPreguntas] = useState<PreguntaFrecuente[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
     const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+    useEffect(() => {
+        apiService.getPreguntasFrecuentes(3)
+            .then((data) => {
+                setPreguntas(data);
+            })
+            .catch(() => setError(true))
+            .finally(() => setLoading(false));
+    }, []);
 
     const togglePregunta = (index: number) => {
         setOpenIndex(openIndex === index ? null : index);
@@ -54,47 +39,58 @@ export const PreguntasFrecuentes: React.FC = () => {
                     </p>
                 </div>
 
-                {/* LISTADO DE PREGUNTAS (ACORDEÓN) */}
-                <div className="space-y-4">
-                    {PREGUNTAS_DATA.map((item, index) => (
-                        <div
-                            key={index}
-                            className={`group border-2 rounded-3xl transition-all duration-300 ${openIndex === index ? 'border-[#00AEEF] bg-slate-50/50' : 'border-slate-100 hover:border-slate-200'
+                {/* ESTADOS: LOADING / ERROR / LISTADO */}
+                {loading ? (
+                    <div className="space-y-4">
+                        {[...Array(4)].map((_, i) => (
+                            <div key={i} className="h-20 rounded-3xl bg-slate-100 animate-pulse" />
+                        ))}
+                    </div>
+                ) : error ? (
+                    <div className="text-center py-16 text-gray-400">
+                        <HelpCircle size={40} className="mx-auto mb-4 opacity-40" />
+                        <p className="font-semibold">No se pudieron cargar las preguntas frecuentes.</p>
+                        <p className="text-sm mt-1">Por favor, intentá de nuevo más tarde.</p>
+                    </div>
+                ) : (
+                    <div className="space-y-4">
+                        {preguntas.map((item, index) => (
+                            <div
+                                key={index}
+                                className={`group border-2 rounded-3xl transition-all duration-300 ${
+                                    openIndex === index
+                                        ? 'border-[#00AEEF] bg-slate-50/50'
+                                        : 'border-slate-100 hover:border-slate-200'
                                 }`}
-                        >
-                            <button
-                                onClick={() => togglePregunta(index)}
-                                className="w-full flex items-center justify-between p-6 md:p-8 text-left outline-none"
                             >
-                                <div className="flex items-center gap-4">
-                                    <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg ${openIndex === index ? 'bg-[#00AEEF] text-white' : 'bg-slate-100 text-gray-400'
-                                        }`}>
-                                        {item.category}
-                                    </span>
-                                    <h3 className="text-lg md:text-xl font-bold tracking-tight text-[#111111]">
-                                        {item.question}
+                                <button
+                                    onClick={() => togglePregunta(index)}
+                                    className="w-full flex items-center justify-between p-6 md:p-8 text-left outline-none"
+                                >
+                                    <h3 className="text-lg md:text-xl font-bold tracking-tight text-[#111111] pr-4">
+                                        {item.pregunta}
                                     </h3>
-                                </div>
-                                <div className={`shrink-0 transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`}>
-                                    {openIndex === index ? (
-                                        <Minus className="text-[#00AEEF]" size={24} />
-                                    ) : (
-                                        <Plus className="text-slate-300" size={24} />
-                                    )}
-                                </div>
-                            </button>
+                                    <div className={`shrink-0 transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`}>
+                                        {openIndex === index ? (
+                                            <Minus className="text-[#00AEEF]" size={24} />
+                                        ) : (
+                                            <Plus className="text-slate-300" size={24} />
+                                        )}
+                                    </div>
+                                </button>
 
-                            {openIndex === index && (
-                                <div className="px-6 md:px-8 pb-8 animate-in fade-in slide-in-from-top-2 duration-300">
-                                    <div className="h-[2px] w-12 bg-[#00AEEF] mb-6 rounded-full opacity-50"></div>
-                                    <p className="text-gray-600 leading-relaxed font-medium text-base">
-                                        {item.answer}
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
+                                {openIndex === index && (
+                                    <div className="px-6 md:px-8 pb-8 animate-in fade-in slide-in-from-top-2 duration-300">
+                                        <div className="h-[2px] w-12 bg-[#00AEEF] mb-6 rounded-full opacity-50"></div>
+                                        <p className="text-gray-600 leading-relaxed font-medium text-base">
+                                            {item.respuesta}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 {/* BANNER DE CONTACTO FINAL */}
                 <div className="mt-20 grid md:grid-cols-2 gap-6">

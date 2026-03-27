@@ -13,6 +13,7 @@ interface HeaderProps {
   onCentroMedicoClick?: () => void;
   onHomeClick?: () => void;
   onSectionClick?: (hash: string) => void;
+  onNoticiasClick?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -21,7 +22,8 @@ export const Header: React.FC<HeaderProps> = ({
   onAfiliarseClick,
   onCentroMedicoClick,
   onHomeClick,
-  onSectionClick
+  onSectionClick,
+  onNoticiasClick
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -79,6 +81,14 @@ export const Header: React.FC<HeaderProps> = ({
               className="text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider transition-colors leading-none"
             >
               Centro Médico
+            </button>
+
+            {/* OPCIÓN: NOTICIAS */}
+            <button
+              onClick={() => { onNoticiasClick?.(); setIsOpen(false); }}
+              className="text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider transition-colors leading-none"
+            >
+              Noticias
             </button>
 
             {NAV_STRUCTURE.map((group) => (
@@ -156,6 +166,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="px-6 pt-4 pb-10 space-y-3 h-screen overflow-y-auto bg-white">
             <button onClick={() => { onHomeClick?.(); setIsOpen(false); }} className="w-full text-left py-4 text-sm font-black text-[#1C75BB] uppercase border-b border-gray-50">Inicio</button>
             <button onClick={() => { onCentroMedicoClick?.(); setIsOpen(false); }} className="w-full text-left py-4 text-sm font-black text-[#1C75BB] uppercase border-b border-gray-50">Centro Médico</button>
+            <button onClick={() => { onNoticiasClick?.(); setIsOpen(false); }} className="w-full text-left py-4 text-sm font-black text-[#1C75BB] uppercase border-b border-gray-50">Noticias</button>
 
             {NAV_STRUCTURE.map((group) => (
               <div key={group.label} className="border-b border-gray-100 pb-2 text-[#1C75BB]">
