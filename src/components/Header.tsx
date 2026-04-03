@@ -65,15 +65,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* NAVEGACIÓN DESKTOP */}
-          <nav className="hidden md:flex space-x-5 lg:space-x-8 items-center h-full">
-
-            {/* OPCIÓN: INICIO (Agregada) */}
-            <button
-              onClick={() => { onHomeClick?.(); setIsOpen(false); }}
-              className="text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider transition-colors leading-none"
-            >
-              Inicio
-            </button>
+          <nav className="hidden md:flex space-x-3 lg:space-x-5 items-center h-full">
 
             {/* OPCIÓN: CENTRO MÉDICO */}
             <button
@@ -127,8 +119,8 @@ export const Header: React.FC<HeaderProps> = ({
 
             {!isLoggedIn && (
               <div className="relative group flex items-center h-full">
-                <button className="text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider px-2 leading-none transition-colors flex items-center">
-                  Ingresar <ChevronDown className="ml-1 h-4 w-4" />
+                <button className="text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider leading-none transition-colors flex items-center">
+                  Ingresar <ChevronDown className="ml-1 h-3.5 w-3.5" />
                 </button>
                 {/* Corregido el GAP aquí también */}
                 <div className="absolute right-0 top-full hidden group-hover:block pt-2 animate-in fade-in zoom-in-95 duration-200">
@@ -144,7 +136,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             <Button
               onClick={() => isLoggedIn ? onActionClick?.('afiliado') : onAfiliarseClick?.()}
-              className={`ml-4 py-2.5 px-8 text-[11px] font-black uppercase tracking-[0.15em] transition-all rounded-xl shadow-lg 
+              className={`ml-2 py-1.2 px-2 text-[12px] font-black uppercase tracking-tight transition-all rounded-xl shadow-lg
               ${isLoggedIn ? 'bg-white border-2 border-celeste text-celeste hover:bg-celeste hover:text-white' : 'bg-[#00AEEF] text-white hover:bg-[#1C75BB]'}`}
             >
               {isLoggedIn ? 'Mi Perfil' : 'Quiero Afiliarme!'}

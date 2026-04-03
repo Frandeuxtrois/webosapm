@@ -46,58 +46,58 @@ export const Hero: React.FC<{ onNoticiaClick?: (id: number) => void }> = ({ onNo
   const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + noticias.length) % noticias.length);
 
   return (
-    <section className="relative h-screen min-h-[800px] flex items-center bg-gradient-to-br from-celeste to-azul overflow-hidden">
+    <section className="relative flex items-center bg-gradient-to-br from-celeste to-azul overflow-hidden pt-24 pb-3 min-h-[650px]">
 
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-white opacity-10 blur-3xl"></div>
       <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-white opacity-10 blur-3xl"></div>
 
-      <div className="relative z-10 w-full pt-10 flex flex-col lg:flex-row items-center pl-16 lg:pl-28">
+      <div className="relative z-10 w-full flex flex-col lg:flex-row items-center pl-8 lg:pl-16">
 
         {/* LADO IZQUIERDO */}
-        <div className="w-full lg:w-7/12 shrink-0 text-center lg:text-left space-y-8 animate-fade-in">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm font-medium">
-            <Zap size={16} className="text-yellow-300 fill-yellow-300" />
+        <div className="w-full lg:w-1/2 shrink-0 text-center lg:text-left space-y-4 animate-fade-in -mt-12">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs font-medium">
+            <Zap size={14} className="text-yellow-300 fill-yellow-300" />
             <span>Inscripción 100% Online y rápida</span>
           </div>
 
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight">
             Tu salud, <br />
             <span className="text-white opacity-90 font-light italic">a tu ritmo.</span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-white/95 max-w-2xl mx-auto lg:mx-0 font-light leading-relaxed">
-            Redefinimos el cuidado de la salud priorizando tu tiempo y tu tranquilidad. Creemos en una medicina de <strong>alta calidad</strong> impulsada por la innovación tecnológica, ofreciéndote una experiencia digital fluida, segura y transparente. Trabajamos para que cada gestión sea más dinámica, permitiéndote acceder a la mejor red de profesionales con la rapidez que el ritmo de vida actual exige.
+          <p className="text-base md:text-lg text-white/95 max-w-xl mx-auto lg:mx-0 font-light leading-relaxed">
+            Redefinimos el cuidado de la salud priorizando tu tiempo y tu tranquilidad. Creemos en una medicina de <strong>alta calidad</strong> impulsada por la innovación tecnológica, ofreciéndote una experiencia digital fluida, segura y transparente.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
-            <Button variant="white" className="text-azul font-black shadow-xl hover:shadow-2xl hover:scale-105 transition-all px-12 py-5 text-lg">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start pt-2">
+            <Button variant="white" className="text-azul font-black shadow-xl hover:shadow-2xl hover:scale-105 transition-all px-8 py-3 text-base">
               Sumarme ahora
             </Button>
-            <Button variant="outline" onClick={scrollToPlanes} className="border-white text-white hover:bg-white/10 px-12 py-5 backdrop-blur-sm text-lg transition-all">
+            <Button variant="outline" onClick={scrollToPlanes} className="border-white text-white hover:bg-white/10 px-8 py-3 backdrop-blur-sm text-base transition-all">
               Conocé nuestros planes
             </Button>
           </div>
 
-          <div className="flex flex-wrap gap-6 justify-center lg:justify-start pt-8 text-white/80">
+          <div className="flex flex-wrap gap-4 justify-center lg:justify-start pt-2 text-white/80">
             <div className="flex items-center gap-2">
-              <Smartphone size={20} />
-              <span className="text-sm font-medium">App Propia</span>
+              <Smartphone size={16} />
+              <span className="text-xs font-medium">App Propia</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 size={20} />
-              <span className="text-sm font-medium">Gestión Simple</span>
+              <CheckCircle2 size={16} />
+              <span className="text-xs font-medium">Gestión Simple</span>
             </div>
           </div>
         </div>
 
         {/* LADO DERECHO: CARRUSEL */}
-        <div className="flex-1 relative flex flex-col items-center justify-center pr-16 -ml-40">
-          <div className="relative w-full h-[620px] flex items-center justify-center">
+        <div className="flex-1 relative flex flex-col items-center justify-center pr-8 mt-8">
+          <div className="relative w-full h-[260px] flex items-center justify-center">
 
             {/* SKELETON */}
             {loading && (
               <div className="absolute w-full bg-white rounded-[2.5rem] overflow-hidden shadow-2xl animate-pulse">
-                <div className="h-[360px] w-full bg-gray-200" />
+                <div className="h-[240px] w-full bg-gray-200" />
                 <div className="h-1 w-full bg-gradient-to-r from-celeste via-azul to-celeste" />
                 <div className="px-8 py-7 flex flex-col gap-3">
                   <div className="h-4 w-24 bg-gray-200 rounded-full" />
@@ -128,9 +128,8 @@ export const Hero: React.FC<{ onNoticiaClick?: (id: number) => void }> = ({ onNo
                     }`}
                 >
                   <div className={`bg-white rounded-[2.5rem] overflow-hidden shadow-2xl ${isActive ? 'shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]' : ''}`}>
-                    <div className="h-[360px] w-full relative overflow-hidden bg-gray-100">
-                      <img src={images[0]} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover scale-110 blur-md opacity-50" />
-                      <img src={images[0]} alt={item.titulo} className="absolute inset-0 w-full h-full object-contain z-10" />
+                    <div className="h-[240px] w-full relative overflow-hidden bg-gray-100">
+                      <img src={images[0]} alt={item.titulo} className="absolute inset-0 w-full h-full object-cover" />
                       <div className="absolute top-6 left-6 z-20">
                         <span className="px-4 py-1.5 text-xs font-bold text-white bg-celeste backdrop-blur-md rounded-full uppercase tracking-widest shadow-md">
                           Novedad

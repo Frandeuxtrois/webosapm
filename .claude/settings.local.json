@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tailwindcss:*)",
+      "Bash(rm -f src/index.css tailwind.config.js postcss.config.js)",
+      "Bash(npm uninstall:*)"
     ]
   }
 }
