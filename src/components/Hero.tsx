@@ -46,7 +46,7 @@ export const Hero: React.FC<{ onNoticiaClick?: (id: number) => void }> = ({ onNo
   const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + noticias.length) % noticias.length);
 
   return (
-    <section className="relative flex items-center bg-gradient-to-br from-celeste to-azul overflow-hidden pt-24 pb-3 min-h-[650px]">
+    <section className="relative flex items-center bg-gradient-to-br from-celeste to-azul overflow-hidden pt-24 pb-12 min-h-[750px]">
 
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-white opacity-10 blur-3xl"></div>
       <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-white opacity-10 blur-3xl"></div>
@@ -92,7 +92,7 @@ export const Hero: React.FC<{ onNoticiaClick?: (id: number) => void }> = ({ onNo
 
         {/* LADO DERECHO: CARRUSEL */}
         <div className="flex-1 relative flex flex-col items-center justify-center pr-8 mt-8">
-          <div className="relative w-full h-[260px] flex items-center justify-center">
+          <div className="relative w-full h-[420px] flex items-center justify-center">
 
             {/* SKELETON */}
             {loading && (
@@ -165,12 +165,12 @@ export const Hero: React.FC<{ onNoticiaClick?: (id: number) => void }> = ({ onNo
           </div>
 
           {!loading && noticias.length > 1 && (
-            <div className="flex gap-6 mt-4 z-40">
-              <button onClick={prevSlide} className="p-4 rounded-full bg-white/20 text-white backdrop-blur-xl border border-white/30 hover:bg-white/40 transition-all shadow-xl active:scale-90">
-                <ChevronLeft size={30} />
+            <div className="flex gap-6 mt-12 z-40">
+              <button onClick={prevSlide} className="p-2 rounded-full bg-white/20 text-white backdrop-blur-xl border border-white/30 hover:bg-white/40 transition-all shadow-xl active:scale-90">
+                <ChevronLeft size={18} />
               </button>
-              <button onClick={nextSlide} className="p-4 rounded-full bg-white/20 text-white backdrop-blur-xl border border-white/30 hover:bg-white/40 transition-all shadow-xl active:scale-90">
-                <ChevronRight size={30} />
+              <button onClick={nextSlide} className="p-2 rounded-full bg-white/20 text-white backdrop-blur-xl border border-white/30 hover:bg-white/40 transition-all shadow-xl active:scale-90">
+                <ChevronRight size={18} />
               </button>
             </div>
           )}

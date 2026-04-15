@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, UserCircle } from 'lucide-react';
 import { NAV_STRUCTURE } from '../constants';
 import { Button } from './ui/Button';
 
@@ -54,7 +54,7 @@ export const Header: React.FC<HeaderProps> = ({
       {/* TEXTURA GRANULADA */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.08] z-[-1]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
 
-      <div className="max-w-full mx-auto px-6 md:px-10 lg:px-16 relative z-10">
+      <div className="max-w-full mx-auto px-3 md:px-5 lg:px-8 relative z-10">
         <div className="flex justify-between items-center h-12">
 
           {/* LOGO */}
@@ -134,13 +134,21 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             )}
 
-            <Button
+            <button
               onClick={() => isLoggedIn ? onActionClick?.('afiliado') : onAfiliarseClick?.()}
-              className={`ml-2 py-1.2 px-2 text-[12px] font-black uppercase tracking-tight transition-all rounded-xl shadow-lg
-              ${isLoggedIn ? 'bg-white border-2 border-celeste text-celeste hover:bg-celeste hover:text-white' : 'bg-[#00AEEF] text-white hover:bg-[#1C75BB]'}`}
+              className={`ml-2 group relative flex items-center gap-1.5 px-6 py-3 rounded-xl text-[13px] font-black uppercase tracking-tight transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95 overflow-hidden
+              ${isLoggedIn
+                ? 'bg-white border-2 border-celeste text-celeste hover:bg-celeste hover:text-white'
+                : 'bg-gradient-to-r from-[#00AEEF] to-[#1C75BB] text-white'}`}
             >
-              {isLoggedIn ? 'Mi Perfil' : 'Quiero Afiliarme!'}
-            </Button>
+              {!isLoggedIn && (
+                <span className="absolute inset-0 bg-gradient-to-r from-[#1C75BB] to-[#00AEEF] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              )}
+              {isLoggedIn
+                ? <><UserCircle size={15} /><span>Mi Perfil</span></>
+                : <span className="relative z-10">Quiero Afiliarme</span>
+              }
+            </button>
           </nav>
 
           {/* BOTÓN MENÚ MÓVIL */}
