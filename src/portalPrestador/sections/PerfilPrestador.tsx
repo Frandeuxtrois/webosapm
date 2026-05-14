@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Building2, MapPin, Mail, Phone, ChevronDown, ChevronUp, Save, Loader2, CheckCircle2, Info } from 'lucide-react';
+import { Building2, MapPin, Mail, Phone, ChevronDown, ChevronUp, Save, Loader2, CheckCircle2, Info, X, Check, CalendarClock } from 'lucide-react';
 import { DatosPrestador, PlanPrestador, apiService } from '../../services/api';
 
 interface PerfilPrestadorProps {
@@ -7,44 +7,11 @@ interface PerfilPrestadorProps {
   onUpdate: () => void;
 }
 
-// 0=No atiende (gris/tachado), 1=Atiende (verde), 2=Requiere autorización (amarillo)
-const AttendanceIcon: React.FC<{ value: number; label: string }> = ({ value, label }) => {
-  if (value === 0) {
-    return (
-      <span className="inline-flex items-center gap-1 text-[9px] font-bold text-slate-400 line-through" title={`${label}: No atiende`}>
-        {label}
-      </span>
-    );
-  }
-  if (value === 1) {
-    return (
-      <span className="inline-flex items-center gap-1 text-[9px] font-bold text-green-600" title={`${label}: Atiende`}>
-        <span className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0"></span>
-        {label}
-      </span>
-    );
-  }
-  // value === 2
-  return (
-    <span className="inline-flex items-center gap-1 text-[9px] font-bold text-amber-600" title={`${label}: Requiere autorización`}>
-      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0"></span>
-      {label}
-    </span>
-  );
+const PlanCell: React.FC<{ value: number }> = ({ value }) => {
+  if (value === 1) return <Check size={14} className="text-[#00AEEF] mx-auto" strokeWidth={3} />;
+  if (value === 2) return <CalendarClock size={13} className="text-amber-500 mx-auto" />;
+  return <X size={13} className="text-red-400 mx-auto" strokeWidth={2.5} />;
 };
-
-const PlanChip: React.FC<{ plan: PlanPrestador }> = ({ plan }) => (
-  <div className="flex flex-col items-start gap-1">
-    <span className="px-3 py-1.5 bg-[#00AEEF]/10 text-[#00AEEF] text-xs font-black uppercase tracking-wider rounded-full border border-[#00AEEF]/20">
-      {plan.planNombre}
-    </span>
-    <div className="flex items-center gap-2 pl-1">
-      <AttendanceIcon value={plan.ambulatorio} label="Amb." />
-      <AttendanceIcon value={plan.internacion} label="Int." />
-      <AttendanceIcon value={plan.guardia} label="Gdia." />
-    </div>
-  </div>
-);
 
 export const PerfilPrestador: React.FC<PerfilPrestadorProps> = ({ datos, onUpdate }) => {
   const [editOpen, setEditOpen] = useState(false);
@@ -124,11 +91,40 @@ export const PerfilPrestador: React.FC<PerfilPrestadorProps> = ({ datos, onUpdat
         {/* Planes */}
         {datos.planes && datos.planes.length > 0 && (
           <div className="mt-6 pt-6 border-t border-gray-100">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">Planes contratados</p>
-            <div className="flex flex-wrap gap-4">
-              {datos.planes.map((plan, i) => (
-                <PlanChip key={plan.planId ?? i} plan={plan} />
-              ))}
+            <p className="text-sm font-black uppercase tracking-tighter text-[#1C75BB] mb-3">Planes</p>
+
+            {/* Leyenda */}
+            <div className="flex items-center gap-5 mb-4">
+              <span className="flex items-center gap-1.5 text-xs font-bold text-red-400"><X size={12} strokeWidth={2.5} /> No Atiende</span>
+              <span className="flex items-center gap-1.5 text-xs font-bold text-[#00AEEF]"><Check size={12} strokeWidth={3} /> Atiende</span>
+              <span className="flex items-center gap-1.5 text-xs font-bold text-amber-500"><CalendarClock size={12} /> Requiere autorización</span>
+            </div>
+
+            <div className="overflow-x-auto rounded-2xl border border-gray-100">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="bg-slate-50 text-[10px] font-black uppercase tracking-widest text-[#1C75BB]">
+                    <th className="px-5 py-3 text-left">Plan</th>
+                    <th className="px-5 py-3 text-left">Desde</th>
+                    <th className="px-5 py-3 text-center">Ambulatorio</th>
+                    <th className="px-5 py-3 text-center">Internación</th>
+                    <th className="px-5 py-3 text-center">Guardia</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {datos.planes.map((plan, i) => (
+                    <tr key={plan.planId ?? i} className={i % 2 === 0 ? 'bg-white' : 'bg-[#e8f6fb]'}>
+                      <td className="px-5 py-3 font-bold text-[#1C75BB]">{plan.planNombre}</td>
+                      <td className="px-5 py-3 text-gray-500">
+                        {plan.fechaDesde ? new Date(plan.fechaDesde).toLocaleDateString('es-AR') : '—'}
+                      </td>
+                      <td className="px-5 py-3 text-center"><PlanCell value={plan.ambulatorio} /></td>
+                      <td className="px-5 py-3 text-center"><PlanCell value={plan.internacion} /></td>
+                      <td className="px-5 py-3 text-center"><PlanCell value={plan.guardia} /></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         )}

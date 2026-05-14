@@ -3,7 +3,7 @@ import {
     FileText, CheckCircle2, Stethoscope, Pill, Activity, Heart, UserCheck,
     AlertTriangle, ShieldCheck, Microscope, Navigation, Users, Clock,
     ShieldAlert, Info, Download, AlertCircle, Star, Search, X,
-    ZoomIn, ZoomOut
+    ZoomIn, ZoomOut, HelpCircle
 } from 'lucide-react';
 
 // ─── Highlight helper ─────────────────────────────────────────────────────────
@@ -697,8 +697,14 @@ export const Tramites: React.FC = () => {
                         <h3 className="text-3xl font-black uppercase tracking-tighter text-[#1C75BB] mb-6">Discapacidad</h3>
                         <TextP>Ofrecemos una herramienta esencial para quienes requieren información actualizada y detallada sobre prestadores relacionados con servicios de discapacidad.</TextP>
                         <div className="grid md:grid-cols-2 gap-6 mt-8 mb-8">
-                            <div className="p-8 bg-[#1C75BB] text-white rounded-[2.5rem] flex flex-col justify-between">
-                                <Download size={32} className="text-[#00AEEF] mb-4" />
+                            <a
+                                href="/formularios/prestadores_discapacidad.pdf"
+                                download
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-8 bg-[#1C75BB] text-white rounded-[2.5rem] flex flex-col justify-between hover:bg-[#00AEEF] transition-colors group"
+                            >
+                                <Download size={32} className="text-[#00AEEF] group-hover:text-white mb-4 transition-colors" />
                                 <div>
                                     <h4 style={{ fontSize }} className="font-black uppercase mb-2">Lista de Prestadores</h4>
                                     <p style={{ fontSize }} className="opacity-80 mb-2">Organizados por provincia y localidad con contactos directos.</p>
@@ -707,24 +713,36 @@ export const Tramites: React.FC = () => {
                                         <li>• Contactos y correos electrónicos para consultas</li>
                                         <li>• Tipos de servicios por institución o profesional</li>
                                     </ul>
-                                    <button style={{ fontSize: fontSize * 0.8 }} className="bg-white text-[#1C75BB] px-6 py-3 rounded-xl font-black uppercase tracking-widest hover:bg-[#00AEEF] hover:text-white transition-all">Descargar Lista</button>
+                                    <span style={{ fontSize: fontSize * 0.8 }} className="inline-block bg-white text-[#1C75BB] px-6 py-3 rounded-xl font-black uppercase tracking-widest group-hover:bg-white/90 transition-all">Descargar Lista</span>
                                 </div>
-                            </div>
+                            </a>
                             <div className="space-y-4">
-                                <div className="p-6 bg-slate-50 rounded-3xl border border-gray-100 flex items-center justify-between">
+                                <a
+                                    href="/formularios/instructivo_discapacidad.pdf"
+                                    download
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-6 bg-slate-50 rounded-3xl border border-gray-100 flex items-center justify-between hover:border-[#00AEEF] hover:shadow-md transition-all group"
+                                >
                                     <div>
-                                        <h5 style={{ fontSize }} className="font-bold uppercase text-[#1C75BB]">Instructivo de Discapacidad</h5>
-                                        <p style={{ fontSize: fontSize * 0.85 }} className="text-gray-500 mt-1">Guía de acceso a servicios. Contiene información muy importante; leer atentamente antes de gestionar.</p>
+                                        <h5 style={{ fontSize }} className="font-bold uppercase text-[#1C75BB] group-hover:text-[#00AEEF] transition-colors">Instructivo de Discapacidad</h5>
+                                        <p style={{ fontSize: fontSize * 0.85 }} className="text-gray-500 mt-1">Guía de acceso a servicios. Leer atentamente antes de gestionar.</p>
                                     </div>
                                     <Download size={18} className="text-[#00AEEF] shrink-0 ml-4" />
-                                </div>
-                                <div className="p-6 bg-slate-50 rounded-3xl border border-gray-100 flex items-center justify-between">
+                                </a>
+                                <a
+                                    href="/formularios/medicamentos_discapacidad.pdf"
+                                    download
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-6 bg-slate-50 rounded-3xl border border-gray-100 flex items-center justify-between hover:border-[#00AEEF] hover:shadow-md transition-all group"
+                                >
                                     <div>
-                                        <h5 style={{ fontSize }} className="font-bold uppercase text-[#1C75BB]">Formulario de Medicación</h5>
+                                        <h5 style={{ fontSize }} className="font-bold uppercase text-[#1C75BB] group-hover:text-[#00AEEF] transition-colors">Formulario de Medicación</h5>
                                         <p style={{ fontSize: fontSize * 0.85 }} className="text-gray-500 mt-1">Para requerir medicación específica para la discapacidad.</p>
                                     </div>
                                     <Download size={18} className="text-[#00AEEF] shrink-0 ml-4" />
-                                </div>
+                                </a>
                                 <div className="p-6 bg-blue-50 rounded-3xl border border-blue-100">
                                     <p style={{ fontSize: fontSize * 0.85 }} className="text-[#1C75BB] font-bold uppercase mb-1">Tipos de Servicios Incluidos</p>
                                     <p style={{ fontSize }} className="text-gray-500">Centros de día, rehabilitación, educación terapéutica, entre otros.</p>
@@ -749,56 +767,55 @@ export const Tramites: React.FC = () => {
 
     // ── Render principal ──────────────────────────────────────────────────────
     return (
-        <section id="tramites" className="pt-32 pb-20 bg-white font-sans min-h-screen text-[#1C75BB]">
-            <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <section id="tramites" className="pt-20 pb-20 bg-slate-50 font-sans min-h-screen text-[#1C75BB]">
 
-                {/* Cabecera */}
-                <div className="mb-12 border-b border-gray-100 pb-8">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                        <div>
-                            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-[#111111]">
-                                Guía de <span className="text-[#00AEEF]">Trámites</span>
-                            </h2>
-                            <p className="text-[#1C75BB] font-bold uppercase text-[10px] tracking-[0.3em] mt-2">Normativas y Prestaciones de OSAPM de la R.A.</p>
-                        </div>
-
-                        {/* Controles: solo tamaño de fuente */}
-                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-
-                            {/* Control de tamaño de fuente */}
-                            <div className="flex items-center gap-1 bg-slate-50 border border-gray-200 rounded-xl p-1" title="Ajustar tamaño de texto">
-                                <button
-                                    onClick={() => setFontSizeIdx(i => Math.max(0, i - 1))}
-                                    disabled={fontSizeIdx === 0}
-                                    className="p-2 rounded-lg hover:bg-white hover:shadow-sm disabled:opacity-30 transition-all text-[#1C75BB]"
-                                >
-                                    <ZoomOut size={15} />
-                                </button>
-                                <div className="flex gap-0.5 px-1">
-                                    {FONT_SIZES.map((_, i) => (
-                                        <button
-                                            key={i}
-                                            onClick={() => setFontSizeIdx(i)}
-                                            className={`w-5 h-5 rounded-md transition-all text-[9px] font-black ${fontSizeIdx === i
-                                                ? 'bg-[#1C75BB] text-white'
-                                                : 'text-gray-400 hover:text-[#1C75BB]'
-                                                }`}
-                                        >
-                                            {FONT_LABELS[i]}
-                                        </button>
-                                    ))}
-                                </div>
-                                <button
-                                    onClick={() => setFontSizeIdx(i => Math.min(FONT_SIZES.length - 1, i + 1))}
-                                    disabled={fontSizeIdx === FONT_SIZES.length - 1}
-                                    className="p-2 rounded-lg hover:bg-white hover:shadow-sm disabled:opacity-30 transition-all text-[#1C75BB]"
-                                >
-                                    <ZoomIn size={15} />
-                                </button>
-                            </div>
-                        </div>
+            {/* HEADER BAND */}
+            <div className="bg-[#1C75BB] px-6 md:px-12 py-10 relative mb-10">
+                <div className="flex flex-col items-center text-center gap-3">
+                    <div className="p-3 bg-white/10 rounded-2xl">
+                        <FileText size={28} className="text-[#00AEEF]" />
+                    </div>
+                    <div>
+                        <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white leading-none">
+                            Guía de <span className="text-[#00AEEF]">Trámites</span>
+                        </h2>
+                        <p className="text-white/60 font-bold uppercase text-[10px] tracking-[0.25em] mt-1">
+                            Normativas y Prestaciones de OSAPM de la R.A.
+                        </p>
                     </div>
                 </div>
+
+                {/* Control tamaño de fuente — esquina */}
+                <div className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-white/10 border border-white/20 rounded-xl p-1">
+                    <button
+                        onClick={() => setFontSizeIdx(i => Math.max(0, i - 1))}
+                        disabled={fontSizeIdx === 0}
+                        className="p-1.5 rounded-lg hover:bg-white/10 disabled:opacity-30 transition-all text-white"
+                    >
+                        <ZoomOut size={14} />
+                    </button>
+                    <div className="flex gap-0.5 px-1">
+                        {FONT_SIZES.map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => setFontSizeIdx(i)}
+                                className={`w-5 h-5 rounded-md transition-all text-[9px] font-black ${fontSizeIdx === i ? 'bg-[#00AEEF] text-white' : 'text-white/50 hover:text-white'}`}
+                            >
+                                {FONT_LABELS[i]}
+                            </button>
+                        ))}
+                    </div>
+                    <button
+                        onClick={() => setFontSizeIdx(i => Math.min(FONT_SIZES.length - 1, i + 1))}
+                        disabled={fontSizeIdx === FONT_SIZES.length - 1}
+                        className="p-1.5 rounded-lg hover:bg-white/10 disabled:opacity-30 transition-all text-white"
+                    >
+                        <ZoomIn size={14} />
+                    </button>
+                </div>
+            </div>
+
+            <div className="max-w-7xl mx-auto px-6 md:px-12">
 
                 <div className="flex flex-col lg:flex-row gap-12">
                     {/* Menú lateral */}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from './ui/Button';
-import { ChevronLeft, ChevronRight, Zap, Smartphone, CheckCircle2, ArrowRight, Calendar } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Smartphone, CheckCircle2, ArrowRight, Calendar } from 'lucide-react';
 import { apiService, Noticia, BACKOFFICE_API_BASE_URL } from '../services/api';
 
 const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=800';
@@ -46,26 +46,29 @@ export const Hero: React.FC<{ onNoticiaClick?: (id: number) => void }> = ({ onNo
   const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + noticias.length) % noticias.length);
 
   return (
-    <section className="relative flex items-center bg-gradient-to-br from-celeste to-azul overflow-hidden pt-24 pb-12 min-h-[750px]">
+    <section className="relative flex items-center bg-gradient-to-br from-celeste to-azul overflow-hidden min-h-screen h-auto lg:h-screen pt-20 pb-10 lg:pb-0">
 
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-white opacity-10 blur-3xl"></div>
       <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-white opacity-10 blur-3xl"></div>
 
-      <div className="relative z-10 w-full flex flex-col lg:flex-row items-center pl-8 lg:pl-16">
+      <div className="relative z-10 w-full flex flex-col lg:flex-row items-stretch lg:items-center px-8 lg:pl-16 lg:pr-0">
 
         {/* LADO IZQUIERDO */}
-        <div className="w-full lg:w-1/2 shrink-0 text-center lg:text-left space-y-4 animate-fade-in -mt-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs font-medium">
-            <Zap size={14} className="text-yellow-300 fill-yellow-300" />
-            <span>Inscripción 100% Online y rápida</span>
+        <div className="w-full lg:w-[42%] shrink-0 text-center lg:text-left space-y-4 animate-fade-in -mt-12">
+          <div className="inline-flex items-center gap-2">
+            <span className="block w-6 h-[2px] bg-white/60 rounded-full" />
+            <p className="text-white/90 text-base font-black uppercase tracking-[0.25em]">
+              Obra Social de Agentes de Propaganda Médica
+            </p>
+            <span className="block w-6 h-[2px] bg-white/60 rounded-full" />
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight">
             Tu salud, <br />
             <span className="text-white opacity-90 font-light italic">a tu ritmo.</span>
           </h1>
 
-          <p className="text-base md:text-lg text-white/95 max-w-xl mx-auto lg:mx-0 font-light leading-relaxed">
+          <p className="text-lg md:text-xl text-white/95 max-w-xl mx-auto lg:mx-0 font-light leading-relaxed">
             Redefinimos el cuidado de la salud priorizando tu tiempo y tu tranquilidad. Creemos en una medicina de <strong>alta calidad</strong> impulsada por la innovación tecnológica, ofreciéndote una experiencia digital fluida, segura y transparente.
           </p>
 
@@ -73,9 +76,9 @@ export const Hero: React.FC<{ onNoticiaClick?: (id: number) => void }> = ({ onNo
             <Button variant="white" className="text-azul font-black shadow-xl hover:shadow-2xl hover:scale-105 transition-all px-8 py-3 text-base">
               Sumarme ahora
             </Button>
-            <Button variant="outline" onClick={scrollToPlanes} className="border-white text-white hover:bg-white/10 px-8 py-3 backdrop-blur-sm text-base transition-all">
+            <button onClick={scrollToPlanes} className="px-8 py-3 rounded-full border-2 border-white text-white bg-transparent hover:bg-white/10 backdrop-blur-sm text-base font-medium transition-all duration-300">
               Conocé nuestros planes
-            </Button>
+            </button>
           </div>
 
           <div className="flex flex-wrap gap-4 justify-center lg:justify-start pt-2 text-white/80">
@@ -91,13 +94,13 @@ export const Hero: React.FC<{ onNoticiaClick?: (id: number) => void }> = ({ onNo
         </div>
 
         {/* LADO DERECHO: CARRUSEL */}
-        <div className="flex-1 relative flex flex-col items-center justify-center pr-8 mt-8">
-          <div className="relative w-full h-[420px] flex items-center justify-center">
+        <div className="w-full lg:flex-1 relative flex flex-col items-center justify-center lg:pr-4 mt-8 lg:ml-10">
+          <div className="relative w-full h-[560px] lg:h-[600px] flex items-center justify-center">
 
             {/* SKELETON */}
             {loading && (
               <div className="absolute w-full bg-white rounded-[2.5rem] overflow-hidden shadow-2xl animate-pulse">
-                <div className="h-[240px] w-full bg-gray-200" />
+                <div className="h-[360px] w-full bg-gray-200" />
                 <div className="h-1 w-full bg-gradient-to-r from-celeste via-azul to-celeste" />
                 <div className="px-8 py-7 flex flex-col gap-3">
                   <div className="h-4 w-24 bg-gray-200 rounded-full" />
@@ -127,8 +130,8 @@ export const Hero: React.FC<{ onNoticiaClick?: (id: number) => void }> = ({ onNo
                         : 'z-10 opacity-0 translate-x-20 scale-75'
                     }`}
                 >
-                  <div className={`bg-white rounded-[2.5rem] overflow-hidden shadow-2xl ${isActive ? 'shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]' : ''}`}>
-                    <div className="h-[240px] w-full relative overflow-hidden bg-gray-100">
+                  <div className={`rounded-[2.5rem] overflow-hidden shadow-2xl ${isActive ? 'shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]' : ''}`}>
+                    <div className="w-full relative overflow-hidden bg-gray-100" style={{ height: '360px', borderRadius: '2.5rem 2.5rem 0 0' }}>
                       <img src={images[0]} alt={item.titulo} className="absolute inset-0 w-full h-full object-cover" />
                       <div className="absolute top-6 left-6 z-20">
                         <span className="px-4 py-1.5 text-xs font-bold text-white bg-celeste backdrop-blur-md rounded-full uppercase tracking-widest shadow-md">

@@ -8,7 +8,19 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       host: '0.0.0.0',
-      allowedHosts: true, // <--- Esto permite cualquier host externo
+      allowedHosts: true,
+      proxy: {
+        '/api-main': {
+          target: 'https://appapis.apm.org.ar',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api-main/, ''),
+        },
+        '/api-backoffice': {
+          target: 'https://osapmapis.apm.org.ar',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api-backoffice/, ''),
+        },
+      },
     },
     plugins: [react()],
     define: {

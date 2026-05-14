@@ -1,6 +1,7 @@
-import React from 'react';
-import { RefreshCw, Download } from 'lucide-react';
+import React, { useRef } from 'react';
+import { Download } from 'lucide-react';
 import headerLogo from '../assets/headerlogo.png';
+import html2canvas from 'html2canvas';
 
 interface CredencialData {
     nombreCompleto: string;
@@ -19,19 +20,20 @@ interface CredencialProps {
 }
 
 export const Credencial: React.FC<CredencialProps> = ({ data, token, loading, onRefresh }) => {
+    const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+    const handleDownload = async (index: number, nombre: string) => {
+        const el = cardRefs.current[index];
+        if (!el) return;
+        const canvas = await html2canvas(el, { scale: 2, useCORS: true, backgroundColor: null });
+        const link = document.createElement('a');
+        link.download = `carnet-${nombre.replace(/\s+/g, '_')}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    };
+
     return (
         <div className="flex flex-col items-center gap-6 py-4 animate-in fade-in duration-500 font-sans">
-
-            {/* BOTÓN ACTUALIZAR */}
-            <div className="w-full max-w-[600px] flex justify-end">
-                <button
-                    onClick={onRefresh}
-                    className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg font-bold text-gray-400 hover:text-[#00AEEF] transition-all text-[9px] uppercase tracking-widest shadow-sm"
-                >
-                    <RefreshCw size={12} className={loading ? 'animate-spin' : ''} />
-                    Actualizar Token
-                </button>
-            </div>
 
             {/* LISTADO DE CREDENCIALES */}
             <div className="flex flex-col gap-8 w-full items-center">
@@ -39,9 +41,9 @@ export const Credencial: React.FC<CredencialProps> = ({ data, token, loading, on
                     const [apellido, nombres] = item.nombreCompleto.split(',').map(s => s.trim());
 
                     return (
-                        <div key={index} className="relative group">
+                        <div key={index} className="flex flex-col items-center gap-3">
                             {/* LA TARJETA */}
-                            <div className="w-[600px] h-[340px] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+                            <div ref={(el) => { cardRefs.current[index] = el; }} className="w-[600px] h-[340px] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col">
 
                                 {/* FRANJA SUPERIOR CELESTE */}
                                 <div className="h-4 bg-[#39B5E6]"></div>
@@ -101,15 +103,6 @@ export const Credencial: React.FC<CredencialProps> = ({ data, token, loading, on
                                             </p>
                                         </div>
 
-                                        {/* TOKEN DE VALIDACIÓN */}
-                                        <div className="bg-white/30 backdrop-blur-sm px-4 py-2 rounded-xl">
-                                            <p className="text-[8px] font-black text-black/70 uppercase text-center mb-0.5 tracking-widest">
-                                                TOKEN DE VALIDACIÓN
-                                            </p>
-                                            <p className="text-[26px] font-black text-black font-mono leading-none text-center">
-                                                {token || '------'}
-                                            </p>
-                                        </div>
                                     </div>
                                 </div>
 
@@ -118,8 +111,12 @@ export const Credencial: React.FC<CredencialProps> = ({ data, token, loading, on
                             </div>
 
                             {/* BOTÓN DESCARGAR */}
-                            <button className="absolute -bottom-3 -right-3 w-12 h-12 bg-gradient-to-br from-[#00AEEF] to-[#1c75bb] text-white rounded-full flex items-center justify-center shadow-xl opacity-0 group-hover:opacity-100 transition-all hover:scale-110 z-20">
-                                <Download size={18} />
+                            <button
+                                onClick={() => handleDownload(index, item.nombreCompleto)}
+                                className="flex items-center gap-2 px-4 py-2 border border-[#00AEEF] text-[#00AEEF] rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-[#00AEEF] hover:text-white transition-all"
+                            >
+                                <Download size={12} />
+                                Descargar carnet
                             </button>
                         </div>
                     );

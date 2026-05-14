@@ -132,16 +132,22 @@ export const NoticiaDetalle: React.FC<{ id: number; onBack: () => void; onNotici
 
   return (
     <div ref={articleRef} className="min-h-screen bg-gray-50">
+      <style>{`
+        .prose img { max-width: 100% !important; height: auto !important; }
+        .prose table { max-width: 100%; display: block; overflow-x: auto; }
+        .prose pre { overflow-x: auto; white-space: pre-wrap; }
+        .prose * { max-width: 100%; }
+      `}</style>
 
       {/* BARRA DE PROGRESO */}
       <div className="fixed top-0 left-0 z-[60] h-1 bg-celeste transition-all duration-100" style={{ width: `${progress}%` }} />
 
       {/* HERO IMAGEN */}
-      <div className="relative h-[70vh] min-h-[400px] w-full overflow-hidden">
+      <div className="relative w-full overflow-hidden" style={{ height: '420px' }}>
         {loading ? (
-          <div className="w-full h-full bg-gray-300 animate-pulse" />
+          <div className="absolute inset-0 bg-gray-300 animate-pulse" />
         ) : noticia && getImg(noticia) ? (
-          <img src={getImg(noticia)} alt={noticia?.titulo} className="w-full h-full object-cover" />
+          <img src={getImg(noticia)} alt={noticia?.titulo} className="absolute inset-0 w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-celeste to-azul flex items-center justify-center">
             <ImageOff size={64} className="text-white/30" />
@@ -194,14 +200,14 @@ export const NoticiaDetalle: React.FC<{ id: number; onBack: () => void; onNotici
           <>
             {/* Copete */}
             {noticia.copete && (
-              <p className="text-xl text-gray-600 font-medium leading-relaxed border-l-4 border-celeste pl-5 mb-8">
-                {noticia.copete}
-              </p>
+              <p className="text-xl text-gray-600 font-medium leading-relaxed border-l-4 border-celeste pl-5 mb-8"
+                dangerouslySetInnerHTML={{ __html: noticia.copete }} />
             )}
 
             {/* Cuerpo */}
             <div
-              className="prose prose-lg prose-blue max-w-none text-gray-700 leading-relaxed"
+              className="prose prose-lg prose-blue max-w-none text-gray-700 leading-relaxed overflow-hidden"
+              style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
               dangerouslySetInnerHTML={{ __html: noticia.cuerpo }}
             />
 
@@ -213,7 +219,7 @@ export const NoticiaDetalle: React.FC<{ id: number; onBack: () => void; onNotici
                   return (
                     <div
                       key={img.idImagen}
-                      className="relative h-52 rounded-2xl overflow-hidden shadow bg-gray-100 cursor-zoom-in group"
+                      className="relative rounded-2xl overflow-hidden shadow bg-gray-100 cursor-zoom-in group" style={{ aspectRatio: '5/3' }}
                       onClick={() => setLightboxSrc(src)}
                     >
                       <img src={src} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover scale-110 blur-md opacity-50" />

@@ -89,7 +89,7 @@ export const SERVICES: Service[] = [
   {
     id: 'emergencias',
     title: 'Emergencias 24hs',
-    description: 'Contamos con una flota moderna para asistirte cuando más lo necesites.',
+    description: 'Contamos con un callcenter las 24hs.',
     icon: <EmergencyIcon className="w-8 h-8 text-azul" />,
   },
   {

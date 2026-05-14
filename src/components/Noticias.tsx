@@ -15,6 +15,8 @@ const readingTime = (html: string) => {
 const getImg = (n: Noticia) =>
   n.imagenes?.length ? `${BACKOFFICE_API_BASE_URL}${n.imagenes[0].rutaImagen}` : PLACEHOLDER;
 
+const stripHtml = (html: string) => html.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
+
 const SkeletonCard = ({ big = false }: { big?: boolean }) => (
   <div className={`bg-white rounded-3xl overflow-hidden animate-pulse ${big ? 'h-[500px]' : 'h-72'}`}>
     <div className={`bg-gray-200 ${big ? 'h-72' : 'h-40'}`} />
@@ -40,19 +42,27 @@ export const Noticias: React.FC<{ onNoticiaClick: (id: number) => void }> = ({ o
   const [destacada, ...resto] = noticias;
 
   return (
-    <section className="min-h-screen bg-gray-50 pt-28 pb-16 px-4">
-      <div className="max-w-6xl mx-auto">
+    <section className="min-h-screen bg-gray-50 pt-20 pb-16">
 
-        {/* ENCABEZADO */}
-        <div className="mb-10">
-          <div className="flex items-center gap-3 mb-2">
-            <Newspaper size={22} className="text-celeste" />
-            <span className="text-xs font-black uppercase tracking-widest text-celeste">Portal de noticias</span>
+      {/* HEADER BAND */}
+      <div className="bg-[#1C75BB] px-6 md:px-12 py-10 mb-10">
+        <div className="flex flex-col items-center text-center gap-3">
+          <div className="p-3 bg-white/10 rounded-2xl">
+            <Newspaper size={28} className="text-[#00AEEF]" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-azul leading-tight">
-            Noticias
-            <span className="block w-16 h-1 bg-celeste mt-3 rounded-full" />
-          </h1>
+          <div>
+            <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white leading-none">
+              Noticias <span className="text-[#00AEEF]">OSAPM</span>
+            </h1>
+            <p className="text-white/60 font-bold uppercase text-[10px] tracking-[0.25em] mt-1">
+              Portal de noticias
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="mb-10">
           {!loading && noticias.length > 0 && (
             <p className="text-gray-400 text-sm mt-3">
               {noticias.length} {noticias.length === 1 ? 'noticia' : 'noticias'} publicadas
@@ -82,7 +92,8 @@ export const Noticias: React.FC<{ onNoticiaClick: (id: number) => void }> = ({ o
         {!loading && destacada && (
           <div
             onClick={() => onNoticiaClick(destacada.idNoticia)}
-            className="relative rounded-3xl overflow-hidden h-[480px] mb-8 cursor-pointer group shadow-xl"
+            className="relative rounded-3xl overflow-hidden mb-8 cursor-pointer group shadow-xl"
+            style={{ aspectRatio: '5/3' }}
           >
             <img
               src={getImg(destacada)}
@@ -106,7 +117,7 @@ export const Noticias: React.FC<{ onNoticiaClick: (id: number) => void }> = ({ o
                 {destacada.titulo}
               </h2>
               {destacada.copete && (
-                <p className="text-white/80 text-base line-clamp-2 max-w-2xl">{destacada.copete}</p>
+                <p className="text-white/80 text-base max-w-2xl" style={{overflow:'hidden',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',wordBreak:'break-word'}}>{stripHtml(destacada.copete)}</p>
               )}
               <div className="inline-flex items-center gap-2 mt-4 text-celeste font-bold text-sm group-hover:gap-3 transition-all">
                 Leer nota completa <ArrowRight size={15} />
@@ -125,11 +136,11 @@ export const Noticias: React.FC<{ onNoticiaClick: (id: number) => void }> = ({ o
                 className="bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer group"
               >
                 {/* Imagen con overlay */}
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative overflow-hidden" style={{ aspectRatio: '5/3' }}>
                   <img
                     src={getImg(n)}
                     alt={n.titulo}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                   <span className="absolute top-4 left-4 px-3 py-1 bg-celeste text-white text-[10px] font-black uppercase tracking-widest rounded-full">
@@ -141,16 +152,16 @@ export const Noticias: React.FC<{ onNoticiaClick: (id: number) => void }> = ({ o
                 <div className="h-1 w-full bg-gradient-to-r from-celeste via-azul to-celeste" />
 
                 {/* Contenido */}
-                <div className="p-5">
+                <div className="p-5 overflow-hidden">
                   <div className="flex items-center gap-3 text-gray-400 text-xs mb-2">
                     <span className="flex items-center gap-1"><Calendar size={11} />{formatDate(n.vigenciaDesde)}</span>
                     {n.cuerpo && <span className="flex items-center gap-1"><Clock size={11} />{readingTime(n.cuerpo)} min</span>}
                   </div>
-                  <h3 className="text-base font-black text-slate-800 leading-snug mb-1 group-hover:text-celeste transition-colors line-clamp-2">
-                    {n.titulo}
+                  <h3 className="text-base font-black text-slate-800 leading-snug mb-1 group-hover:text-celeste transition-colors" style={{overflow:'hidden',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',wordBreak:'break-word'}}>
+                    {stripHtml(n.titulo)}
                   </h3>
                   {n.copete && (
-                    <p className="text-gray-500 text-sm line-clamp-2 leading-relaxed">{n.copete}</p>
+                    <p className="text-gray-500 text-sm leading-relaxed" style={{overflow:'hidden',display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',wordBreak:'break-word'}}>{stripHtml(n.copete)}</p>
                   )}
                   <div className="inline-flex items-center gap-1 mt-3 text-celeste text-xs font-bold group-hover:gap-2 transition-all">
                     Leer más <ArrowRight size={12} />

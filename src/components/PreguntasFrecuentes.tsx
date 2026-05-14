@@ -22,22 +22,26 @@ export const PreguntasFrecuentes: React.FC = () => {
     };
 
     return (
-        <section id="preguntas-frecuentes" className="pt-32 pb-20 bg-white font-sans text-[#1C75BB] min-h-screen">
-            <div className="max-w-4xl mx-auto px-6">
+        <section id="preguntas-frecuentes" className="pt-20 pb-20 bg-slate-50 font-sans text-[#1C75BB] min-h-screen">
 
-                {/* CABECERA */}
-                <div className="text-center mb-16 space-y-4">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#00AEEF]/10 rounded-full text-[#00AEEF]">
-                        <HelpCircle size={16} />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Centro de Ayuda</span>
+            {/* HEADER BAND */}
+            <div className="bg-[#1C75BB] px-6 md:px-12 py-10 mb-10">
+                <div className="flex flex-col items-center text-center gap-3">
+                    <div className="p-3 bg-white/10 rounded-2xl">
+                        <HelpCircle size={28} className="text-[#00AEEF]" />
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-[#111111]">
-                        Preguntas <span className="text-[#00AEEF]">Frecuentes</span>
-                    </h2>
-                    <p className="text-gray-500 font-medium max-w-lg mx-auto leading-relaxed">
-                        Resolvé tus dudas de forma inmediata. Si no encontrás lo que buscás, recordá que nuestros canales de atención están abiertos.
-                    </p>
+                    <div>
+                        <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white leading-none">
+                            Preguntas <span className="text-[#00AEEF]">Frecuentes</span>
+                        </h2>
+                        <p className="text-white/60 font-bold uppercase text-[10px] tracking-[0.25em] mt-1">
+                            Resolvé tus dudas de forma inmediata
+                        </p>
+                    </div>
                 </div>
+            </div>
+
+            <div className="max-w-4xl mx-auto px-6">
 
                 {/* ESTADOS: LOADING / ERROR / LISTADO */}
                 {loading ? (
@@ -100,18 +104,21 @@ export const PreguntasFrecuentes: React.FC = () => {
                             <h4 className="text-xl font-black uppercase tracking-tighter">¿Aún tenés dudas?</h4>
                             <p className="text-sm font-medium opacity-80 leading-relaxed">Nuestro equipo de atención al afiliado está listo para ayudarte con gestiones complejas.</p>
                         </div>
-                        <button className="mt-8 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#00AEEF] group-hover:text-white transition-colors">
-                            Contactar soporte <ArrowRight size={16} />
-                        </button>
+                        <a
+                            href="mailto:autorizaciones@apm.org.ar"
+                            className="mt-8 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#00AEEF] group-hover:text-white transition-colors"
+                        >
+                            Contactar <ArrowRight size={16} />
+                        </a>
                     </div>
 
                     <div className="p-8 bg-slate-50 border-2 border-slate-100 rounded-[2.5rem] flex flex-col justify-between">
                         <div className="space-y-4">
                             <Phone size={40} className="text-[#00AEEF]" />
                             <h4 className="text-xl font-black uppercase tracking-tighter text-[#111111]">Mesa de Ayuda</h4>
-                            <p className="text-sm font-bold text-gray-500">Llamanos de Lunes a Viernes de 8:00 a 20:00 hs para consultas administrativas.</p>
+                            <p className="text-sm font-bold text-gray-500">Llamanos de Lunes a Viernes de 9:00 a 18:00 hs para consultas administrativas.</p>
                         </div>
-                        <p className="mt-8 text-2xl font-black text-[#1C75BB]">0800-666-7276</p>
+                        <p className="mt-8 text-2xl font-black text-[#1C75BB]">4633-7878</p>
                     </div>
                 </div>
 

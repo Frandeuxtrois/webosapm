@@ -22,6 +22,8 @@ export interface Plan {
   description: string;
   features: string[];
   recommended?: boolean;
+  cobertura?: string[];
+  beneficios?: string[];
 }
 
 export interface Service {

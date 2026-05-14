@@ -1,8 +1,6 @@
-// URL base de la API de APM (Incluye prefijo de directorio virtual para IIS)
-export const API_BASE_URL = 'https://appapis.apm.org.ar/AppOSAPM';
-
-// 🛠️ NUEVA URL BASE PARA TICKETS
-export const TICKETS_BASE_URL = 'https://osapmapis.apm.org.ar';
+const IS_DEV = import.meta.env.DEV;
+export const API_BASE_URL = IS_DEV ? '/api-main/AppOSAPM' : 'https://appapis.apm.org.ar/AppOSAPM';
+export const TICKETS_BASE_URL = IS_DEV ? '/api-backoffice' : 'https://osapmapis.apm.org.ar';
 
 export const API_ENDPOINTS = {
     // --- AUTHENTICATION ---

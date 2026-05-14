@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
     MapPin, Phone, Clock, Stethoscope,
-    CreditCard, Info, Navigation, MessageCircle, HandHeart
+    CreditCard, Navigation, MessageCircle, HandHeart
 } from 'lucide-react';
 import { Button } from './ui/Button';
 
@@ -16,8 +16,8 @@ const IMAGES = [
 const MEDICAL_SPECIALTIES = [
     "Cardiología", "Cirugía General", "Clínica Médica", "Dermatología",
     "Diabetología", "Endocrinología", "Gastroenterología", "Ginecología",
-    "Kinesiología", "Nutrición", "Osteopatía",
-    "Otorrinolaringología", "Pediatría", "Traumatología", "Urología"
+    "Kinesiología", "Neurología", "Nutrición", "Osteopatía",
+    "Otorrinolaringología", "Pediatría", "Reumatología", "Traumatología", "Urología"
 ];
 
 const DENTAL_SPECIALTIES = [
@@ -25,8 +25,23 @@ const DENTAL_SPECIALTIES = [
     "Prótesis", "Implantes", "Radiología dental", "Cirugías"
 ];
 
+const MEDICAL_PRESTATIONS = [
+    "Consultas médicas ambulatorias", "Estudios de laboratorio", "Diagnóstico por imágenes",
+    "Internación clínica y quirúrgica", "Cirugía ambulatoria", "Guardia médica 24hs",
+    "Estudios de alta complejidad", "Salud mental y psicología", "Medicina preventiva",
+    "Plan materno infantil", "Medicación oncológica", "Trasplantes"
+];
+
+const REHAB_PRESTATIONS = [
+    "Kinesiología y fisioterapia", "RPG – Reeducación Postural Global",
+    "Rehabilitación cardíaca", "Rehabilitación neurológica",
+    "Fonoaudiología", "Terapia ocupacional",
+    "Hidroterapia", "Estimulación temprana"
+];
+
 export const CentroMedico: React.FC = () => {
     const [currentImg, setCurrentImg] = useState(0);
+    const [prestacionTab, setPrestacionTab] = useState<'odontologicas' | 'medicas' | 'rehabilitacion'>('odontologicas');
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -114,38 +129,87 @@ export const CentroMedico: React.FC = () => {
                     </div>
                 </div>
 
-                {/* SECCIÓN ODONTOLOGÍA Y PAGOS */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-24">
-
-                    {/* Bloque Odontología: Blanco con relieve */}
-                    <div className="lg:col-span-2 bg-white rounded-[3rem] p-10 md:p-16 border border-gray-100 shadow-xl relative overflow-hidden group">
-                        {/* Icono HandHeart como marca de agua */}
-                        <HandHeart className="absolute -right-6 -bottom-6 w-48 h-48 md:w-64 md:h-64 opacity-[0.05] text-[#00AEEF] group-hover:scale-110 transition-transform duration-1000" />
-
-                        <div className="relative z-10">
-                            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-10 flex items-center gap-4 text-[#1C75BB]">
-                                <span className="bg-[#00AEEF] text-white px-4 py-1 rounded-2xl text-2xl shadow-lg shadow-blue-500/20 tracking-normal">ODONTOLOGÍA</span>
-                            </h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-                                {DENTAL_SPECIALTIES.map((item, idx) => (
-                                    <div key={idx} className="flex items-center border-b border-gray-100 pb-3 hover:border-[#00AEEF] transition-colors">
-                                        <p className="font-bold text-lg uppercase tracking-tight text-[#1C75BB]">{item}</p>
-                                    </div>
-                                ))}
-                            </div>
+                {/* SECCIÓN PRESTACIONES */}
+                <div className="mb-24">
+                    <div className="flex items-center gap-4 mb-10 text-[#1C75BB]">
+                        <div className="p-3 bg-[#00AEEF]/10 rounded-2xl text-[#00AEEF]">
+                            <HandHeart size={32} />
                         </div>
+                        <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight">Prestaciones</h2>
                     </div>
 
-                    {/* Tarjeta Medios de Pago */}
-                    <div className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-lg flex flex-col justify-center text-center md:text-left">
-                        <CreditCard size={40} className="text-[#00AEEF] mb-8 mx-auto md:mx-0" />
-                        <h3 className="text-2xl font-black uppercase tracking-tight mb-4 text-[#1C75BB] leading-tight">Medios de Pago</h3>
-                        <p className="text-gray-500 font-medium text-sm leading-relaxed mb-8 italic">
-                            Aceptamos todos los medios de pago para la atención con nuestros profesionales y servicios médicos.
-                        </p>
-                        <div className="p-5 bg-[#00AEEF]/5 border-l-[6px] border-l-[#00AEEF] rounded-r-2xl shadow-sm">
-                            <p className="text-[#1C75BB] font-black text-xl uppercase tracking-tighter">Atención Integral</p>
-                            <p className="text-[10px] uppercase font-bold text-gray-400 mt-2 tracking-widest italic">Débito y Crédito</p>
+                    {/* Tab Bar */}
+                    <div className="flex flex-wrap gap-3 mb-8">
+                        {([
+                            { key: 'odontologicas', label: 'Odontológicas' },
+                            { key: 'medicas', label: 'Médicas' },
+                            { key: 'rehabilitacion', label: 'Rehabilitación' },
+                        ] as const).map(({ key, label }) => (
+                            <button
+                                key={key}
+                                onClick={() => setPrestacionTab(key)}
+                                className={`px-7 py-3 rounded-full font-black text-[12px] uppercase tracking-wider transition-all duration-200 ${
+                                    prestacionTab === key
+                                        ? 'bg-[#00AEEF] text-white shadow-lg shadow-blue-400/30 scale-105'
+                                        : 'bg-white border border-gray-200 text-[#1C75BB] hover:border-[#00AEEF] hover:text-[#00AEEF]'
+                                }`}
+                            >
+                                {label}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Tab Content */}
+                    <div className="bg-white rounded-[3rem] p-10 md:p-14 border border-gray-100 shadow-xl relative overflow-hidden group">
+                        <HandHeart className="absolute -right-6 -bottom-6 w-48 h-48 md:w-64 md:h-64 opacity-[0.04] text-[#00AEEF] group-hover:scale-110 transition-transform duration-1000" />
+                        <div className="relative z-10">
+                            {prestacionTab === 'odontologicas' && (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in duration-300">
+                                    {DENTAL_SPECIALTIES.map((item, idx) => (
+                                        <div key={idx} className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl border border-gray-100 hover:border-[#00AEEF] hover:shadow-md transition-all group/item cursor-default">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] group-hover/item:scale-150 transition-transform flex-shrink-0"></div>
+                                            <p className="font-bold text-[13px] uppercase tracking-wide text-[#1C75BB] group-hover/item:text-[#00AEEF] transition-colors">{item}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            {prestacionTab === 'medicas' && (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in duration-300">
+                                    {MEDICAL_PRESTATIONS.map((item, idx) => (
+                                        <div key={idx} className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl border border-gray-100 hover:border-[#00AEEF] hover:shadow-md transition-all group/item cursor-default">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] group-hover/item:scale-150 transition-transform flex-shrink-0"></div>
+                                            <p className="font-bold text-[13px] uppercase tracking-wide text-[#1C75BB] group-hover/item:text-[#00AEEF] transition-colors">{item}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            {prestacionTab === 'rehabilitacion' && (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in duration-300">
+                                    {REHAB_PRESTATIONS.map((item, idx) => (
+                                        <div key={idx} className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl border border-gray-100 hover:border-[#00AEEF] hover:shadow-md transition-all group/item cursor-default">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] group-hover/item:scale-150 transition-transform flex-shrink-0"></div>
+                                            <p className="font-bold text-[13px] uppercase tracking-wide text-[#1C75BB] group-hover/item:text-[#00AEEF] transition-colors">{item}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* TARJETA MEDIOS DE PAGO */}
+                <div className="mb-24">
+                    <div className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-lg flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12">
+                        <CreditCard size={40} className="text-[#00AEEF] flex-shrink-0" />
+                        <div>
+                            <h3 className="text-2xl font-black uppercase tracking-tight mb-3 text-[#1C75BB]">Medios de Pago</h3>
+                            <p className="text-gray-500 font-medium text-sm leading-relaxed mb-6 italic">
+                                Aceptamos todos los medios de pago para la atención con nuestros profesionales y servicios médicos.
+                            </p>
+                            <div className="p-5 bg-[#00AEEF]/5 border-l-[6px] border-l-[#00AEEF] rounded-r-2xl shadow-sm">
+                                <p className="text-[#1C75BB] font-black text-xl uppercase tracking-tighter">Atención Integral</p>
+                                <p className="text-[10px] uppercase font-bold text-gray-400 mt-2 tracking-widest italic">Débito y Crédito</p>
+                            </div>
                         </div>
                     </div>
                 </div>

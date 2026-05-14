@@ -1,8 +1,9 @@
 import { Plan } from '../types';
 import { PLANS } from '../constants';
 
-const OSAM_API_BASE_URL = 'https://appapis.apm.org.ar/AppOSAPM';
-export const BACKOFFICE_API_BASE_URL = 'https://osapmapis.apm.org.ar';
+const IS_DEV = import.meta.env.DEV;
+const OSAM_API_BASE_URL = IS_DEV ? '/api-main/AppOSAPM' : 'https://appapis.apm.org.ar/AppOSAPM';
+export const BACKOFFICE_API_BASE_URL = IS_DEV ? '/api-backoffice' : 'https://osapmapis.apm.org.ar';
 
 export interface PreguntaFrecuente {
   pregunta: string;
@@ -53,6 +54,8 @@ export interface DatosPrestador {
   provinciaNombre: string;
   email: string;
   telefono: string;
+  esSubprestador: boolean;
+  razonSocialSuperior: string | null;
   planes: PlanPrestador[];
   datosAnexos: DatoAnexo[];
 }
@@ -76,10 +79,26 @@ export interface Prestacion {
   codigoApm: string;
   equivalencia: string;
   descripcion: string;
+  prestadorDescripcion: string;
   importe: number;
-  plan1KAmb: boolean; plan1KInt: boolean; plan1KGdia: boolean;
-  plan3KAmb: boolean; plan3KInt: boolean; plan3KGdia: boolean;
-  plan5KAmb: boolean; plan5KInt: boolean; plan5KGdia: boolean;
+  // 0 = no atiende, 1 = atiende, 2 = requiere autorización
+  plan1KAmb: number;  plan1KInt: number;  plan1KGuard: number;
+  plan3KAmb: number;  plan3KInt: number;  plan3KGuard: number;
+  plan5KAmb: number;  plan5KInt: number;  plan5KGuard: number;
+  plan5KPAmb: number; plan5KPInt: number; plan5KPGuard: number;
+  planPAmb: number;   planPInt: number;   planPGuard: number;
+}
+
+export interface NormativaDto {
+  uuid: string;
+  title: string;
+  creationTime: string;
+}
+
+export interface NormativaDetalleDto extends NormativaDto {
+  content: string;
+  description: string;
+  tags: string;
 }
 
 export interface ArchivoPrestador {
@@ -91,7 +110,7 @@ export interface ArchivoPrestador {
 
 // --- PRESTADOR HELPERS ---
 
-const PRESTADOR_BASE = 'https://appapis.apm.org.ar/AppOSAPM';
+const PRESTADOR_BASE = IS_DEV ? '/api-main/AppOSAPM' : 'https://appapis.apm.org.ar/AppOSAPM';
 
 const prestadorHeaders = (isJson = true): Record<string, string> => {
   const token = localStorage.getItem('prestador_token') ?? '';
@@ -277,6 +296,27 @@ export const apiService = {
 
   getAfiliado: async (afiliadoId: string, parentescoId: number): Promise<Afiliado> => {
     const r = await pfetch(`${PRESTADOR_BASE}/api/Prestador/getAfiliado?afiliadoId=${afiliadoId}&parentescoId=${parentescoId}`);
+    if (!r.ok) throw new Error(`${r.status}`);
+    return r.json();
+  },
+
+  getNormativas: async (keyword?: string): Promise<NormativaDto[]> => {
+    const qs = keyword ? `?keyword=${encodeURIComponent(keyword)}` : '';
+    const r = await pfetch(`${PRESTADOR_BASE}/api/Prestador/getNormativas${qs}`);
+    if (!r.ok) throw new Error(`${r.status}`);
+    return r.json();
+  },
+
+  getNormativa: async (uuid: string): Promise<NormativaDetalleDto> => {
+    const r = await pfetch(`${PRESTADOR_BASE}/api/Prestador/getNormativa/${uuid}`);
+    if (!r.ok) throw new Error(`${r.status}`);
+    return r.json();
+  },
+
+  cambiarClavePrestador: async (claveActual: string, nuevaClave: string) => {
+    const r = await pfetch(`${PRESTADOR_BASE}/api/AuthPrestador/cambiarClave`, {
+      method: 'POST', body: JSON.stringify({ ClaveActual: claveActual, NuevaClave: nuevaClave })
+    });
     if (!r.ok) throw new Error(`${r.status}`);
     return r.json();
   },

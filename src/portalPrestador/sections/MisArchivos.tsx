@@ -100,6 +100,32 @@ export const MisArchivos: React.FC<MisArchivosProps> = ({ onSessionExpired }) =>
 
   return (
     <div className="space-y-6">
+
+      {/* Documentos OSAPM */}
+      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
+        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Documentos OSAPM</p>
+        <a
+          href="/formularios/formulario_prestador/rendicion_prestadores.pdf"
+          download
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between gap-4 p-4 bg-slate-50 rounded-2xl border border-gray-100 hover:border-[#00AEEF] hover:shadow-md transition-all group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 bg-[#00AEEF]/10 rounded-xl flex items-center justify-center group-hover:bg-[#00AEEF] transition-colors flex-shrink-0">
+              <FileText size={18} className="text-[#00AEEF] group-hover:text-white transition-colors" />
+            </div>
+            <div>
+              <p className="font-black text-[13px] text-[#1C75BB] uppercase tracking-tight group-hover:text-[#00AEEF] transition-colors">
+                Planilla de Rendición de Prestadores
+              </p>
+              <p className="text-[11px] text-gray-400 mt-0.5">Formulario oficial para rendición de prestaciones</p>
+            </div>
+          </div>
+          <Download size={16} className="text-[#00AEEF] shrink-0" />
+        </a>
+      </div>
+
       {error && (
         <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700 font-semibold text-sm">
           <AlertTriangle size={18} />

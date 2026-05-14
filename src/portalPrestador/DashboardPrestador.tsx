@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard, ReceiptText, ClipboardList, FolderOpen,
-  MessageCircle, LogOut, Menu, X, ChevronRight, Loader2, Users
+  MessageCircle, LogOut, Menu, X, ChevronRight, Loader2, Users, BookOpen, KeyRound
 } from 'lucide-react';
 import { apiService, DatosPrestador } from '../services/api';
 import { PerfilPrestador } from './sections/PerfilPrestador';
@@ -10,20 +10,24 @@ import { Tarifario } from './sections/Tarifario';
 import { MisArchivos } from './sections/MisArchivos';
 import { ContactoPrestador } from './sections/ContactoPrestador';
 import { BuscadorAfiliados } from './sections/BuscadorAfiliados';
+import { Normativas } from './sections/Normativas';
+import { CambiarClave } from './sections/CambiarClave';
 import headerLogo from '../assets/headerlogo.png';
 
 interface DashboardPrestadorProps {
   onLogout: () => void;
 }
 
-type Section = 'inicio' | 'liquidaciones' | 'tarifario' | 'archivos' | 'contacto' | 'afiliados';
+type Section = 'inicio' | 'liquidaciones' | 'tarifario' | 'archivos' | 'contacto' | 'afiliados' | 'normativas' | 'clave';
 
 const menuItems: { id: Section; icon: any; label: string }[] = [
   { id: 'inicio', icon: LayoutDashboard, label: 'Inicio' },
   { id: 'liquidaciones', icon: ReceiptText, label: 'Liquidaciones' },
-  { id: 'tarifario', icon: ClipboardList, label: 'Tarifario' },
+  { id: 'tarifario', icon: ClipboardList, label: 'Prestaciones' },
   { id: 'archivos', icon: FolderOpen, label: 'Mis Archivos' },
   { id: 'afiliados', icon: Users, label: 'Afiliados' },
+  { id: 'normativas', icon: BookOpen, label: 'Normativas' },
+  { id: 'clave', icon: KeyRound, label: 'Cambiar Clave' },
   { id: 'contacto', icon: MessageCircle, label: 'Contacto' },
 ];
 
@@ -64,13 +68,21 @@ export const DashboardPrestador: React.FC<DashboardPrestadorProps> = ({ onLogout
       case 'inicio':
         return <PerfilPrestador datos={datos} onUpdate={fetchDatos} />;
       case 'liquidaciones':
-        return <Liquidaciones onSessionExpired={handleSessionExpired} />;
+        return <Liquidaciones
+          onSessionExpired={handleSessionExpired}
+          esSubprestador={datos?.esSubprestador}
+          razonSocialSuperior={datos?.razonSocialSuperior}
+        />;
       case 'tarifario':
         return <Tarifario onSessionExpired={handleSessionExpired} />;
       case 'archivos':
         return <MisArchivos onSessionExpired={handleSessionExpired} />;
       case 'afiliados':
         return <BuscadorAfiliados onSessionExpired={handleSessionExpired} />;
+      case 'normativas':
+        return <Normativas onSessionExpired={handleSessionExpired} />;
+      case 'clave':
+        return <CambiarClave onSessionExpired={handleSessionExpired} />;
       case 'contacto':
         return <ContactoPrestador onSessionExpired={handleSessionExpired} />;
       default:

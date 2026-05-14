@@ -64,7 +64,7 @@ export const Contact: React.FC = () => {
                   </div>
                   <div className="ml-4">
                     <h4 className="font-bold text-oscuro">Email</h4>
-                    <p className="text-gray-600">sistemas@apm.org.ar</p>
+                    <a href="mailto:osapm@apm.org.ar" className="text-gray-600 hover:text-celeste transition-colors">osapm@apm.org.ar</a>
                   </div>
                 </div>
               </div>

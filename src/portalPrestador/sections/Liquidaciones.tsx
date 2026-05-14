@@ -4,6 +4,8 @@ import { Liquidacion, apiService } from '../../services/api';
 
 interface LiquidacionesProps {
   onSessionExpired: () => void;
+  esSubprestador?: boolean;
+  razonSocialSuperior?: string | null;
 }
 
 const formatARS = (n: number) =>
@@ -15,7 +17,7 @@ const defaultDesde = () => {
   return d.toISOString().split('T')[0];
 };
 
-export const Liquidaciones: React.FC<LiquidacionesProps> = ({ onSessionExpired }) => {
+export const Liquidaciones: React.FC<LiquidacionesProps> = ({ onSessionExpired, esSubprestador, razonSocialSuperior }) => {
   const [fechaDesde, setFechaDesde] = useState(defaultDesde());
   const [data, setData] = useState<Liquidacion[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,10 +28,12 @@ export const Liquidaciones: React.FC<LiquidacionesProps> = ({ onSessionExpired }
     setError(null);
     try {
       const result = await apiService.getLiquidaciones(desde);
-      setData(result);
+      // El backend puede devolver array directo o envuelto en { data: [...] } o similar
+      const arr = Array.isArray(result) ? result : (result as any)?.data ?? (result as any)?.liquidaciones ?? [];
+      setData(arr);
     } catch (err: any) {
       if (err.message === 'SESSION_EXPIRED') { onSessionExpired(); return; }
-      setError('Error al cargar las liquidaciones.');
+      setError(`Error al cargar las liquidaciones (${err.message}).`);
     } finally {
       setLoading(false);
     }
@@ -88,7 +92,21 @@ export const Liquidaciones: React.FC<LiquidacionesProps> = ({ onSessionExpired }
             <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <ReceiptText size={32} className="text-slate-300" />
             </div>
-            <p className="font-black text-gray-400 uppercase tracking-widest text-xs">No hay liquidaciones en el período seleccionado</p>
+            {esSubprestador ? (
+              <>
+                <p className="font-black text-gray-400 uppercase tracking-widest text-xs mb-2">
+                  No tenés liquidaciones a tu nombre
+                </p>
+                <p className="text-xs text-gray-400">
+                  Consultá con el prestador principal:{' '}
+                  <span className="font-black text-[#1C75BB]">{razonSocialSuperior ?? 'prestador superior'}</span>
+                </p>
+              </>
+            ) : (
+              <p className="font-black text-gray-400 uppercase tracking-widest text-xs">
+                No hay movimientos en el período seleccionado
+              </p>
+            )}
           </div>
         ) : (
           <div className="overflow-x-auto">

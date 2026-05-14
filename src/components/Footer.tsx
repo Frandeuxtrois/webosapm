@@ -1,10 +1,22 @@
-import React from 'react';
-import { Facebook, Instagram, Linkedin, Phone, MapPin, Globe } from 'lucide-react';
+import React, { useState } from 'react';
+import { Facebook, Instagram, Linkedin, Phone, MapPin, Globe, ChevronDown, ChevronUp } from 'lucide-react';
 
-// Importamos el mismo logo que en el header
 import footerLogo from '../assets/headerlogo.png';
 
-export const Footer: React.FC = () => {
+const AUTORIDADES = [
+  { cargo: 'Presidente',               nombre: 'Agliano, Salvador Humberto' },
+  { cargo: 'Vicepresidente',           nombre: 'Peidro, Ricardo Hugo' },
+  { cargo: 'Tesorero',                 nombre: 'Nelson, Pedro Marcelo' },
+  { cargo: 'Secretario de Acción Social', nombre: 'Fernandez, María Daniela' },
+];
+
+interface FooterProps {
+  onNavigate?: (view: string) => void;
+  onSectionClick?: (hash: string) => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onNavigate, onSectionClick }) => {
+  const [institucionalOpen, setInstitucionalOpen] = useState(false);
   return (
     <footer className="bg-oscuro text-white pt-20 pb-10 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,43 +52,60 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* COLUMNA 2: INSTITUCIONAL */}
+          {/* COLUMNA 2: NOSOTROS */}
           <div>
-            <h3 className="font-bold text-lg mb-6 text-white border-l-4 border-celeste pl-3 uppercase text-xs tracking-widest">Institucional</h3>
+            <h3 className="font-bold mb-6 text-white border-l-4 border-celeste pl-3 uppercase text-xs tracking-widest">Nosotros</h3>
             <ul className="space-y-4 text-sm text-gray-400 font-medium">
-              <li><a href="#" className="hover:text-celeste transition-colors">Nosotros</a></li>
-              <li><a href="#" className="hover:text-celeste transition-colors">Autoridades</a></li>
-              <li><a href="#" className="hover:text-celeste transition-colors">Cartilla Médica</a></li>
+
+              {/* Institucional con desplegable */}
+              <li>
+                <button
+                  onClick={() => setInstitucionalOpen(o => !o)}
+                  className="flex items-center gap-1.5 hover:text-celeste transition-colors w-full text-left"
+                >
+                  Institucional
+                  {institucionalOpen ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+                </button>
+                {institucionalOpen && (
+                  <ul className="mt-3 ml-3 space-y-3 border-l border-gray-700 pl-3">
+                    {AUTORIDADES.map(({ cargo, nombre }) => (
+                      <li key={cargo}>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">{cargo}</p>
+                        <p className="text-xs text-gray-300 mt-0.5">{nombre}</p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+
+              <li>
+                <button onClick={() => onNavigate?.('telefonos-utiles')} className="hover:text-celeste transition-colors text-left">
+                  Teléfonos Útiles
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onNavigate?.('seccionales')} className="hover:text-celeste transition-colors text-left">
+                  Oficinas
+                </button>
+              </li>
+              <li>
+                <button onClick={() => onSectionClick?.('#contacto')} className="hover:text-celeste transition-colors text-left">
+                  Contacto
+                </button>
+              </li>
             </ul>
           </div>
 
-          {/* COLUMNA 3: LEGALES Y CONTROL */}
+          {/* COLUMNA 3: VIOLENCIA DE GÉNERO */}
           <div>
-            <h3 className="font-bold text-lg mb-6 text-white border-l-4 border-celeste pl-3 uppercase text-xs tracking-widest">Legales</h3>
-            <ul className="space-y-4 text-sm text-gray-400 font-medium">
-              <li><a href="#" className="hover:text-celeste transition-colors">Términos y Condiciones</a></li>
-              <li><a href="#" className="hover:text-celeste transition-colors">Política de Privacidad</a></li>
-              <li>
-                <a
-                  href="https://www.argentina.gob.ar/economia/industria-y-comercio/defensadelconsumidor"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-celeste transition-colors"
-                >
-                  Defensa al Consumidor
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.argentina.gob.ar/sssalud"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-celeste transition-colors text-xs leading-tight block"
-                >
-                  Superintendencia de Servicios de Salud
-                </a>
-              </li>
-            </ul>
+            <h3 className="font-bold mb-6 text-white border-l-4 border-red-500 pl-3 uppercase text-xs tracking-widest leading-tight">
+              Si sos víctima de<br />violencia de género
+            </h3>
+            <p className="text-sm text-gray-400 leading-relaxed">
+              Llamá al{' '}
+              <a href="tel:144" className="text-celeste font-black hover:underline">*144</a>
+              . Las 24hs los 365 días del año.
+            </p>
           </div>
 
           {/* COLUMNA 4: CONTACTO SEDE */}
