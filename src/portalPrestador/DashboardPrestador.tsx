@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard, ReceiptText, ClipboardList, FolderOpen,
-  MessageCircle, LogOut, Menu, X, ChevronRight, Loader2, Users, BookOpen, KeyRound
+  MessageCircle, LogOut, Menu, X, ChevronRight, Loader2, Users, BookOpen, KeyRound, Accessibility
 } from 'lucide-react';
 import { apiService, DatosPrestador } from '../services/api';
 import { PerfilPrestador } from './sections/PerfilPrestador';
@@ -12,23 +12,25 @@ import { ContactoPrestador } from './sections/ContactoPrestador';
 import { BuscadorAfiliados } from './sections/BuscadorAfiliados';
 import { Normativas } from './sections/Normativas';
 import { CambiarClave } from './sections/CambiarClave';
+import { ArchivoDiscapacidad } from './sections/ArchivoDiscapacidad';
 import headerLogo from '../assets/headerlogo.png';
 
 interface DashboardPrestadorProps {
   onLogout: () => void;
 }
 
-type Section = 'inicio' | 'liquidaciones' | 'tarifario' | 'archivos' | 'contacto' | 'afiliados' | 'normativas' | 'clave';
+type Section = 'inicio' | 'liquidaciones' | 'tarifario' | 'archivos' | 'contacto' | 'afiliados' | 'normativas' | 'clave' | 'discapacidad';
 
-const menuItems: { id: Section; icon: any; label: string }[] = [
-  { id: 'inicio', icon: LayoutDashboard, label: 'Inicio' },
-  { id: 'liquidaciones', icon: ReceiptText, label: 'Liquidaciones' },
-  { id: 'tarifario', icon: ClipboardList, label: 'Prestaciones' },
-  { id: 'archivos', icon: FolderOpen, label: 'Mis Archivos' },
-  { id: 'afiliados', icon: Users, label: 'Afiliados' },
-  { id: 'normativas', icon: BookOpen, label: 'Normativas' },
-  { id: 'clave', icon: KeyRound, label: 'Cambiar Clave' },
-  { id: 'contacto', icon: MessageCircle, label: 'Contacto' },
+const BASE_MENU: { id: Section; icon: any; label: string }[] = [
+  { id: 'inicio',        icon: LayoutDashboard, label: 'Inicio' },
+  { id: 'liquidaciones', icon: ReceiptText,      label: 'Liquidaciones' },
+  { id: 'tarifario',     icon: ClipboardList,    label: 'Prestaciones' },
+  { id: 'archivos',      icon: FolderOpen,       label: 'Mis Archivos' },
+  { id: 'afiliados',     icon: Users,            label: 'Afiliados' },
+  { id: 'normativas',    icon: BookOpen,         label: 'Normativas' },
+  { id: 'discapacidad',  icon: Accessibility,    label: 'Discapacidad' },
+  { id: 'clave',         icon: KeyRound,         label: 'Cambiar Clave' },
+  { id: 'contacto',      icon: MessageCircle,    label: 'Contacto' },
 ];
 
 export const DashboardPrestador: React.FC<DashboardPrestadorProps> = ({ onLogout }) => {
@@ -53,6 +55,10 @@ export const DashboardPrestador: React.FC<DashboardPrestadorProps> = ({ onLogout
   }, []);
 
   const handleSessionExpired = () => onLogout();
+
+  const menuItems = BASE_MENU.filter(item =>
+    item.id !== 'discapacidad' || datos?.esDiscapacidad === true
+  );
 
   const handleNavClick = (id: Section) => {
     setActiveSection(id);
@@ -83,6 +89,8 @@ export const DashboardPrestador: React.FC<DashboardPrestadorProps> = ({ onLogout
         return <Normativas onSessionExpired={handleSessionExpired} />;
       case 'clave':
         return <CambiarClave onSessionExpired={handleSessionExpired} />;
+      case 'discapacidad':
+        return <ArchivoDiscapacidad onSessionExpired={handleSessionExpired} />;
       case 'contacto':
         return <ContactoPrestador onSessionExpired={handleSessionExpired} />;
       default:

@@ -93,9 +93,6 @@ export const QuieroAfiliarme: React.FC = () => {
             <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white leading-none">
               Formulario de <span className="text-[#00AEEF]">Afiliación</span>
             </h1>
-            <p className="text-white/60 font-bold uppercase text-[10px] tracking-[0.25em] mt-1">
-              Completá el formulario y un asesor se comunicará con vos
-            </p>
           </div>
         </div>
       </div>

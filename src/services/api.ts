@@ -46,6 +46,11 @@ export interface DatoAnexo {
   texto: string;
 }
 
+export interface EspecialidadPrestador {
+  espCodigo: string;
+  sspCodigo: string;
+}
+
 export interface DatosPrestador {
   prestadorId: number;
   nombre: string;
@@ -56,6 +61,8 @@ export interface DatosPrestador {
   telefono: string;
   esSubprestador: boolean;
   razonSocialSuperior: string | null;
+  esDiscapacidad: boolean;
+  especialidades: EspecialidadPrestador[];
   planes: PlanPrestador[];
   datosAnexos: DatoAnexo[];
 }
@@ -288,9 +295,35 @@ export const apiService = {
   downloadArchivo: async (id: number, nombreMostrar: string) => {
     const r = await pfetch(`${PRESTADOR_BASE}/api/Prestador/downloadArchivo?id=${id}`);
     if (!r.ok) throw new Error(`${r.status}`);
+    const nombre = r.headers.get('x-suggested-filename') || nombreMostrar;
     const blob = await r.blob();
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = nombreMostrar; a.click();
+    const a = document.createElement('a'); a.href = url; a.download = nombre; a.click();
+    URL.revokeObjectURL(url);
+  },
+
+  // --- DISCAPACIDAD ---
+  subirArchivosDiscapacidad: async (afiliadoId: string, files: File[]) => {
+    const fd = new FormData();
+    files.forEach(f => fd.append('archivos', f));
+    const r = await pfetch(`${PRESTADOR_BASE}/api/Prestador/discapacidad/subirArchivos?afiliadoId=${encodeURIComponent(afiliadoId)}`, { method: 'POST', body: fd });
+    if (!r.ok) throw new Error(`${r.status}`);
+    return r.json();
+  },
+
+  getArchivosDiscapacidad: async (afiliadoId: string): Promise<ArchivoPrestador[]> => {
+    const r = await pfetch(`${PRESTADOR_BASE}/api/Prestador/discapacidad/getArchivos?afiliadoId=${encodeURIComponent(afiliadoId)}`);
+    if (!r.ok) throw new Error(`${r.status}`);
+    return r.json();
+  },
+
+  downloadArchivoDiscapacidad: async (id: number, nombreMostrar: string) => {
+    const r = await pfetch(`${PRESTADOR_BASE}/api/Prestador/discapacidad/downloadArchivo?id=${id}`);
+    if (!r.ok) throw new Error(`${r.status}`);
+    const nombre = r.headers.get('x-suggested-filename') || nombreMostrar;
+    const blob = await r.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = nombre; a.click();
     URL.revokeObjectURL(url);
   },
 
