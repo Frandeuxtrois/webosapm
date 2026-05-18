@@ -25,23 +25,9 @@ const DENTAL_SPECIALTIES = [
     "Prótesis", "Implantes", "Radiología dental", "Cirugías"
 ];
 
-const MEDICAL_PRESTATIONS = [
-    "Consultas médicas ambulatorias", "Estudios de laboratorio", "Diagnóstico por imágenes",
-    "Internación clínica y quirúrgica", "Cirugía ambulatoria", "Guardia médica 24hs",
-    "Estudios de alta complejidad", "Salud mental y psicología", "Medicina preventiva",
-    "Plan materno infantil", "Medicación oncológica", "Trasplantes"
-];
-
-const REHAB_PRESTATIONS = [
-    "Kinesiología y fisioterapia", "RPG – Reeducación Postural Global",
-    "Rehabilitación cardíaca", "Rehabilitación neurológica",
-    "Fonoaudiología", "Terapia ocupacional",
-    "Hidroterapia", "Estimulación temprana"
-];
 
 export const CentroMedico: React.FC = () => {
     const [currentImg, setCurrentImg] = useState(0);
-    const [prestacionTab, setPrestacionTab] = useState<'odontologicas' | 'medicas' | 'rehabilitacion'>('odontologicas');
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -49,6 +35,7 @@ export const CentroMedico: React.FC = () => {
         }, 5000);
         return () => clearInterval(timer);
     }, []);
+    const [prestacionTab, setPrestacionTab] = useState<'odontologicas' | 'medicas' | 'rehabilitacion'>('odontologicas');
 
     return (
         <section id="centro-medico" className="pt-20 bg-white font-sans text-[#1C75BB] overflow-x-hidden animate-in fade-in duration-700">
@@ -129,6 +116,7 @@ export const CentroMedico: React.FC = () => {
                     </div>
                 </div>
 
+
                 {/* SECCIÓN PRESTACIONES */}
                 <div className="mb-24">
                     <div className="flex items-center gap-4 mb-10 text-[#1C75BB]">
@@ -139,7 +127,7 @@ export const CentroMedico: React.FC = () => {
                     </div>
 
                     {/* Tab Bar */}
-                    <div className="flex flex-wrap gap-3 mb-8">
+                    <div className="flex flex-wrap gap-3">
                         {([
                             { key: 'odontologicas', label: 'Odontológicas' },
                             { key: 'medicas', label: 'Médicas' },
@@ -157,43 +145,6 @@ export const CentroMedico: React.FC = () => {
                                 {label}
                             </button>
                         ))}
-                    </div>
-
-                    {/* Tab Content */}
-                    <div className="bg-white rounded-[3rem] p-10 md:p-14 border border-gray-100 shadow-xl relative overflow-hidden group">
-                        <HandHeart className="absolute -right-6 -bottom-6 w-48 h-48 md:w-64 md:h-64 opacity-[0.04] text-[#00AEEF] group-hover:scale-110 transition-transform duration-1000" />
-                        <div className="relative z-10">
-                            {prestacionTab === 'odontologicas' && (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in duration-300">
-                                    {DENTAL_SPECIALTIES.map((item, idx) => (
-                                        <div key={idx} className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl border border-gray-100 hover:border-[#00AEEF] hover:shadow-md transition-all group/item cursor-default">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] group-hover/item:scale-150 transition-transform flex-shrink-0"></div>
-                                            <p className="font-bold text-[13px] uppercase tracking-wide text-[#1C75BB] group-hover/item:text-[#00AEEF] transition-colors">{item}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                            {prestacionTab === 'medicas' && (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in duration-300">
-                                    {MEDICAL_PRESTATIONS.map((item, idx) => (
-                                        <div key={idx} className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl border border-gray-100 hover:border-[#00AEEF] hover:shadow-md transition-all group/item cursor-default">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] group-hover/item:scale-150 transition-transform flex-shrink-0"></div>
-                                            <p className="font-bold text-[13px] uppercase tracking-wide text-[#1C75BB] group-hover/item:text-[#00AEEF] transition-colors">{item}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                            {prestacionTab === 'rehabilitacion' && (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in duration-300">
-                                    {REHAB_PRESTATIONS.map((item, idx) => (
-                                        <div key={idx} className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl border border-gray-100 hover:border-[#00AEEF] hover:shadow-md transition-all group/item cursor-default">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] group-hover/item:scale-150 transition-transform flex-shrink-0"></div>
-                                            <p className="font-bold text-[13px] uppercase tracking-wide text-[#1C75BB] group-hover/item:text-[#00AEEF] transition-colors">{item}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
                     </div>
                 </div>
 

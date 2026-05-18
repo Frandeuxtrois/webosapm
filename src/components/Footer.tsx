@@ -146,8 +146,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSectionClick }) =>
         </div>
 
         {/* COPYRIGHT FINAL */}
-        <div className="mt-10 text-center text-[10px] text-gray-600 uppercase tracking-[0.3em]">
+        <div className="mt-10 text-center text-[10px] text-gray-600 uppercase tracking-[0.3em] flex flex-col items-center gap-2">
           <p>&copy; {new Date().getFullYear()} OSAPM - Todos los derechos reservados.</p>
+          <a href="/privacidad.html" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-400 transition-colors underline underline-offset-2">
+            Política de Privacidad
+          </a>
           {/* Al lado del copyright o en una esquina */}
           <button
             onClick={() => window.location.href = '/admin-dashboard'}
