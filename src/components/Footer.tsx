@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
-import { Facebook, Instagram, Linkedin, Phone, MapPin, Globe, ChevronDown, ChevronUp } from 'lucide-react';
+import React from 'react';
+import { Facebook, Instagram, Linkedin, Phone, MapPin, Globe, Download } from 'lucide-react';
+
+const SSS_DOCS = [
+  { nombre: 'SSS 2026', tipo: 'PDF', url: '/cartilla-docs/SSS 2026.pdf' },
+  { nombre: 'Anexo III — Período 2026', tipo: 'XLSX', url: '/cartilla-docs/Anexo III - 118200 Periodo 2026.xlsx' },
+];
 
 import footerLogo from '../assets/headerlogo.png';
-
-const AUTORIDADES = [
-  { cargo: 'Presidente',               nombre: 'Agliano, Salvador Humberto' },
-  { cargo: 'Vicepresidente',           nombre: 'Peidro, Ricardo Hugo' },
-  { cargo: 'Tesorero',                 nombre: 'Nelson, Pedro Marcelo' },
-  { cargo: 'Secretario de Acción Social', nombre: 'Fernandez, María Daniela' },
-];
 
 interface FooterProps {
   onNavigate?: (view: string) => void;
@@ -16,15 +14,12 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate, onSectionClick }) => {
-  const [institucionalOpen, setInstitucionalOpen] = useState(false);
   return (
     <footer className="bg-oscuro text-white pt-20 pb-10 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* COLUMNAS: Se eliminó la línea de borde inferior (border-b) */}
         <div className="grid md:grid-cols-4 gap-12 mb-12">
 
-          {/* COLUMNA 1: LOGO Y REDES */}
           <div className="col-span-1 md:col-span-1">
             <div className="mb-4">
               <a href="/" className="inline-block transition-transform hover:scale-105">
@@ -52,31 +47,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSectionClick }) =>
             </div>
           </div>
 
-          {/* COLUMNA 2: NOSOTROS */}
           <div>
             <h3 className="font-bold mb-6 text-white border-l-4 border-celeste pl-3 uppercase text-xs tracking-widest">Nosotros</h3>
             <ul className="space-y-4 text-sm text-gray-400 font-medium">
 
-              {/* Institucional con desplegable */}
-              <li>
-                <button
-                  onClick={() => setInstitucionalOpen(o => !o)}
-                  className="flex items-center gap-1.5 hover:text-celeste transition-colors w-full text-left"
-                >
-                  Institucional
-                  {institucionalOpen ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
-                </button>
-                {institucionalOpen && (
-                  <ul className="mt-3 ml-3 space-y-3 border-l border-gray-700 pl-3">
-                    {AUTORIDADES.map(({ cargo, nombre }) => (
-                      <li key={cargo}>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">{cargo}</p>
-                        <p className="text-xs text-gray-300 mt-0.5">{nombre}</p>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
 
               <li>
                 <button onClick={() => onNavigate?.('telefonos-utiles')} className="hover:text-celeste transition-colors text-left">
@@ -96,7 +70,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSectionClick }) =>
             </ul>
           </div>
 
-          {/* COLUMNA 3: VIOLENCIA DE GÉNERO */}
           <div>
             <h3 className="font-bold mb-6 text-white border-l-4 border-red-500 pl-3 uppercase text-xs tracking-widest leading-tight">
               Si sos víctima de<br />violencia de género
@@ -108,7 +81,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSectionClick }) =>
             </p>
           </div>
 
-          {/* COLUMNA 4: CONTACTO SEDE */}
           <div>
             <h3 className="font-bold text-lg mb-6 text-white border-l-4 border-celeste pl-3 uppercase text-xs tracking-widest">Sede Central</h3>
             <ul className="space-y-4 text-sm text-gray-400 font-medium">
@@ -128,7 +100,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSectionClick }) =>
           </div>
         </div>
 
-        {/* BARRA INFERIOR: Se mantiene este borde (border-t) como la única línea divisoria */}
         <div className="flex flex-col lg:flex-row justify-between items-center gap-6 border-t border-gray-800 pt-12">
           <div className="text-center lg:text-left">
             <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Identificación Institucional</p>
@@ -145,13 +116,21 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSectionClick }) =>
           </div>
         </div>
 
-        {/* COPYRIGHT FINAL */}
-        <div className="mt-10 text-center text-[10px] text-gray-600 uppercase tracking-[0.3em] flex flex-col items-center gap-2">
+        <div className="flex items-center gap-4 mt-6 text-[10px] text-gray-600 uppercase tracking-[0.3em]">
+          {SSS_DOCS.map(({ nombre, tipo, url }) => (
+            <a key={nombre} href={url} target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-1 hover:text-gray-400 transition-colors">
+              <Download size={9} />
+              {nombre} ({tipo})
+            </a>
+          ))}
+        </div>
+
+        <div className="mt-6 text-center text-[10px] text-gray-600 uppercase tracking-[0.3em] flex flex-col items-center gap-2">
           <p>&copy; {new Date().getFullYear()} OSAPM - Todos los derechos reservados.</p>
           <a href="/privacidad.html" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-400 transition-colors underline underline-offset-2">
             Política de Privacidad
           </a>
-          {/* Al lado del copyright o en una esquina */}
           <button
             onClick={() => window.location.href = '/admin-dashboard'}
             className="opacity-0 hover:opacity-10 transition-opacity text-[8px]"

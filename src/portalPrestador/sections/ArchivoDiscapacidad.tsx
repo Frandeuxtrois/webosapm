@@ -105,7 +105,6 @@ export const ArchivoDiscapacidad: React.FC<ArchivoDiscapacidadProps> = ({ onSess
     return (
         <div className="space-y-6">
 
-            {/* Buscador de afiliado */}
             <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
                 <h2 className="text-xl font-black mb-1 flex items-center gap-3 uppercase tracking-tighter text-[#1C75BB]">
                     <span className="w-1.5 h-6 bg-[#00AEEF] rounded-full"></span>
@@ -137,10 +136,8 @@ export const ArchivoDiscapacidad: React.FC<ArchivoDiscapacidadProps> = ({ onSess
                 </form>
             </div>
 
-            {/* Contenido — solo si hay afiliado buscado */}
             {buscado && (
                 <>
-                    {/* Mensajes */}
                     {error && (
                         <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700 font-semibold text-sm">
                             <AlertTriangle size={18} className="flex-shrink-0" /> {error}
@@ -154,7 +151,6 @@ export const ArchivoDiscapacidad: React.FC<ArchivoDiscapacidadProps> = ({ onSess
                         </div>
                     )}
 
-                    {/* Zona de upload */}
                     <div
                         onDrop={handleDrop}
                         onDragOver={e => { e.preventDefault(); setIsDragging(true); }}
@@ -194,7 +190,6 @@ export const ArchivoDiscapacidad: React.FC<ArchivoDiscapacidadProps> = ({ onSess
                         </div>
                     </div>
 
-                    {/* Lista de archivos */}
                     <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                         <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                             <h3 className="font-black text-[#1C75BB] text-xs uppercase tracking-widest">

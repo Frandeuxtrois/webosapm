@@ -44,7 +44,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             case 'overview':
                 return (
                     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        {/* ESTADÍSTICAS RÁPIDAS */}
+
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             <StatCard title="Visitas Web" value="2.450" icon={Globe} color="text-[#00AEEF]" />
                             <StatCard title="Nuevos Afiliados" value="+24" icon={Users} color="text-green-500" />
@@ -53,7 +53,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                         </div>
 
                         <div className="grid lg:grid-cols-2 gap-8">
-                            {/* ACTIVIDAD RECIENTE */}
+
                             <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100">
                                 <h3 className="text-xl font-black text-[#1C75BB] mb-6 uppercase tracking-tighter italic">Actividad del Portal</h3>
                                 <div className="space-y-4">
@@ -73,7 +73,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                                 </div>
                             </div>
 
-                            {/* ESTADO SERVIDORES */}
+
                             <div className="bg-[#1C75BB] rounded-[2.5rem] p-8 text-white shadow-xl flex flex-col justify-center">
                                 <div className="flex items-center gap-4 mb-6">
                                     <div className="p-3 bg-white/10 rounded-2xl"><BarChart3 size={32} /></div>
@@ -174,7 +174,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     return (
         <div className="min-h-screen bg-[#F8FAFC] font-sans flex text-[#1C75BB]">
 
-            {/* SIDEBAR ADMIN (AZUL #1C75BB) */}
+
             <aside className="w-72 bg-[#1C75BB] text-white flex flex-col fixed h-full z-50 shadow-2xl">
                 <div className="p-8">
                     <img src={headerLogo} alt="Logo" className="h-10 brightness-0 invert" />
@@ -214,7 +214,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                 </div>
             </aside>
 
-            {/* MAIN CONTENT AREA */}
+
             <div className="flex-1 ml-72">
                 <header className="bg-white/80 backdrop-blur-md border-b border-gray-100 h-20 flex items-center px-10 sticky top-0 z-40">
                     <div className="flex items-center gap-3">
@@ -245,7 +245,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     );
 };
 
-// Componente para las tarjetas de estadísticas
+
 const StatCard = ({ title, value, icon: Icon, color }: any) => (
     <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100 hover:shadow-xl hover:scale-[1.02] transition-all group">
         <div className="flex justify-between items-start mb-4">

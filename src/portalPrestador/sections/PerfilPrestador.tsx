@@ -129,7 +129,6 @@ export const PerfilPrestador: React.FC<PerfilPrestadorProps> = ({ datos, onUpdat
           </div>
         )}
 
-        {/* Datos anexos */}
         {datos.datosAnexos && datos.datosAnexos.length > 0 && (
           <div className="mt-6 pt-6 border-t border-gray-100">
             <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-4">Información adicional</p>
@@ -147,7 +146,6 @@ export const PerfilPrestador: React.FC<PerfilPrestadorProps> = ({ datos, onUpdat
         )}
       </div>
 
-      {/* Edición */}
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
         <button
           onClick={() => setEditOpen(!editOpen)}

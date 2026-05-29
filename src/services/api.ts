@@ -29,14 +29,12 @@ export interface Noticia {
   imagenes: NoticiaImagen[];
 }
 
-// --- PRESTADOR INTERFACES ---
-
 export interface PlanPrestador {
   planId: string;
   planNombre: string;
   fechaDesde: string;
   fechaHasta: string | null;
-  ambulatorio: number; // 0=No atiende, 1=Atiende, 2=Requiere autorización
+  ambulatorio: number; 
   internacion: number;
   guardia: number;
 }
@@ -88,7 +86,7 @@ export interface Prestacion {
   descripcion: string;
   prestadorDescripcion: string;
   importe: number;
-  // 0 = no atiende, 1 = atiende, 2 = requiere autorización
+  
   plan1KAmb: number;  plan1KInt: number;  plan1KGuard: number;
   plan3KAmb: number;  plan3KInt: number;  plan3KGuard: number;
   plan5KAmb: number;  plan5KInt: number;  plan5KGuard: number;
@@ -114,8 +112,6 @@ export interface ArchivoPrestador {
   fechaSubida: string;
   tamaño: number;
 }
-
-// --- PRESTADOR HELPERS ---
 
 const PRESTADOR_BASE = IS_DEV ? '/api-main/AppOSAPM' : 'https://appapis.apm.org.ar/AppOSAPM';
 
@@ -175,7 +171,7 @@ export const apiService = {
     if (!response.ok) throw new Error(`Error al obtener noticias: ${response.status}`);
     const data = await response.json();
     const items: Noticia[] = Array.isArray(data) ? data : data.noticias ?? data.items ?? [];
-    // Fetch detalle de cada noticia en paralelo para obtener copete e imagenes
+    
     const detalles = await Promise.all(items.map((n) => apiService.getNoticiaDetalle(n.idNoticia)));
     return detalles;
   },
@@ -198,7 +194,7 @@ export const apiService = {
     });
   },
 
-  // --- PRESTADOR METHODS ---
+  
 
   loginPrestador: async (cuit: string, password: string) => {
     const r = await fetch(`${PRESTADOR_BASE}/api/AuthPrestador/login`, {
@@ -302,7 +298,7 @@ export const apiService = {
     URL.revokeObjectURL(url);
   },
 
-  // --- DISCAPACIDAD ---
+  
   subirArchivosDiscapacidad: async (afiliadoId: string, files: File[]) => {
     const fd = new FormData();
     files.forEach(f => fd.append('archivos', f));

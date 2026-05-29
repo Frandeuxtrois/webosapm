@@ -101,7 +101,6 @@ export const Register: React.FC<RegisterProps> = ({ onBack, onRegisterSuccess, o
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-cyan-50 to-slate-100 relative overflow-hidden">
 
-      {/* Elementos decorativos */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 right-20 w-72 h-72 bg-[#00AEEF]/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 left-20 w-96 h-96 bg-[#1C75BB]/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
@@ -114,7 +113,6 @@ export const Register: React.FC<RegisterProps> = ({ onBack, onRegisterSuccess, o
 
       <div className="w-full max-w-md relative z-10">
 
-        {/* Header */}
         <div className="text-center mb-8 space-y-4">
           <div className="relative inline-block">
             <div className="absolute inset-0 bg-gradient-to-br from-[#00AEEF] to-[#1C75BB] rounded-3xl blur-xl opacity-40 animate-pulse"></div>
@@ -128,7 +126,6 @@ export const Register: React.FC<RegisterProps> = ({ onBack, onRegisterSuccess, o
           </div>
         </div>
 
-        {/* Card */}
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-br from-[#00AEEF] via-[#1C75BB] to-[#00AEEF] rounded-3xl blur-sm opacity-30"></div>
           <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-[#00AEEF]/20 p-8 border border-white/60">
@@ -163,7 +160,6 @@ export const Register: React.FC<RegisterProps> = ({ onBack, onRegisterSuccess, o
 
                 <form onSubmit={handleSubmit} className="space-y-5">
 
-                  {/* DNI */}
                   <div className="space-y-1.5">
                     <label className="block text-sm font-semibold text-[#111111]">DNI</label>
                     <div className="relative group">
@@ -188,7 +184,6 @@ export const Register: React.FC<RegisterProps> = ({ onBack, onRegisterSuccess, o
                     </div>
                   </div>
 
-                  {/* Email */}
                   <div className="space-y-1.5">
                     <label className="block text-sm font-semibold text-[#111111]">Email</label>
                     <div className="relative group">
@@ -206,7 +201,6 @@ export const Register: React.FC<RegisterProps> = ({ onBack, onRegisterSuccess, o
                     </div>
                   </div>
 
-                  {/* Fecha de Nacimiento */}
                   <div className="space-y-1.5">
                     <label className="block text-sm font-semibold text-[#111111]">Fecha de Nacimiento</label>
                     <div className="relative group">
@@ -225,7 +219,6 @@ export const Register: React.FC<RegisterProps> = ({ onBack, onRegisterSuccess, o
                     </div>
                   </div>
 
-                  {/* Contraseña */}
                   <div className="space-y-1.5">
                     <label className="block text-sm font-semibold text-[#111111]">Contraseña</label>
                     <div className="relative group">
@@ -253,7 +246,6 @@ export const Register: React.FC<RegisterProps> = ({ onBack, onRegisterSuccess, o
                     )}
                   </div>
 
-                  {/* Confirmar Contraseña */}
                   <div className="space-y-1.5">
                     <label className="block text-sm font-semibold text-[#111111]">Confirmar Contraseña</label>
                     <div className="relative group">
@@ -282,7 +274,6 @@ export const Register: React.FC<RegisterProps> = ({ onBack, onRegisterSuccess, o
                     )}
                   </div>
 
-                  {/* Botón Registrarse */}
                   <button
                     type="submit"
                     disabled={isLoading}

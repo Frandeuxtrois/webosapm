@@ -3,7 +3,6 @@ import { MapPin, Phone, Mail, Search, Navigation, Building2, ChevronRight } from
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 
-// Fix leaflet default icon
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
@@ -175,7 +174,6 @@ export const Seccionales: React.FC = () => {
                     </div>
                 </div>
 
-                {/* GRILLA DE SECCIONALES */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredSeccionales.map((sec, idx) => (
                         <div key={idx} className="group bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:border-[#00AEEF]/30 transition-all relative overflow-hidden flex flex-col justify-between">

@@ -18,7 +18,6 @@ const getImages = (noticia: Noticia): string[] => {
   return noticia.imagenes.map((img) => `${BACKOFFICE_API_BASE_URL}${img.rutaImagen}`).filter(Boolean);
 };
 
-
 export const Hero: React.FC<{ onNoticiaClick?: (id: number) => void }> = ({ onNoticiaClick }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [noticias, setNoticias] = useState<Noticia[]>([]);
@@ -53,7 +52,6 @@ export const Hero: React.FC<{ onNoticiaClick?: (id: number) => void }> = ({ onNo
 
       <div className="relative z-10 w-full flex flex-col lg:flex-row items-stretch lg:items-center px-8 lg:pl-16 lg:pr-0">
 
-        {/* LADO IZQUIERDO */}
         <div className="w-full lg:w-[42%] shrink-0 text-center lg:text-left space-y-4 animate-fade-in -mt-12">
           <div className="inline-flex items-center gap-2">
             <span className="block w-6 h-[2px] bg-white/60 rounded-full" />
@@ -93,11 +91,9 @@ export const Hero: React.FC<{ onNoticiaClick?: (id: number) => void }> = ({ onNo
           </div>
         </div>
 
-        {/* LADO DERECHO: CARRUSEL */}
         <div className="w-full lg:flex-1 relative flex flex-col items-center justify-center lg:pr-4 mt-8 lg:ml-10">
           <div className="relative w-full h-[560px] lg:h-[600px] flex items-center justify-center">
 
-            {/* SKELETON */}
             {loading && (
               <div className="absolute w-full bg-white rounded-[2.5rem] overflow-hidden shadow-2xl animate-pulse">
                 <div className="h-[360px] w-full bg-gray-200" />
@@ -111,7 +107,6 @@ export const Hero: React.FC<{ onNoticiaClick?: (id: number) => void }> = ({ onNo
               </div>
             )}
 
-            {/* NOTICIAS */}
             {!loading && noticias.map((item, index) => {
               let position = index - currentIndex;
               if (position < 0) position += noticias.length;

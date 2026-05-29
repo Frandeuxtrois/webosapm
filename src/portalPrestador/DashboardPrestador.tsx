@@ -100,7 +100,6 @@ export const DashboardPrestador: React.FC<DashboardPrestadorProps> = ({ onLogout
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans flex">
-      {/* Overlay móvil */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/40 z-30 lg:hidden"
@@ -108,14 +107,12 @@ export const DashboardPrestador: React.FC<DashboardPrestadorProps> = ({ onLogout
         />
       )}
 
-      {/* Sidebar */}
       <aside
         className={`fixed top-0 left-0 h-full z-40 flex flex-col transition-transform duration-300 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         } lg:translate-x-0 lg:static lg:flex`}
         style={{ width: 260, backgroundColor: '#0f2a4a', minHeight: '100vh' }}
       >
-        {/* Logo / Header sidebar */}
         <div className="px-6 py-6 flex items-center justify-between border-b border-white/10">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-[#00AEEF] rounded-lg flex items-center justify-center flex-shrink-0">
@@ -134,7 +131,6 @@ export const DashboardPrestador: React.FC<DashboardPrestadorProps> = ({ onLogout
           </button>
         </div>
 
-        {/* Navegación */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {menuItems.map(item => (
             <button
@@ -155,7 +151,6 @@ export const DashboardPrestador: React.FC<DashboardPrestadorProps> = ({ onLogout
           ))}
         </nav>
 
-        {/* Logout */}
         <div className="px-3 py-4 border-t border-white/10">
           <button
             onClick={onLogout}
@@ -167,12 +162,9 @@ export const DashboardPrestador: React.FC<DashboardPrestadorProps> = ({ onLogout
         </div>
       </aside>
 
-      {/* Contenido principal */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Header */}
         <header className="bg-white border-b border-gray-100 sticky top-0 z-20 shadow-sm">
           <div className="px-6 lg:px-8 py-4 flex items-center gap-4">
-            {/* Botón menú mobile */}
             <button
               onClick={() => setSidebarOpen(true)}
               className="lg:hidden p-2 text-[#1C75BB] hover:bg-slate-100 rounded-xl transition-colors"
@@ -206,7 +198,6 @@ export const DashboardPrestador: React.FC<DashboardPrestadorProps> = ({ onLogout
           </div>
         </header>
 
-        {/* Main content */}
         <main className="flex-1 px-6 lg:px-8 py-8">
           {loadingDatos && activeSection === 'inicio' ? (
             <div className="h-[50vh] flex flex-col items-center justify-center text-[#1C75BB]">

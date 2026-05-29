@@ -54,7 +54,6 @@ export const Plans: React.FC<{ onPlanClick?: () => void }> = ({ onPlanClick }) =
         </div>
       </div>
 
-      {/* OVERLAY */}
       {selected && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
@@ -64,7 +63,6 @@ export const Plans: React.FC<{ onPlanClick?: () => void }> = ({ onPlanClick }) =
             className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
             <div className="flex items-center justify-between px-8 pt-8 pb-4 border-b border-gray-100 flex-shrink-0">
               <div>
                 <h2 className="text-2xl font-black text-azul">{selected.name}</h2>
@@ -77,10 +75,8 @@ export const Plans: React.FC<{ onPlanClick?: () => void }> = ({ onPlanClick }) =
               </button>
             </div>
 
-            {/* Contenido scrolleable */}
             <div className="overflow-y-auto px-8 py-6 space-y-6 flex-1">
 
-              {/* Cobertura */}
               {selected.cobertura && (
                 <div>
                   <p className="text-[11px] font-black uppercase tracking-widest text-[#1C75BB] mb-3 border-l-4 border-celeste pl-3">
@@ -97,7 +93,6 @@ export const Plans: React.FC<{ onPlanClick?: () => void }> = ({ onPlanClick }) =
                 </div>
               )}
 
-              {/* Beneficios */}
               {selected.beneficios && (
                 <div>
                   <p className="text-[11px] font-black uppercase tracking-widest text-[#1C75BB] mb-3 border-l-4 border-celeste pl-3">
@@ -115,7 +110,6 @@ export const Plans: React.FC<{ onPlanClick?: () => void }> = ({ onPlanClick }) =
               )}
             </div>
 
-            {/* Footer */}
             {!selected.recommended && (
               <div className="px-8 py-5 border-t border-gray-100 flex-shrink-0">
                 <button

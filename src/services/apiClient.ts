@@ -9,7 +9,7 @@ export const apiClient = axios.create({
     },
 });
 
-// Interceptor: Antes de cada petición, busca el token y lo pega en el Header
+
 apiClient.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('auth_token');

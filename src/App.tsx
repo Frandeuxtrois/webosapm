@@ -11,6 +11,7 @@ import { Login } from './portalAfiliado/Login';
 import { Register } from './portalAfiliado/Register';
 import { Dashboard } from './portalAfiliado/Dashboard';
 import { CentroMedico } from './components/CentroMedico';
+import { NovedadesCM } from './components/NovedadesCM';
 import { Seccionales } from './components/Seccionales';
 import { TelefonosUtiles } from './components/TelefonosUtiles';
 import { Tramites } from './components/Tramites';
@@ -20,8 +21,8 @@ import { NoticiaDetalle } from './components/NoticiaDetalle';
 import { Noticias } from './components/Noticias';
 import { FormularioSalud } from './components/FormularioSalud';
 import { FormularioPrestador } from './components/FormularioPrestador';
+import { CartillaPublica } from './components/CartillaPublica';
 
-// ADMIN IMPORTS
 import { AdminLogin } from './backoffice/AdminLogin';
 import { AdminDashboard } from './backoffice/AdminDashboard';
 
@@ -82,7 +83,7 @@ function AppContent() {
 
   if (loading) return null;
 
-  // --- LOGICA BACKOFFICE ---
+  
   if (currentView === 'admin-dashboard') {
     if (!isAdminLoggedIn) {
       return <AdminLogin onLoginSuccess={() => setIsAdminLoggedIn(true)} onBack={() => navigateTo('home')} />;
@@ -90,7 +91,7 @@ function AppContent() {
     return <AdminDashboard onLogout={handleAdminLogout} />;
   }
 
-  // --- LOGICA PORTALES ---
+  
   if (currentView === 'portal-afiliado' && isLoggedIn) {
     return <Dashboard onLogout={() => { logout(); navigateTo('home'); }} />;
   }
@@ -118,14 +119,14 @@ function AppContent() {
   }
 
   if (currentView === 'login-afiliado' && !isLoggedIn) {
-    return <Login onBack={() => navigateTo('home')} onLoginSuccess={() => navigateTo('home')} onGoToRegister={() => navigateTo('registro')} />;
+    return <Login onBack={() => navigateTo('home')} onLoginSuccess={() => navigateTo('portal-afiliado')} onGoToRegister={() => navigateTo('registro')} />;
   }
 
   if (currentView === 'registro' && !isLoggedIn) {
     return <Register onBack={() => navigateTo('home')} onRegisterSuccess={() => navigateTo('login-afiliado')} onGoToLogin={() => navigateTo('login-afiliado')} />;
   }
 
-  // Redirección si ya está logueado
+  
   if (isLoggedIn && currentView === 'login-afiliado') {
     navigateTo('home');
   }
@@ -163,20 +164,21 @@ function AppContent() {
       />
 
       <main>
-        {/* CORRECCIÓN: Agregados Institutional y Procedures al renderizado de la Home */}
         {currentView === 'home' && (
           <>
             <Hero onNoticiaClick={(id) => { navigateToNoticia(id); }} />
             <Plans onPlanClick={() => navigateTo('quiero-afiliarme')} />
-            <Services />
+            <Services onCartillaClick={() => navigateTo('cartilla')} />
             <Institutional />
             <Contact />
           </>
         )}
 
+        {currentView === 'cartilla' && <CartillaPublica />}
         {currentView === 'formulario-salud' && <FormularioSalud />}
         {currentView === 'formulario-prestador' && <FormularioPrestador />}
-        {currentView === 'centro-medico' && <CentroMedico />}
+        {currentView === 'centro-medico' && <CentroMedico onNoticiasClick={() => navigateTo('novedades-cm')} />}
+        {currentView === 'novedades-cm' && <NovedadesCM />}
         {currentView === 'seccionales' && <Seccionales />}
         {currentView === 'telefonos-utiles' && <TelefonosUtiles />}
         {currentView === 'tramites' && <Tramites />}

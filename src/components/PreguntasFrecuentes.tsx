@@ -24,7 +24,6 @@ export const PreguntasFrecuentes: React.FC = () => {
     return (
         <section id="preguntas-frecuentes" className="pt-20 pb-20 bg-slate-50 font-sans text-[#1C75BB] min-h-screen">
 
-            {/* HEADER BAND */}
             <div className="bg-[#1C75BB] px-6 md:px-12 py-10 mb-10">
                 <div className="flex flex-col items-center text-center gap-3">
                     <div className="p-3 bg-white/10 rounded-2xl">
@@ -43,7 +42,6 @@ export const PreguntasFrecuentes: React.FC = () => {
 
             <div className="max-w-4xl mx-auto px-6">
 
-                {/* ESTADOS: LOADING / ERROR / LISTADO */}
                 {loading ? (
                     <div className="space-y-4">
                         {[...Array(4)].map((_, i) => (
@@ -96,7 +94,6 @@ export const PreguntasFrecuentes: React.FC = () => {
                     </div>
                 )}
 
-                {/* BANNER DE CONTACTO FINAL */}
                 <div className="mt-20 grid md:grid-cols-2 gap-6">
                     <div className="p-8 bg-[#1C75BB] rounded-[2.5rem] text-white shadow-xl flex flex-col justify-between group cursor-pointer hover:scale-[1.02] transition-all">
                         <div className="space-y-4">

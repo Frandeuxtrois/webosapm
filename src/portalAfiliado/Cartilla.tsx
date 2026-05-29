@@ -4,22 +4,22 @@ import { cartillaService } from '../services/cartillaService';
 import { useAuth } from '../context/authContext';
 
 export const Cartilla: React.FC = () => {
-    const { user } = useAuth(); // Obtenemos el planId y seccionalId del token decodificado
+    const { user } = useAuth();
 
-    // Listas de parámetros
+    
     const [tiposCartilla, setTiposCartilla] = useState<any[]>([]);
     const [provincias, setProvincias] = useState<any[]>([]);
     const [seccionales, setSeccionales] = useState<any[]>([]);
     const [especialidades, setEspecialidades] = useState<any[]>([]);
     const [localidades, setLocalidades] = useState<any[]>([]);
 
-    // Estados de UI y Resultados
+    
     const [resultados, setResultados] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [loadingEsp, setLoadingEsp] = useState(false);
     const [view, setView] = useState<'filtros' | 'resultados'>('filtros');
 
-    // Estado de Filtros (Igual a tu App)
+    
     const [filtros, setFiltros] = useState({
         tipoCartilla: null as number | null,
         tipoPrestadorId: null as number | null,
@@ -73,7 +73,7 @@ export const Cartilla: React.FC = () => {
 
             const payload = {
                 tipoCartilla: Number(filtros.tipoCartilla),
-                plan: user?.planId || "", // IMPORTANTE: El plan sale del token
+                plan: user?.planId || "1000",
                 seccionalId: seccionalParaBusqueda,
                 razonSocial: filtros.razonSocial || "",
                 provinciaId: filtros.provinciaId || "",
@@ -121,7 +121,7 @@ export const Cartilla: React.FC = () => {
             {view === 'filtros' ? (
                 <div className="max-w-4xl mx-auto bg-white rounded-[2rem] shadow-sm border border-gray-100 p-8 md:p-12">
 
-                    {/* Header Buscador */}
+
                     <div className="flex justify-between items-start mb-10">
                         <div className="flex items-center gap-4">
                             <div className="p-3 bg-[#00AEEF]/10 rounded-2xl text-[#00AEEF]">
@@ -139,7 +139,7 @@ export const Cartilla: React.FC = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-                        {/* 1. TIPO DE CARTILLA */}
+
                         <div className="space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest ml-1 opacity-60">1. Tipo de Cartilla (Requerido)</label>
                             <select
@@ -169,7 +169,7 @@ export const Cartilla: React.FC = () => {
                             />
                         </div>
 
-                        {/* 2. ESPECIALIDAD (Si corresponde) */}
+
                         {showEspecialidad && (
                             <div className="md:col-span-2 space-y-2">
                                 <label className="text-[10px] font-black uppercase tracking-widest ml-1 opacity-60 text-[#00AEEF]">2. Especialidad Médica (Requerido)</label>
@@ -240,7 +240,7 @@ export const Cartilla: React.FC = () => {
                 </div>
             ) : (
                 <div className="space-y-6">
-                    {/* BARRA DE CONTROL DE RESULTADOS */}
+
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 px-4">
                         <button
                             onClick={() => setView('filtros')}
@@ -253,7 +253,7 @@ export const Cartilla: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* GRILLA DE PRESTADORES */}
+
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pb-20">
                         {resultados.map((item, idx) => (
                             <div key={idx} className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all group relative overflow-hidden">

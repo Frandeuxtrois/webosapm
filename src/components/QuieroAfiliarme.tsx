@@ -27,7 +27,7 @@ export const QuieroAfiliarme: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>();
 
   const validate = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {};
@@ -83,7 +83,6 @@ export const QuieroAfiliarme: React.FC = () => {
   return (
     <section className="pt-20 min-h-screen bg-slate-50 font-sans animate-in fade-in duration-500">
 
-      {/* HEADER BAND */}
       <div className="bg-[#1C75BB] px-6 md:px-12 py-10">
         <div className="flex flex-col items-center text-center gap-3">
           <div className="p-3 bg-white/10 rounded-2xl">
@@ -97,7 +96,6 @@ export const QuieroAfiliarme: React.FC = () => {
         </div>
       </div>
 
-      {/* EN CONSTRUCCIÓN */}
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-5 px-6">
         <div className="w-20 h-20 bg-[#00AEEF]/10 rounded-3xl flex items-center justify-center">
           <Clock className="text-[#00AEEF]" size={36} />

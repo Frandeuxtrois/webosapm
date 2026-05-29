@@ -1,4 +1,4 @@
-// src/services/authService.ts
+
 import { UserDecoded } from '../types';
 
 export const authService = {
@@ -25,17 +25,17 @@ export const authService = {
         const decoded = authService.decodeToken(token);
         if (!decoded) return null;
 
-        // Lógica 099 -> 001 que pediste
+        
         const rawSeccional = String(decoded.SeccionalId || "001").trim();
         const seccional_app = rawSeccional === "099" ? "001" : rawSeccional;
 
         return {
-            dni: decoded.nameid,             // Del Token
-            afiliadoId: decoded.AfiliadoId,   // Del Token
-            planId: decoded.PlanId,           // Del Token
-            seccionalId: seccional_app,       // Del Token procesado
-            nombre: perfilData?.apellidoNombre || `Usuario ${decoded.nameid}`, // De la API o el DNI
-            planNombre: perfilData?.planDescrip || `Plan ${decoded.PlanId}`,  // De la API o el ID
+            dni: decoded.nameid,             
+            afiliadoId: decoded.AfiliadoId,   
+            planId: decoded.PlanId,           
+            seccionalId: seccional_app,       
+            nombre: perfilData?.apellidoNombre || `Usuario ${decoded.nameid}`, 
+            planNombre: perfilData?.planDescrip || `Plan ${decoded.PlanId}`,  
             exp: decoded.exp
         };
     }

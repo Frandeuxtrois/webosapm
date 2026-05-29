@@ -7,7 +7,7 @@ import {
     Plus, Search, Navigation, Phone, ArrowLeft
 } from 'lucide-react';
 
-// Importación de recursos y servicios
+
 import headerLogo from '../assets/headerlogo.png';
 import { Credencial } from './Credencial';
 import { afiliadoService } from '../services/afiliadoService';
@@ -62,7 +62,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         { id: 'cambiar-password', icon: Key, label: 'Seguridad' },
     ];
 
-    // 1. CARGA INICIAL (Perfil y Grupo)
+    
     useEffect(() => {
         if (user) {
             const fetchInitial = async () => {
@@ -81,7 +81,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         }
     }, [user]);
 
-    // 2. LÓGICA DE CARTILLA
+    
     useEffect(() => {
         if (activeSection === 'prestadores') {
             cartillaService.getParametrosBusqueda().then(data => {
@@ -102,7 +102,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         }
     }, [filtrosCartilla.provinciaId]);
 
-    // 3. ESTADO DE CUENTA
+    
     useEffect(() => {
         if (activeSection === 'estado-cuenta' && user) {
             const fetchFinanzas = async () => {
@@ -120,7 +120,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         }
     }, [activeSection, user]);
 
-    // 4. REFRESCAR TOKEN CARNET
+    
     useEffect(() => {
         let interval: any;
         if (activeSection === 'carnet' && user) {
@@ -134,7 +134,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         return () => clearInterval(interval);
     }, [activeSection, user]);
 
-    // --- HANDLERS ---
+    
     const handleLoadMore = () => setVisibleCount(prev => prev + 15);
 
     const handlePassSubmit = async (e: React.FormEvent) => {
@@ -327,7 +327,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
             case 'estado-cuenta':
                 return (
                     <div className="space-y-6 animate-in fade-in duration-500 pb-10 text-[#1C75BB]">
-                        {/* BOX SALDO */}
+
                         <div className="bg-white rounded-3xl p-10 border border-gray-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
                             <div className="flex items-center gap-6">
                                 <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center text-[#1C75BB]"><Wallet size={32} /></div>
@@ -335,7 +335,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                             </div>
                             <button className="px-10 py-4 bg-[#1C75BB] text-white font-black rounded-xl shadow-lg hover:bg-[#00AEEF] transition-all uppercase tracking-widest text-[10px]">Pagar Cuotas Online</button>
                         </div>
-                        {/* LISTADO MOVIMIENTOS */}
+
                         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
                             <table className="w-full text-left">
                                 <thead className="bg-gray-50 text-[10px] font-black uppercase tracking-widest text-[#1C75BB]">
@@ -385,7 +385,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                                 <button className="px-10 bg-[#1C75BB] text-white font-black py-4 rounded-xl shadow-lg uppercase text-[10px] tracking-widest">Actualizar Contraseña</button>
                             </form>
                         </div>
-                        {/* CAMBIO DE EMAIL */}
+
                         <div className="bg-white rounded-3xl p-10 border border-gray-100 shadow-sm">
                             <h2 className="text-xl font-black mb-6 uppercase tracking-tight flex items-center gap-3 text-[#1C75BB]"><Mail size={22} /> Correo Electrónico</h2>
                             {emailStep === 1 ? (

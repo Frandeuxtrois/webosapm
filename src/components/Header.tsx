@@ -3,7 +3,6 @@ import { Menu, X, ChevronDown, UserCircle } from 'lucide-react';
 import { NAV_STRUCTURE } from '../constants';
 import { Button } from './ui/Button';
 
-// Importación del logo
 import headerLogo from '../assets/headerlogo.png';
 
 interface HeaderProps {
@@ -51,23 +50,19 @@ export const Header: React.FC<HeaderProps> = ({
     <header className={`fixed w-full z-50 transition-[background-color,padding,box-shadow] duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-xl shadow-lg py-2' : 'bg-white/100 py-4'
       } border-b border-gray-100`}>
 
-      {/* TEXTURA GRANULADA */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.08] z-[-1]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
 
       <div className="max-w-full mx-auto px-3 md:px-5 lg:px-8 relative z-10">
         <div className="flex justify-between items-center h-12">
 
-          {/* LOGO */}
           <div className="flex-shrink-0 flex items-center">
             <button onClick={() => { onHomeClick?.(); setIsOpen(false); }} className="transition-transform hover:scale-105 block outline-none">
               <img src={headerLogo} alt="Logo" className={`transition-all duration-300 object-contain ${scrolled ? 'h-9' : 'h-12'}`} />
             </button>
           </div>
 
-          {/* NAVEGACIÓN DESKTOP */}
           <nav className="hidden md:flex space-x-3 lg:space-x-5 items-center h-full">
 
-            {/* OPCIÓN: CENTRO MÉDICO */}
             <button
               onClick={() => { onCentroMedicoClick?.(); setIsOpen(false); }}
               className="text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider transition-colors leading-none"
@@ -75,7 +70,6 @@ export const Header: React.FC<HeaderProps> = ({
               Centro Médico
             </button>
 
-            {/* OPCIÓN: NOTICIAS */}
             <button
               onClick={() => { onNoticiasClick?.(); setIsOpen(false); }}
               className="text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider transition-colors leading-none"
@@ -95,7 +89,6 @@ export const Header: React.FC<HeaderProps> = ({
                   </a>
                 )}
 
-                {/* Submenú Desktop - Corregido el GAP con padding superior en el contenedor */}
                 {group.items && (
                   <div className="absolute right-0 top-full hidden group-hover:block pt-2 animate-in fade-in zoom-in-95 duration-200">
                     <div className="w-64 rounded-2xl shadow-2xl bg-white border border-gray-100 overflow-hidden">
@@ -122,7 +115,6 @@ export const Header: React.FC<HeaderProps> = ({
                 <button className="text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider leading-none transition-colors flex items-center">
                   Ingresar <ChevronDown className="ml-1 h-3.5 w-3.5" />
                 </button>
-                {/* Corregido el GAP aquí también */}
                 <div className="absolute right-0 top-full hidden group-hover:block pt-2 animate-in fade-in zoom-in-95 duration-200">
                   <div className="w-52 rounded-2xl shadow-2xl bg-white border border-gray-100 overflow-hidden">
                     <div className="py-2 text-[#1C75BB]">
@@ -151,7 +143,6 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           </nav>
 
-          {/* BOTÓN MENÚ MÓVIL */}
           <div className="md:hidden flex items-center h-full">
             <button onClick={toggleMenu} className="text-[#1C75BB] p-2 hover:text-[#00AEEF] outline-none">
               {isOpen ? <X size={32} /> : <Menu size={32} />}
@@ -160,7 +151,6 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* MENÚ MÓVIL */}
       {isOpen && (
         <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-2xl border-t border-gray-100 animate-in slide-in-from-top duration-300">
           <div className="px-6 pt-4 pb-10 space-y-3 h-screen overflow-y-auto bg-white">

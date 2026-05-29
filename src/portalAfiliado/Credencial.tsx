@@ -43,7 +43,7 @@ export const Credencial: React.FC<CredencialProps> = ({ data, token, loading, on
         const el = cardRefs.current[index];
         if (!el) return;
 
-        // Clonar sin transform para capturar a tamaño real (600×340)
+        
         const clone = el.cloneNode(true) as HTMLElement;
         clone.style.transform = 'none';
         clone.style.position  = 'fixed';
@@ -58,7 +58,7 @@ export const Credencial: React.FC<CredencialProps> = ({ data, token, loading, on
         document.body.removeChild(clone);
 
         const padding = 80;
-        const r = 28 * DPR; // border-radius en px del canvas final
+        const r = 28 * DPR; 
         const x = padding;
         const y = padding;
         const w = cardCanvas.width;
@@ -69,11 +69,11 @@ export const Credencial: React.FC<CredencialProps> = ({ data, token, loading, on
         final.height = h + padding * 2;
         const ctx = final.getContext('2d')!;
 
-        // Fondo blanco
+        
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, final.width, final.height);
 
-        // Helper bordes redondeados manual (cross-browser)
+        
         const rrect = (cx: number, cy: number, cw: number, ch: number, cr: number) => {
             ctx.beginPath();
             ctx.moveTo(cx + cr, cy);
@@ -88,7 +88,7 @@ export const Credencial: React.FC<CredencialProps> = ({ data, token, loading, on
             ctx.closePath();
         };
 
-        // Sombra (se dibuja sobre un fill, ANTES del clip)
+        
         ctx.save();
         ctx.shadowColor = 'rgba(0,0,0,0.20)';
         ctx.shadowBlur = 40;
@@ -98,7 +98,7 @@ export const Credencial: React.FC<CredencialProps> = ({ data, token, loading, on
         ctx.fill();
         ctx.restore();
 
-        // Imagen recortada con bordes redondeados
+        
         ctx.save();
         rrect(x, y, w, h, r);
         ctx.clip();
@@ -114,31 +114,31 @@ export const Credencial: React.FC<CredencialProps> = ({ data, token, loading, on
     return (
         <div className="flex flex-col items-center gap-6 py-4 animate-in fade-in duration-500 font-sans">
 
-            {/* LISTADO DE CREDENCIALES */}
+
             <div ref={containerRef} className="flex flex-col gap-8 w-full items-center">
                 {data.map((item, index) => {
                     const [apellido, nombres] = item.nombreCompleto.split(',').map(s => s.trim());
 
                     return (
                         <div key={index} className="flex flex-col items-center gap-3 w-full">
-                            {/* WRAPPER RESPONSIVE */}
+
                             <div style={{
                                 width: CARD_W * scale,
                                 height: CARD_H * scale,
                                 overflow: 'hidden',
                                 flexShrink: 0,
                             }}>
-                            {/* LA TARJETA */}
+
                             <div
                                 ref={(el) => { cardRefs.current[index] = el; }}
                                 className="w-[600px] h-[340px] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col"
                                 style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}
                             >
 
-                                {/* FRANJA SUPERIOR CELESTE */}
+
                                 <div className="h-4 bg-[#39B5E6]"></div>
 
-                                {/* SECCIÓN BLANCA CON LOGO */}
+
                                 <div className="bg-white h-[90px] flex items-center justify-center px-8">
                                     <img
                                         src={headerLogo}
@@ -147,19 +147,19 @@ export const Credencial: React.FC<CredencialProps> = ({ data, token, loading, on
                                     />
                                 </div>
 
-                                {/* LÍNEA SEPARADORA HORIZONTAL */}
+
                                 <div className="h-[7px] bg-[#39B5E6]"></div>
 
-                                {/* ESPACIO BLANCO */}
+
                                 <div className="h-1 bg-white"></div>
 
-                                {/* LÍNEA EMBELLECEDORA DELGADA */}
+
                                 <div className="h-[1px] bg-[#39B5E6]"></div>
 
-                                {/* SECCIÓN CELESTE CON TODOS LOS DATOS */}
+
                                 <div className="flex-1 bg-[#39B5E6] px-8 py-6 flex justify-between items-start">
 
-                                    {/* COLUMNA IZQUIERDA - DATOS PERSONALES */}
+
                                     <div className="flex-1">
                                         <div className="mb-3">
                                             <h3 className="text-[28px] font-black leading-tight uppercase text-black">
@@ -182,7 +182,7 @@ export const Credencial: React.FC<CredencialProps> = ({ data, token, loading, on
                                         </div>
                                     </div>
 
-                                    {/* COLUMNA DERECHA - PLAN Y TOKEN */}
+
                                     <div className="flex flex-col justify-between items-end h-full">
                                         <div className="text-right">
                                             <p className="text-[30px] font-black leading-none uppercase text-black mb-1">
@@ -196,12 +196,12 @@ export const Credencial: React.FC<CredencialProps> = ({ data, token, loading, on
                                     </div>
                                 </div>
 
-                                {/* FRANJA INFERIOR CELESTE */}
+
                                 <div className="h-2 bg-[#39B5E6]"></div>
                             </div>
-                            </div>{/* cierre wrapper responsive */}
+                            </div>
 
-                            {/* BOTÓN DESCARGAR */}
+
                             <button
                                 onClick={() => handleDownload(index, item.nombreCompleto)}
                                 className="flex items-center gap-2 px-4 py-2 border border-[#00AEEF] text-[#00AEEF] rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-[#00AEEF] hover:text-white transition-all"

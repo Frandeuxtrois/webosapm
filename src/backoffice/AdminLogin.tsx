@@ -21,7 +21,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess, onBack }
         setTimeout(() => {
             if (formData.user === 'admin' && formData.pass === 'osapm2024') {
                 localStorage.setItem('admin_token', 'secret-admin-session');
-                onLoginSuccess(); // <--- ESTO LE AVISA A APP.TSX
+                onLoginSuccess(); 
             } else {
                 setError("Usuario o clave de administrador incorrectos");
             }

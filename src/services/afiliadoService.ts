@@ -7,7 +7,7 @@ const getAuthHeaders = () => ({
 });
 
 export const afiliadoService = {
-    // --- PERFIL Y CREDENCIALES ---
+    
     getPerfil: async () => {
         try {
             const res = await fetch(`${API_BASE_URL}${API_ENDPOINTS.PERFIL_DATOS}`, {
@@ -61,12 +61,12 @@ export const afiliadoService = {
             const res = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GENERAR_CUPON}`, {
                 method: 'POST',
                 headers: getAuthHeaders(),
-                body: JSON.stringify({ id: idFactura }) // Enviamos el ID de la factura FAB
+                body: JSON.stringify({ id: idFactura }) 
             });
 
             if (!res.ok) throw new Error('No se pudo generar el cupón');
 
-            // Retornamos el archivo como un BLOB (Binary Large Object)
+            
             return await res.blob();
         } catch (error) {
             console.error("Error al descargar cupón:", error);

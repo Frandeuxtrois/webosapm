@@ -7,7 +7,7 @@ interface BuscadorAfiliadosProps {
 }
 
 const parseQuery = (raw: string): { afiliadoId: string; parentescoId: number } | null => {
-  // Accept formats: "123456-00" or "12345600"
+  
   const cleaned = raw.trim().replace('-', '');
   if (cleaned.length < 7 || !/^\d+$/.test(cleaned)) return null;
   const afiliadoId = cleaned.slice(0, cleaned.length - 2);
@@ -53,7 +53,6 @@ export const BuscadorAfiliados: React.FC<BuscadorAfiliadosProps> = ({ onSessionE
 
   return (
     <div className="space-y-6">
-      {/* Buscador */}
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
         <h2 className="text-xl font-black mb-2 flex items-center gap-3 uppercase tracking-tighter text-[#1C75BB]">
           <span className="w-1.5 h-6 bg-[#00AEEF] rounded-full"></span>
@@ -92,7 +91,6 @@ export const BuscadorAfiliados: React.FC<BuscadorAfiliadosProps> = ({ onSessionE
         )}
       </div>
 
-      {/* Not found */}
       {notFound && (
         <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-10 text-center">
           <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -103,7 +101,6 @@ export const BuscadorAfiliados: React.FC<BuscadorAfiliadosProps> = ({ onSessionE
         </div>
       )}
 
-      {/* Resultado */}
       {afiliado && (
         <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
           <div className="flex items-start justify-between gap-4 mb-6">

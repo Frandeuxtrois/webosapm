@@ -28,7 +28,7 @@ export const Liquidaciones: React.FC<LiquidacionesProps> = ({ onSessionExpired, 
     setError(null);
     try {
       const result = await apiService.getLiquidaciones(desde);
-      // El backend puede devolver array directo o envuelto en { data: [...] } o similar
+      
       const arr = Array.isArray(result) ? result : (result as any)?.data ?? (result as any)?.liquidaciones ?? [];
       setData(arr);
     } catch (err: any) {
@@ -53,7 +53,6 @@ export const Liquidaciones: React.FC<LiquidacionesProps> = ({ onSessionExpired, 
 
   return (
     <div className="space-y-6">
-      {/* Filtro */}
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
         <div className="flex flex-col sm:flex-row gap-4 items-end">
           <div className="space-y-2 flex-1">
@@ -77,7 +76,6 @@ export const Liquidaciones: React.FC<LiquidacionesProps> = ({ onSessionExpired, 
         </div>
       </div>
 
-      {/* Tabla */}
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
         {loading ? (
           <div className="p-12 space-y-3">

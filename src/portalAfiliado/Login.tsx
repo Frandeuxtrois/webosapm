@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, ArrowRight, Loader2, Lock } from 'lucide-react';
-import { useAuth } from '../context/authContext'; // Importamos el contexto
+import { Eye, EyeOff, ArrowRight, Loader2, Lock, CheckCircle } from 'lucide-react';
+import { useAuth } from '../context/authContext';
+import { API_BASE_URL, API_ENDPOINTS } from '../services/apiConfig';
 
-// Importación de las imágenes
 import loginLogo from '../assets/login-logo.png';
 
 interface LoginProps {
@@ -11,17 +11,72 @@ interface LoginProps {
   onGoToRegister?: () => void;
 }
 
+type Step = 'login' | 'recuperar' | 'reset' | 'exito';
+
 export const Login: React.FC<LoginProps> = ({ onBack, onLoginSuccess, onGoToRegister }) => {
-  const { login } = useAuth(); // <--- Usamos la función del cerebro global
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [step, setStep] = useState<Step>('login');
 
-  const [formData, setFormData] = useState({
-    dni: '',
-    password: ''
-  });
+  const [formData, setFormData] = useState({ dni: '', password: '' });
+  const [recDni, setRecDni] = useState('');
+  const [resetCodigo, setResetCodigo] = useState('');
+  const [resetPassword, setResetPassword] = useState('');
+  const [resetPasswordConfirm, setResetPasswordConfirm] = useState('');
+
+  const handleSolicitarReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}${API_ENDPOINTS.OLVIDE_CLAVE}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dni: recDni }),
+      });
+      if (res.ok) {
+        setStep('reset');
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.message || 'No se pudo enviar el código. Verificá el DNI ingresado.');
+      }
+    } catch {
+      setError('Error de conexión con el servidor.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEjecutarReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (resetPassword !== resetPasswordConfirm) {
+      setError('Las contraseñas no coinciden.');
+      return;
+    }
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${API_BASE_URL}${API_ENDPOINTS.EJECUTAR_RESET}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dni: recDni, codigo: resetCodigo, nuevaPassword: resetPassword }),
+      });
+      if (res.ok) {
+        setStep('exito');
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.message || 'Código incorrecto o expirado.');
+      }
+    } catch {
+      setError('Error de conexión con el servidor.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleDniChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, '');
@@ -51,25 +106,137 @@ export const Login: React.FC<LoginProps> = ({ onBack, onLoginSuccess, onGoToRegi
     }
   };
 
+  const bgShell = (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute top-20 right-20 w-72 h-72 bg-[#00AEEF]/20 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-20 left-20 w-96 h-96 bg-[#1C75BB]/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#00AEEF]/10 rounded-full blur-3xl"></div>
+      <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(circle, #1C75BB 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
+    </div>
+  );
+
+  if (step === 'recuperar') return (
+    <div className="min-h-screen w-full flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-cyan-50 to-slate-100 relative overflow-hidden">
+      {bgShell}
+      <div className="w-full max-w-md relative z-10">
+        <div className="text-center mb-8">
+          <div className="relative inline-block mb-4">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#00AEEF] to-[#1C75BB] rounded-3xl blur-xl opacity-40 animate-pulse"></div>
+            <div className="relative inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white shadow-2xl border-4 border-slate-50">
+              <img src={loginLogo} alt="OSAPM" className="h-12 w-auto object-contain" />
+            </div>
+          </div>
+          <h1 className="text-2xl font-bold text-[#1C75BB] mb-1">Recuperar contraseña</h1>
+          <p className="text-sm text-slate-500">Te enviamos un código al email asociado a tu DNI</p>
+        </div>
+        <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/60">
+          {error && <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-2xl">⚠️ {error}</div>}
+          <form onSubmit={handleSolicitarReset} className="space-y-5">
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-[#111111]">DNI</label>
+              <input
+                type="text" inputMode="numeric" required
+                className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl py-4 px-5 outline-none font-medium text-[#111111] focus:border-[#00AEEF] transition-all"
+                placeholder="Ingresá tu DNI sin puntos"
+                value={recDni}
+                onChange={e => setRecDni(e.target.value.replace(/\D/g, ''))}
+              />
+            </div>
+            <button type="submit" disabled={isLoading || !recDni} className="w-full bg-gradient-to-r from-[#00AEEF] to-[#1C75BB] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-[#00AEEF]/40 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+              {isLoading ? <Loader2 className="animate-spin" size={20} /> : <><span>Enviar código</span><ArrowRight size={18} /></>}
+            </button>
+          </form>
+        </div>
+        <button onClick={() => { setStep('login'); setError(null); }} className="mt-6 w-full text-slate-500 hover:text-[#111111] text-sm font-semibold flex items-center justify-center gap-2 py-3 rounded-xl hover:bg-white/50">← Volver al inicio de sesión</button>
+      </div>
+    </div>
+  );
+
+  if (step === 'reset') return (
+    <div className="min-h-screen w-full flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-cyan-50 to-slate-100 relative overflow-hidden">
+      {bgShell}
+      <div className="w-full max-w-md relative z-10">
+        <div className="text-center mb-8">
+          <div className="relative inline-block mb-4">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#00AEEF] to-[#1C75BB] rounded-3xl blur-xl opacity-40 animate-pulse"></div>
+            <div className="relative inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white shadow-2xl border-4 border-slate-50">
+              <img src={loginLogo} alt="OSAPM" className="h-12 w-auto object-contain" />
+            </div>
+          </div>
+          <h1 className="text-2xl font-bold text-[#1C75BB] mb-1">Nueva contraseña</h1>
+          <p className="text-sm text-slate-500">Ingresá el código que recibiste por email y tu nueva contraseña</p>
+        </div>
+        <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/60">
+          {error && <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-2xl">⚠️ {error}</div>}
+          <form onSubmit={handleEjecutarReset} className="space-y-5">
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-[#111111]">Código recibido por email</label>
+              <input
+                type="text" required
+                className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl py-4 px-5 outline-none font-medium text-[#111111] focus:border-[#00AEEF] transition-all tracking-widest"
+                placeholder="Ej: 123456"
+                value={resetCodigo}
+                onChange={e => setResetCodigo(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-[#111111]">Nueva contraseña</label>
+              <div className="relative">
+                <input
+                  type={showNewPassword ? 'text' : 'password'} required
+                  className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl py-4 px-5 pr-12 outline-none font-medium text-[#111111] focus:border-[#1C75BB] transition-all"
+                  placeholder="Mínimo 8 caracteres"
+                  value={resetPassword}
+                  onChange={e => setResetPassword(e.target.value)}
+                />
+                <button type="button" onClick={() => setShowNewPassword(v => !v)} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#1C75BB] transition-colors">
+                  {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-[#111111]">Confirmar contraseña</label>
+              <input
+                type="password" required
+                className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl py-4 px-5 outline-none font-medium text-[#111111] focus:border-[#1C75BB] transition-all"
+                placeholder="Repetí la nueva contraseña"
+                value={resetPasswordConfirm}
+                onChange={e => setResetPasswordConfirm(e.target.value)}
+              />
+            </div>
+            <button type="submit" disabled={isLoading || !resetCodigo || !resetPassword || !resetPasswordConfirm} className="w-full bg-gradient-to-r from-[#00AEEF] to-[#1C75BB] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-[#00AEEF]/40 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+              {isLoading ? <Loader2 className="animate-spin" size={20} /> : <><span>Cambiar contraseña</span><ArrowRight size={18} /></>}
+            </button>
+          </form>
+        </div>
+        <button onClick={() => { setStep('recuperar'); setError(null); }} className="mt-6 w-full text-slate-500 hover:text-[#111111] text-sm font-semibold flex items-center justify-center gap-2 py-3 rounded-xl hover:bg-white/50">← Volver</button>
+      </div>
+    </div>
+  );
+
+  if (step === 'exito') return (
+    <div className="min-h-screen w-full flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-cyan-50 to-slate-100 relative overflow-hidden">
+      {bgShell}
+      <div className="w-full max-w-md relative z-10 text-center">
+        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-12 border border-white/60 space-y-5">
+          <CheckCircle size={56} className="text-green-500 mx-auto" />
+          <h2 className="text-2xl font-bold text-[#1C75BB]">¡Contraseña actualizada!</h2>
+          <p className="text-slate-500 text-sm">Ya podés iniciar sesión con tu nueva contraseña.</p>
+          <button onClick={() => { setStep('login'); setError(null); }} className="w-full bg-gradient-to-r from-[#00AEEF] to-[#1C75BB] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-[#00AEEF]/40 transition-all flex items-center justify-center gap-2">
+            Ir al inicio de sesión <ArrowRight size={18} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-cyan-50 to-slate-100 relative overflow-hidden">
 
-      {/* Elementos decorativos con colores OSAPM */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-20 w-72 h-72 bg-[#00AEEF]/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 left-20 w-96 h-96 bg-[#1C75BB]/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#00AEEF]/10 rounded-full blur-3xl"></div>
-
-        {/* Patrón de puntos sutil */}
-        <div className="absolute inset-0 opacity-[0.02]" style={{
-          backgroundImage: 'radial-gradient(circle, #1C75BB 1px, transparent 1px)',
-          backgroundSize: '30px 30px'
-        }}></div>
-      </div>
+      {bgShell}
 
       <div className="w-full max-w-md relative z-10">
 
-        {/* Header con más presencia */}
         <div className="text-center mb-8 space-y-4">
           <div className="relative inline-block">
             <div className="absolute inset-0 bg-gradient-to-br from-[#00AEEF] to-[#1C75BB] rounded-3xl blur-xl opacity-40 animate-pulse"></div>
@@ -83,7 +250,6 @@ export const Login: React.FC<LoginProps> = ({ onBack, onLoginSuccess, onGoToRegi
           </div>
         </div>
 
-        {/* Card de login */}
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-br from-[#00AEEF] via-[#1C75BB] to-[#00AEEF] rounded-3xl blur-sm opacity-30"></div>
           <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-[#00AEEF]/20 p-8 border border-white/60">
@@ -126,7 +292,7 @@ export const Login: React.FC<LoginProps> = ({ onBack, onLoginSuccess, onGoToRegi
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-semibold text-[#111111]">Contraseña</label>
-                  <button type="button" className="text-xs text-[#1C75BB] hover:text-[#00AEEF] font-semibold hover:underline flex items-center gap-1"><Lock size={12} />¿Olvidaste tu clave?</button>
+                  <button type="button" onClick={() => { setError(null); setRecDni(formData.dni); setStep('recuperar'); }} className="text-xs text-[#1C75BB] hover:text-[#00AEEF] font-semibold hover:underline flex items-center gap-1"><Lock size={12} />¿Olvidaste tu clave?</button>
                 </div>
                 <div className="relative group">
                   <div className={`absolute inset-0 bg-gradient-to-r from-[#1C75BB] to-[#00AEEF] rounded-xl blur-md opacity-0 group-hover:opacity-20 transition-opacity ${focusedField === 'password' ? 'opacity-30' : ''}`}></div>

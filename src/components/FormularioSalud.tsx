@@ -49,7 +49,6 @@ export const FormularioSalud: React.FC = () => {
     return (
         <section className="pt-20 min-h-screen bg-slate-50 font-sans text-[#1C75BB] animate-in fade-in duration-500">
 
-            {/* HEADER BAND */}
             <div className="bg-[#1C75BB] px-6 md:px-12 py-10 relative">
                 <div className="flex flex-col items-center text-center gap-3">
                     <div className="p-3 bg-white/10 rounded-2xl">
@@ -65,7 +64,6 @@ export const FormularioSalud: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Control tamaño de fuente — esquina */}
                 <div className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-white/10 border border-white/20 rounded-xl p-1">
                     <button
                         onClick={() => setFontSizeIdx(i => Math.max(0, i - 1))}
@@ -97,7 +95,6 @@ export const FormularioSalud: React.FC = () => {
                 </div>
             </div>
 
-            {/* GRID */}
             <div className="max-w-5xl mx-auto px-6 md:px-12 py-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {FORMULARIOS.map((form, idx) => (

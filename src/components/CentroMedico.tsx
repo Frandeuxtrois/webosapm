@@ -1,218 +1,519 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
-    MapPin, Phone, Clock, Stethoscope,
-    CreditCard, Navigation, MessageCircle, HandHeart
+    MapPin, Phone, Stethoscope,
+    CreditCard, Navigation, MessageCircle, HandHeart,
+    ExternalLink, Mail, Banknote, QrCode, Newspaper, ChevronDown
 } from 'lucide-react';
-import { Button } from './ui/Button';
+interface NovedadCard {
+    id: number;
+    titulo: string;
+    copete: string;
+    fecha: string;
+    imagen: string;
+}
 
-const IMAGES = [
-    "/centro-medico/foto1.png",
-    "/centro-medico/foto2.jpg",
-    "/centro-medico/foto3.jpg",
-    "/centro-medico/foto4.jpg",
-    "/centro-medico/foto5.jpg"
+const NOVEDADES_PLACEHOLDER: NovedadCard[] = [
+    {
+        id: 1,
+        titulo: 'Nueva especialidad en el Centro Médico',
+        copete: 'Bienvenida Dra. Carla Lallopizzo a nuestro equipo.',
+        fecha: '2026-05-14',
+        imagen: '/cm-osapm/reumato.jpg',
+    },
+    {
+        id: 2,
+        titulo: 'Nueva especialidad en el Centro Médico',
+        copete: 'Bienvenida Dra. Anabella Gomez a nuestro equipo.',
+        fecha: '2026-05-14',
+        imagen: '/cm-osapm/neuro.jpg',
+    },
+    {
+        id: 3,
+        titulo: 'Equipo de Rehabilitación renovado',
+        copete: 'Contamos con equipamiento de última generación en el área de Fisiokinesioterapia para mejorar los tratamientos.',
+        fecha: '2025-02-10',
+        imagen: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800',
+    },
 ];
 
-const MEDICAL_SPECIALTIES = [
-    "Cardiología", "Cirugía General", "Clínica Médica", "Dermatología",
-    "Diabetología", "Endocrinología", "Gastroenterología", "Ginecología",
-    "Kinesiología", "Neurología", "Nutrición", "Osteopatía",
-    "Otorrinolaringología", "Pediatría", "Reumatología", "Traumatología", "Urología"
+
+interface Especialidad {
+    nombre: string;
+    procedimientos?: string[];
+}
+
+const ESPECIALIDADES: Especialidad[] = [
+    { nombre: "Clínica Médica", procedimientos: ["Consulta Clínica Médica"] },
+    { nombre: "Cardiología", procedimientos: ["Electrocardiograma"] },
+    {
+        nombre: "Traumatología",
+        procedimientos: [
+            "Infiltraciones de Traumatología, con o sin medicación incluida (Corticoides / Ácido Hialurónico)",
+            "Curaciones",
+            "Extracción de puntos"
+        ]
+    },
+    {
+        nombre: "Dermatología",
+        procedimientos: [
+            "Escisión local de lesión de piel o glándula de piel (quiste sebáceo, ántrax, nevus, etc.)",
+            "Destrucción de lesión de piel por electrocoagulación o sustancias químicas — hasta 5 elementos",
+            "Destrucción de lesión de piel por electrocoagulación o sustancias químicas — más de 5 elementos",
+            "Drenaje de absceso",
+            "Dermatoscopía",
+            "Control de lunares / Mapeo corporal",
+            "Biopsia de piel",
+            "Curetaje",
+            "Infiltración de queloides"
+        ]
+    },
+    {
+        nombre: "Ginecología",
+        procedimientos: [
+            "Colposcopía / Traqueloscopía",
+            "Cepillado endocervical c/ control colposcópico (Cytobrush)",
+            "Topificación vulvar",
+            "Vaginoscopía",
+            "Vulvoscopía",
+            "Toma de muestra para Papanicolau",
+            "Extracción de DIU",
+            "Colocación de DIU (incluye DIU Kupfer standard — otro DIU a cargo del paciente)",
+            "Biopsia de vagina",
+            "Biopsia de cuello",
+            "Punción de vagina",
+            "Punción de saco de Douglas",
+            "Escisión local de lesión de cuello / Electrocoagulación / Cauterización química"
+        ]
+    },
+    { nombre: "Nutrición", procedimientos: ["Dieta"] },
+    {
+        nombre: "Rehabilitación",
+        procedimientos: [
+            "Fisiokinesioterapia con Láser, Magneto, Ultrasonido, Electroanalgesia, Ejercicios"
+        ]
+    },
+    {
+        nombre: "Otorrinolaringología",
+        procedimientos: [
+            "Extracción de cuerpo extraño en oído / Extracción de cerumen",
+            "Rinofibrolaringoscopía"
+        ]
+    },
+    { nombre: "Urología", procedimientos: ["Colocación y recambio de sonda"] },
+    { nombre: "Cirugía General" },
+    { nombre: "Diabetología" },
+    { nombre: "Endocrinología" },
+    { nombre: "Gastroenterología" },
+    { nombre: "Neurología" },
+    { nombre: "Pediatría" },
+    { nombre: "Reumatología", procedimientos: ["Capilaroscopía"] },
 ];
 
-const DENTAL_SPECIALTIES = [
-    "Odontología general", "Odontopediatría", "Periodoncia", "Ortodoncia",
-    "Prótesis", "Implantes", "Radiología dental", "Cirugías"
+const ODONTOLOGIA = [
+    "Consultas",
+    "Operatoria Dental",
+    "Endodoncia",
+    "Prótesis",
+    "Rehabilitaciones sobre Implantes",
+    "Prevención / Ortodoncia",
+    "Ortopedia",
+    "Odontopediatría",
+    "Periodoncia",
+    "Radiología Odontológica",
+    "Cirugía",
+    "Blanqueamiento"
 ];
 
+const PRESTACIONES_MEDICAS = ESPECIALIDADES.filter(e => e.procedimientos && e.procedimientos.length > 0);
+const PRESTACIONES_REHAB = ["Ejercicios", "Electroanalgesia", "Fisiokinesioterapia", "Láser", "Magneto", "Osteopatía", "Ultrasonido"];
 
-export const CentroMedico: React.FC = () => {
-    const [currentImg, setCurrentImg] = useState(0);
+const MEDIOS_PAGO = [
+    { label: 'Débito', icon: CreditCard },
+    { label: 'Crédito', icon: CreditCard },
+    { label: 'Transferencia', icon: Banknote },
+    { label: 'QR', icon: QrCode },
+];
 
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentImg((prev) => (prev + 1) % IMAGES.length);
-        }, 5000);
-        return () => clearInterval(timer);
-    }, []);
-    const [prestacionTab, setPrestacionTab] = useState<'odontologicas' | 'medicas' | 'rehabilitacion'>('odontologicas');
+interface CentroMedicoProps {
+    onNoticiasClick?: () => void;
+}
+
+export const CentroMedico: React.FC<CentroMedicoProps> = ({ onNoticiasClick }) => {
+    const [prestacionTab, setPrestacionTab] = useState<'medicas' | 'rehabilitacion' | 'odontologicas'>('medicas');
+    const [especialidadesOpen, setEspecialidadesOpen] = useState(false);
+    const [prestacionesOpen, setPrestacionesOpen] = useState(false);
 
     return (
-        <section id="centro-medico" className="pt-20 bg-white font-sans text-[#1C75BB] overflow-x-hidden animate-in fade-in duration-700">
+        <section id="centro-medico" className="pt-20 bg-white font-sans text-[#1C75BB] animate-in fade-in duration-700">
 
-            {/* CARRUSEL HERO */}
-            <div className="relative h-[400px] md:h-[600px] w-full overflow-hidden bg-slate-100">
-                {IMAGES.map((img, idx) => (
-                    <div
-                        key={idx}
-                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${idx === currentImg ? 'opacity-100' : 'opacity-0'}`}
-                    >
+            {/* INFO BAR */}
+            <div className="bg-[#1C75BB] px-6 py-3 flex flex-wrap justify-center gap-5 md:gap-10">
+                <button
+                    onClick={() => document.getElementById('novedades')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="flex items-center gap-2 bg-[#00AEEF] text-white text-[13px] font-black uppercase tracking-wider px-4 py-1.5 rounded-full hover:bg-white hover:text-[#1C75BB] transition-colors"
+                >
+                    <Newspaper size={13} />
+                    <span>Novedades</span>
+                </button>
+                <div className="flex items-center gap-2 text-white text-[13px] font-bold uppercase tracking-wider">
+                    <MapPin size={14} />
+                    <span>Ecuador 949, CABA</span>
+                </div>
+                <div className="flex items-center gap-2 text-white text-[13px] font-bold uppercase tracking-wider">
+                    <Phone size={14} />
+                    <span>(011) 2034-1000</span>
+                </div>
+                <a href="https://wa.me/5491123010833" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white text-[13px] font-bold uppercase tracking-wider hover:text-[#00AEEF] transition-colors">
+                    <MessageCircle size={14} />
+                    <span>WhatsApp</span>
+                </a>
+                <a href="https://www.instagram.com/centromedicoosapm" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white text-[13px] font-bold uppercase tracking-wider hover:text-[#00AEEF] transition-colors">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                        <circle cx="12" cy="12" r="4" />
+                        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                    </svg>
+                    <span>Instagram</span>
+                </a>
+            </div>
+
+            {/* HERO: FOTO + HISTORIA */}
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+                <div className="flex items-center justify-center bg-slate-50 p-8 lg:p-12">
+                    <div className="w-full rounded-3xl overflow-hidden shadow-2xl ring-1 ring-gray-100">
                         <img
-                            src={img}
-                            className="w-full h-full object-cover object-center brightness-[0.6]"
-                            alt={`Instalaciones Centro Médico ${idx + 1}`}
+                            src="/cm-osapm/foto1.png"
+                            className="w-full aspect-[4/3] object-cover"
+                            style={{ objectPosition: 'center calc(50% + -50px)' }}
+                            alt="Centro Médico OSAPM"
                         />
                     </div>
-                ))}
-
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 bg-black/10">
-                    <h1 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter drop-shadow-2xl">
+                </div>
+                <div className="flex flex-col justify-center px-10 py-14 bg-white">
+                    <p className="text-[12px] font-black uppercase tracking-widest text-[#00AEEF] mb-3">Nuestra historia</p>
+                    <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-[#1C75BB] leading-none mb-2">
                         Centro Médico <span className="text-[#00AEEF]">OSAPM</span>
                     </h1>
-                    <p className="mt-4 text-white text-sm md:text-lg font-bold uppercase tracking-[0.2em] md:tracking-[0.4em] opacity-90">
-                        Excelencia Médica a tu servicio
-                    </p>
-                </div>
+                    <div className="w-16 h-1 bg-[#00AEEF] rounded-full mb-6" />
 
-                <div className="absolute bottom-0 left-0 w-full bg-white/95 backdrop-blur-md border-t border-gray-100 py-4 md:py-8 px-4 flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 shadow-2xl">
-                    <div className="flex items-center gap-2">
-                        <MapPin className="text-[#00AEEF]" size={18} />
-                        <p className="font-bold text-[10px] md:text-xs uppercase">Ecuador 949, CABA</p>
+                    <div className="flex flex-wrap gap-2 mb-6">
+                        {['4 Consultorios Médicos', 'Rehabilitación', '2 Consultorios Odontológicos', 'Radiología Dental', 'Quirófano Odontológico'].map(t => (
+                            <span key={t} className="text-[12px] font-bold bg-[#00AEEF]/10 text-[#1C75BB] px-3 py-1.5 rounded-full">{t}</span>
+                        ))}
                     </div>
-                    <div className="hidden md:block h-6 w-[1px] bg-gray-200"></div>
 
-                    <div className="flex items-center gap-2">
-                        <Phone className="text-[#00AEEF]" size={18} />
-                        <p className="font-bold text-[10px] md:text-xs uppercase">(011) 2034 - 1000</p>
+                    <div className="space-y-3 text-gray-600 text-base leading-relaxed">
+                        <p>En Octubre del 2021 te anunciábamos la apertura de nuestro Centro Médico OSAPM.</p>
+                        <p>En esos momentos, estuvimos trabajando en la remodelación de ese espacio tan querido que se inauguró hace 30 años como Clínica Odontológica. Se buscó optimizar los recursos para poner a tu disposición más servicios y una atención exclusiva.</p>
+                        <p>Fue para nosotros una satisfacción rescatar las oportunidades y haber podido compartir con vos la noticia que sin dudas redundó en una mejor atención.</p>
+                        <button
+                            onClick={() => document.getElementById('direccion-medica')?.scrollIntoView({ behavior: 'smooth' })}
+                            className="font-bold text-[#00AEEF] underline underline-offset-2 text-left hover:text-[#1C75BB] transition-colors"
+                        >
+                            Ahora a 6 años...
+                        </button>
                     </div>
-                    <div className="hidden md:block h-6 w-[1px] bg-gray-200"></div>
 
-                    <a
-                        href="https://wa.me/5491123010833"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 hover:scale-105 transition-transform"
-                    >
-                        <MessageCircle className="text-[#00AEEF]" size={18} />
-                        <p className="font-bold text-[10px] md:text-xs uppercase text-[#1C75BB]">WhatsApp +54 9 11 2301-0833</p>
-                    </a>
-                    <div className="hidden md:block h-6 w-[1px] bg-gray-200"></div>
-
-                    <div className="flex items-center gap-2">
-                        <Clock className="text-[#00AEEF]" size={18} />
-                        <p className="font-bold text-[10px] md:text-xs uppercase">Lun a Vie 8:00 - 19:00</p>
+                    <div className="mt-8 flex flex-col sm:flex-row gap-3">
+                        <a href="tel:01120341000" className="flex items-center justify-center gap-2 bg-[#1C75BB] text-white px-7 py-3 rounded-full font-black uppercase tracking-wider text-sm hover:bg-[#00AEEF] transition-colors shadow-lg">
+                            <Phone size={16} />
+                            Llamar
+                        </a>
+                        <a href="https://wa.me/5491123010833" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-[#25D366] text-white px-7 py-3 rounded-full font-black uppercase tracking-wider text-sm hover:bg-[#128C7E] transition-colors shadow-lg">
+                            <MessageCircle size={16} />
+                            WhatsApp Turnos
+                        </a>
                     </div>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-6 lg:px-16 py-12 md:py-24 font-sans">
+            {/* SUSANA SECTION */}
+            <div id="direccion-medica" className="grid grid-cols-1 lg:grid-cols-2 bg-slate-50">
+                <div className="flex flex-col justify-center px-10 py-14 order-2 lg:order-1">
+                    <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-[#1C75BB] leading-none mb-1">
+                        Dra. Susana Agliano
+                    </h2>
+                    <p className="text-[#00AEEF] font-black text-sm uppercase tracking-widest mb-6">Dirección Médica</p>
+                    <div className="w-16 h-1 bg-[#00AEEF] rounded-full mb-6" />
 
-                {/* ESPECIALIDADES MÉDICAS */}
-                <div className="mb-24">
-                    <div className="flex items-center gap-4 mb-10 text-[#1C75BB]">
+                    <div className="relative space-y-3 text-gray-600 text-base leading-relaxed pl-5 border-l-2 border-[#00AEEF]/30">
+                        <p>Dirigir, coordinar y llevar adelante un Centro Médico claramente no es tarea fácil. Hoy me toca estar a la cabeza y si bien sé que asumí una responsabilidad enorme, también sé que si hay algo que me caracteriza son los desafíos y metas que me propongo.</p>
+                        <p>Siempre se puede ir un poquito más allá, aprender algo nuevo. Es mi manera de encarar mi trabajo, mi día a día siempre en movimiento no quedándome estática.</p>
+                        <p>Obviamente no estoy sola, hay un equipo de personas excelentes y muy capaces trabajando juntos para poder dar lo mejor a nuestros pacientes.</p>
+                        <p>Lo que sí me ayudó, algo que aprendí en estos últimos años es... rodearme de buena gente. Gente que va para un mismo lado. Ante todo, buenas personas.</p>
+                    </div>
+                    <p className="mt-5 font-black text-[#1C75BB] text-sm uppercase tracking-wide">Eso somos — buena gente que trabaja día a día. Vamos por más, Centro Médico OSAPM.</p>
+                </div>
+                <div className="flex items-center justify-center bg-white p-6 lg:p-8 order-1 lg:order-2">
+                    <div className="w-full max-w-md rounded-3xl overflow-hidden shadow-2xl ring-1 ring-gray-100">
+                        <img
+                            src="/cm-osapm/susana1.JPG"
+                            className="w-full aspect-[4/5] object-cover object-top"
+                            alt="Dra. Susana Agliano - Dirección Médica"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+
+            {/* ESPECIALIDADES */}
+            <div className="py-16">
+                <div className="px-4 lg:px-10 mb-4">
+                    <button
+                        onClick={() => setEspecialidadesOpen(o => !o)}
+                        className="flex items-center gap-4 text-[#1C75BB] group"
+                    >
                         <div className="p-3 bg-[#00AEEF]/10 rounded-2xl text-[#00AEEF]">
                             <Stethoscope size={32} />
                         </div>
-                        <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight">Especialidades</h2>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-                        {MEDICAL_SPECIALTIES.map((item, idx) => (
-                            <div key={idx} className="flex items-center gap-4 p-5 bg-white border border-gray-100 rounded-2xl shadow-sm hover:border-[#00AEEF] hover:shadow-xl transition-all group cursor-default">
-                                <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] group-hover:scale-150 transition-transform"></div>
-                                <p className="font-bold text-[13px] uppercase tracking-wide text-[#1C75BB] group-hover:text-[#00AEEF] transition-colors">{item}</p>
-                            </div>
-                        ))}
-                    </div>
+                        <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tight">Especialidades</h2>
+                        <span className="ml-1 p-1.5 bg-[#00AEEF]/15 rounded-full">
+                            <ChevronDown
+                                size={20}
+                                className={`text-[#00AEEF] transition-transform duration-300 ${especialidadesOpen ? 'rotate-180' : ''}`}
+                            />
+                        </span>
+                    </button>
                 </div>
 
+                {!especialidadesOpen && (
+                    <div className="px-4 lg:px-10 mt-5 flex flex-wrap gap-2">
+                        {ESPECIALIDADES.slice(0, 6).map(e => (
+                            <span key={e.nombre} className="text-[11px] font-bold uppercase tracking-wider bg-[#00AEEF]/8 text-[#1C75BB] px-3 py-1.5 rounded-full border border-[#00AEEF]/20">
+                                {e.nombre}
+                            </span>
+                        ))}
+                        <span className="text-[11px] font-bold uppercase tracking-wider bg-slate-100 text-gray-400 px-3 py-1.5 rounded-full">
+                            +{ESPECIALIDADES.length - 6 + ODONTOLOGIA.length} más
+                        </span>
+                    </div>
+                )}
 
-                {/* SECCIÓN PRESTACIONES */}
-                <div className="mb-24">
-                    <div className="flex items-center gap-4 mb-10 text-[#1C75BB]">
+                {especialidadesOpen && (
+                    <div className="max-w-7xl mx-auto px-4 lg:px-8 animate-in fade-in slide-in-from-top-2 duration-300 pt-8">
+                        {/* Médicas y Rehabilitación */}
+                        <div className="mb-12">
+                            <p className="text-[13px] font-black uppercase tracking-widest text-[#00AEEF] mb-5 flex items-center gap-3">
+                                <span className="w-5 h-[2px] bg-[#00AEEF] rounded-full inline-block" />
+                                Médicas y Rehabilitación
+                            </p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                {ESPECIALIDADES.map((esp) => (
+                                    <div key={esp.nombre} className="flex items-center gap-3 p-5 bg-white border border-gray-100 rounded-2xl hover:border-[#00AEEF] hover:shadow-md transition-all">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] flex-shrink-0" />
+                                        <p className="font-bold text-[13px] uppercase tracking-wide text-[#1C75BB]">{esp.nombre}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Odontológicas */}
+                        <div>
+                            <p className="text-[13px] font-black uppercase tracking-widest text-[#00AEEF] mb-5 flex items-center gap-3">
+                                <span className="w-5 h-[2px] bg-[#00AEEF] rounded-full inline-block" />
+                                Odontológicas
+                            </p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                                {ODONTOLOGIA.map((item, idx) => (
+                                    <div key={idx} className="flex items-center gap-4 p-5 bg-white border border-gray-100 rounded-2xl hover:border-[#00AEEF] hover:shadow-md transition-all group cursor-default">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] group-hover:scale-150 transition-transform flex-shrink-0" />
+                                        <p className="font-bold text-[13px] uppercase tracking-wide text-[#1C75BB] group-hover:text-[#00AEEF] transition-colors">{item}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* PRESTACIONES */}
+            <div className="py-12">
+                <div className="px-4 lg:px-10 mb-4">
+                    <button
+                        onClick={() => setPrestacionesOpen(o => !o)}
+                        className="flex items-center gap-4 text-[#1C75BB] group"
+                    >
                         <div className="p-3 bg-[#00AEEF]/10 rounded-2xl text-[#00AEEF]">
                             <HandHeart size={32} />
                         </div>
-                        <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight">Prestaciones</h2>
-                    </div>
+                        <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tight">Prestaciones</h2>
+                        <span className="ml-1 p-1.5 bg-[#00AEEF]/15 rounded-full">
+                            <ChevronDown
+                                size={20}
+                                className={`text-[#00AEEF] transition-transform duration-300 ${prestacionesOpen ? 'rotate-180' : ''}`}
+                            />
+                        </span>
+                    </button>
+                </div>
 
-                    {/* Tab Bar */}
-                    <div className="flex flex-wrap gap-3">
-                        {([
-                            { key: 'odontologicas', label: 'Odontológicas' },
-                            { key: 'medicas', label: 'Médicas' },
-                            { key: 'rehabilitacion', label: 'Rehabilitación' },
-                        ] as const).map(({ key, label }) => (
-                            <button
-                                key={key}
-                                onClick={() => setPrestacionTab(key)}
-                                className={`px-7 py-3 rounded-full font-black text-[12px] uppercase tracking-wider transition-all duration-200 ${
-                                    prestacionTab === key
-                                        ? 'bg-[#00AEEF] text-white shadow-lg shadow-blue-400/30 scale-105'
-                                        : 'bg-white border border-gray-200 text-[#1C75BB] hover:border-[#00AEEF] hover:text-[#00AEEF]'
-                                }`}
-                            >
-                                {label}
-                            </button>
+                {!prestacionesOpen && (
+                    <div className="px-4 lg:px-10 mt-5 flex flex-wrap gap-2">
+                        {['Médicas', 'Rehabilitación', 'Odontológicas'].map(cat => (
+                            <span key={cat} className="text-[11px] font-bold uppercase tracking-wider bg-[#00AEEF]/8 text-[#1C75BB] px-3 py-1.5 rounded-full border border-[#00AEEF]/20">
+                                {cat}
+                            </span>
+                        ))}
+                        <span className="text-[11px] font-bold uppercase tracking-wider bg-slate-100 text-gray-400 px-3 py-1.5 rounded-full">
+                            {PRESTACIONES_MEDICAS.reduce((acc, e) => acc + e.procedimientos!.length, 0) + PRESTACIONES_REHAB.length + ODONTOLOGIA.length} procedimientos
+                        </span>
+                    </div>
+                )}
+
+                {prestacionesOpen && (
+                <div className="max-w-7xl mx-auto px-4 lg:px-8 animate-in fade-in slide-in-from-top-2 duration-300 pt-8">
+                <div className="flex flex-wrap gap-3 mb-8">
+                    {([
+                        { key: 'medicas', label: 'Médicas' },
+                        { key: 'rehabilitacion', label: 'Rehabilitación' },
+                        { key: 'odontologicas', label: 'Odontológicas' },
+                    ] as const).map(({ key, label }) => (
+                        <button
+                            key={key}
+                            onClick={() => setPrestacionTab(key)}
+                            className={`px-7 py-3 rounded-full font-black text-[14px] uppercase tracking-wider transition-all duration-200 ${prestacionTab === key ? 'bg-[#00AEEF] text-white shadow-lg shadow-blue-400/30 scale-105' : 'bg-white border border-gray-200 text-[#1C75BB] hover:border-[#00AEEF] hover:text-[#00AEEF]'}`}
+                        >
+                            {label}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="bg-white rounded-[2.5rem] p-8 md:p-12 border border-gray-100 shadow-xl animate-in fade-in duration-300">
+                    {prestacionTab === 'medicas' && (
+                        <div className="space-y-6">
+                            {PRESTACIONES_MEDICAS.map((esp) => (
+                                <div key={esp.nombre}>
+                                    <p className="text-[13px] font-black uppercase tracking-widest text-[#1C75BB] mb-3 border-l-4 border-[#00AEEF] pl-3">{esp.nombre}</p>
+                                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                        {esp.procedimientos!.map((p, i) => (
+                                            <li key={i} className="flex items-start gap-3 p-4 bg-slate-50 rounded-2xl border border-gray-100">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] flex-shrink-0 mt-1.5" />
+                                                <p className="font-bold text-[13px] text-[#1C75BB] leading-snug">{p}</p>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    {prestacionTab === 'rehabilitacion' && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {PRESTACIONES_REHAB.map((item, idx) => (
+                                <div key={idx} className="flex items-center gap-3 p-5 bg-white border border-gray-100 rounded-2xl hover:border-[#00AEEF] hover:shadow-md transition-all">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] flex-shrink-0" />
+                                    <p className="font-bold text-[13px] uppercase tracking-wide text-[#1C75BB]">{item}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    {prestacionTab === 'odontologicas' && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            {ODONTOLOGIA.map((item, idx) => (
+                                <div key={idx} className="flex items-center gap-3 p-5 bg-white border border-gray-100 rounded-2xl hover:border-[#00AEEF] hover:shadow-md transition-all">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] flex-shrink-0" />
+                                    <p className="font-bold text-[13px] uppercase tracking-wide text-[#1C75BB]">{item}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+                </div>
+                )}
+            </div>
+
+            {/* NOVEDADES */}
+            <div id="novedades" className="max-w-7xl mx-auto px-4 lg:px-8 py-12">
+                <div className="flex items-center gap-4 text-[#1C75BB] mb-10">
+                    <div className="p-3 bg-[#00AEEF]/10 rounded-2xl text-[#00AEEF]">
+                        <Newspaper size={32} />
+                    </div>
+                    <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight">Novedades</h2>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {NOVEDADES_PLACEHOLDER.map(n => (
+                        <div key={n.id} onClick={onNoticiasClick} className="bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+                            <div className="aspect-[16/9] overflow-hidden">
+                                <img src={n.imagen} alt={n.titulo} className="w-full h-full object-cover" />
+                            </div>
+                            <div className="p-6">
+                                <p className="text-[12px] font-black uppercase tracking-widest text-[#00AEEF] mb-2">
+                                    {new Date(n.fecha).toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                                </p>
+                                <h3 className="font-black text-[#1C75BB] text-base uppercase tracking-tight leading-tight mb-2 line-clamp-2">{n.titulo}</h3>
+                                <p className="text-gray-400 text-sm leading-relaxed line-clamp-3">{n.copete}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* MEDIOS DE PAGO */}
+            <div className="max-w-7xl mx-auto px-4 lg:px-8 py-12">
+                <div className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-lg">
+                    <div className="flex items-center gap-3 mb-8">
+                        <CreditCard size={28} className="text-[#00AEEF]" />
+                        <h3 className="text-2xl font-black uppercase tracking-tight text-[#1C75BB]">Medios de Pago</h3>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {MEDIOS_PAGO.map(({ label, icon: Icon }) => (
+                            <div key={label} className="flex flex-col items-center gap-3 p-6 bg-slate-50 rounded-2xl border border-gray-100 hover:border-[#00AEEF] transition-colors">
+                                <Icon size={24} className="text-[#00AEEF]" />
+                                <p className="font-black text-sm uppercase tracking-wider text-[#1C75BB]">{label}</p>
+                            </div>
                         ))}
                     </div>
                 </div>
-
-                {/* TARJETA MEDIOS DE PAGO */}
-                <div className="mb-24">
-                    <div className="bg-white rounded-[3rem] p-10 border border-gray-100 shadow-lg flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12">
-                        <CreditCard size={40} className="text-[#00AEEF] flex-shrink-0" />
-                        <div>
-                            <h3 className="text-2xl font-black uppercase tracking-tight mb-3 text-[#1C75BB]">Medios de Pago</h3>
-                            <p className="text-gray-500 font-medium text-sm leading-relaxed mb-6 italic">
-                                Aceptamos todos los medios de pago para la atención con nuestros profesionales y servicios médicos.
-                            </p>
-                            <div className="p-5 bg-[#00AEEF]/5 border-l-[6px] border-l-[#00AEEF] rounded-r-2xl shadow-sm">
-                                <p className="text-[#1C75BB] font-black text-xl uppercase tracking-tighter">Atención Integral</p>
-                                <p className="text-[10px] uppercase font-bold text-gray-400 mt-2 tracking-widest italic">Débito y Crédito</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* GOOGLE MAPS */}
-                <div className="mb-24">
-                    <div className="flex items-center gap-4 mb-10 text-[#1C75BB]">
-                        <div className="p-3 bg-[#00AEEF]/10 rounded-2xl text-[#00AEEF]">
-                            <Navigation size={32} />
-                        </div>
-                        <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight">Cómo Llegar</h2>
-                    </div>
-
-                    <div className="w-full h-[350px] md:h-[500px] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-slate-50 relative group">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3283.991152763868!2d-58.4031206!3d-34.6043813!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccaea6646f903%3A0x70677464019a3b5f!2sEcuador%20949%2C%20C1214%20CABA%2C%20Argentina!5e0!3m2!1ses-419!2sar!4v1710000000000!5m2!1ses-419!2sar"
-                            width="100%"
-                            height="100%"
-                            style={{ border: 0 }}
-                            allowFullScreen
-                            loading="lazy"
-                            className="grayscale-[0.4] group-hover:grayscale-0 transition-all duration-1000 contrast-[1.1]"
-                        ></iframe>
-                    </div>
-                </div>
-
-                {/* BOTONES ACCIÓN FINALES */}
-                <div className="flex flex-col md:flex-row items-center justify-center gap-6 px-4 pb-12">
-                    <a
-                        href="tel:01120341000"
-                        className="w-full md:w-auto bg-[#1C75BB] text-white px-10 py-5 rounded-full font-black uppercase tracking-widest text-[13px] md:text-sm hover:bg-[#00AEEF] transition-all shadow-xl shadow-blue-900/20 flex items-center justify-center gap-3 active:scale-95"
-                    >
-                        <Phone size={20} />
-                        Llamar: (011) 2034-1000
-                    </a>
-
-                    <a
-                        href="https://wa.me/5491123010833"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full md:w-auto bg-[#25D366] text-white px-10 py-5 rounded-full font-black uppercase tracking-widest text-[13px] md:text-sm hover:bg-[#128C7E] transition-all shadow-xl shadow-green-500/20 flex items-center justify-center gap-3 active:scale-95"
-                    >
-                        <MessageCircle size={20} />
-                        WhatsApp Turnos
-                    </a>
-                </div>
-
-                <p className="text-center text-gray-400 font-bold uppercase tracking-[0.2em] mt-8 text-[10px] italic">
-                    Atención personalizada de lunes a viernes de 8:00 - 19:00
-                </p>
-
             </div>
+
+            {/* MAPA */}
+            <div className="max-w-7xl mx-auto px-4 lg:px-8 py-12">
+                <div className="flex items-center gap-4 mb-10 text-[#1C75BB]">
+                    <div className="p-3 bg-[#00AEEF]/10 rounded-2xl text-[#00AEEF]">
+                        <Navigation size={32} />
+                    </div>
+                    <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight">Cómo Llegar</h2>
+                </div>
+                <div className="w-full h-[350px] md:h-[500px] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-slate-50">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3283.991152763868!2d-58.4031206!3d-34.6043813!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccaea6646f903%3A0x70677464019a3b5f!2sEcuador%20949%2C%20C1214%20CABA%2C%20Argentina!5e0!3m2!1ses-419!2sar!4v1710000000000!5m2!1ses-419!2sar"
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                    />
+                </div>
+            </div>
+
+            {/* PROFESIONALES DE SALUD */}
+            <div className="max-w-7xl mx-auto px-4 lg:px-8 pb-16">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-6 p-8 bg-slate-50 border border-gray-100 rounded-3xl">
+                    <div>
+                        <p className="text-[12px] font-black uppercase tracking-widest text-[#00AEEF] mb-1">Sumate al equipo</p>
+                        <p className="font-black text-lg uppercase tracking-tighter text-[#1C75BB]">Profesionales de Salud</p>
+                        <p className="text-sm text-gray-400 mt-1">¿Querés formar parte del plantel del Centro Médico OSAPM? Dejanos tu CV.</p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+                        <a
+                            href="mailto:centro.medico@apm.org.ar"
+                            className="flex items-center gap-2 border border-[#1C75BB]/30 text-[#1C75BB] px-5 py-2.5 rounded-full font-black text-sm uppercase tracking-wider hover:bg-[#1C75BB] hover:text-white hover:border-[#1C75BB] transition-all"
+                        >
+                            <Mail size={14} />
+                            centro.medico@apm.org.ar
+                        </a>
+                        <a
+                            href="https://www.linkedin.com/in/centro-m%C3%A9dico-osapm-9679b839b/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 border border-gray-200 text-gray-400 px-5 py-2.5 rounded-full font-black text-sm uppercase tracking-wider hover:border-[#1C75BB] hover:text-[#1C75BB] transition-all"
+                        >
+                            <ExternalLink size={14} />
+                            LinkedIn
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         </section>
     );
 };

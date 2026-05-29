@@ -48,7 +48,7 @@ export const TelefonosUtiles: React.FC = () => {
         <section id="telefonos" className="pt-32 pb-20 bg-white font-sans text-[#1C75BB] overflow-x-hidden animate-in fade-in duration-700">
             <div className="max-w-7xl mx-auto px-6 md:px-12">
 
-                {/* HEADER SECCIÓN */}
+
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
                     <div className="space-y-4 text-center md:text-left">
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 rounded-full text-red-600">
@@ -60,7 +60,7 @@ export const TelefonosUtiles: React.FC = () => {
                         </h2>
                     </div>
 
-                    {/* BUSCADOR */}
+
                     <div className="relative w-full md:w-96 group">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#00AEEF] transition-colors" size={20} />
                         <input
@@ -73,7 +73,7 @@ export const TelefonosUtiles: React.FC = () => {
                     </div>
                 </div>
 
-                {/* BANNER EMERGENCIAS NACIONAL (Solo se ve si no hay búsqueda o si coincide) */}
+
                 {(search === "" || "todo el pais".includes(search.toLowerCase())) && (
                     <div className="mb-12 bg-gradient-to-r from-[#1C75BB] to-[#00AEEF] rounded-[2.5rem] p-8 md:p-12 text-white shadow-2xl relative overflow-hidden group">
                         <Activity className="absolute -right-10 -bottom-10 w-64 h-64 opacity-10 group-hover:scale-110 transition-transform duration-1000" />
@@ -97,7 +97,7 @@ export const TelefonosUtiles: React.FC = () => {
                     </div>
                 )}
 
-                {/* GRILLA DE TELÉFONOS REGIONALES */}
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredData.filter(i => !i.destacado).map((item, idx) => (
                         <div key={idx} className="group bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl hover:border-[#00AEEF]/20 transition-all flex flex-col justify-between overflow-hidden relative">
@@ -137,7 +137,7 @@ export const TelefonosUtiles: React.FC = () => {
                     ))}
                 </div>
 
-                {/* EMPTY STATE */}
+
                 {filteredData.length === 0 && (
                     <div className="py-20 text-center">
                         <p className="text-xl font-bold opacity-20 uppercase tracking-widest">No se encontraron resultados para "{search}"</p>

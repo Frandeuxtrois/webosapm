@@ -18,7 +18,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [user, setUser] = useState<UserDecoded | null>(null);
     const [loading, setLoading] = useState(true);
 
-    // Chequeo inicial de sesión (Persistencia)
+    
     useEffect(() => {
         const initAuth = async () => {
             const token = authService.getToken();
@@ -32,7 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         initAuth();
     }, []);
 
-    // Función de Login que sincroniza toda la App
+    
     const login = async (dni: string, pass: string) => {
         const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.LOGIN}`, {
             method: 'POST',
@@ -44,11 +44,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         if (response.ok && data.token) {
             authService.saveToken(data.token);
-            // Traemos perfil para nombres prolijos
+            
             const perfil = await afiliadoService.getPerfil();
             const identity = authService.processIdentity(data.token, perfil);
 
-            // ACTUALIZACIÓN INSTANTÁNEA DEL ESTADO
+            
             setUser(identity);
             return { ok: true, data };
         }

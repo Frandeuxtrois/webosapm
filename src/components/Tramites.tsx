@@ -6,7 +6,7 @@ import {
     ZoomIn, ZoomOut, HelpCircle
 } from 'lucide-react';
 
-// ─── Highlight helper ─────────────────────────────────────────────────────────
+
 function normalize(s: string) {
     return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
@@ -15,7 +15,7 @@ function normalize(s: string) {
 const FONT_SIZES = [14, 16, 18, 20, 22];
 const FONT_LABELS = ["XS", "S", "M", "L", "XL"];
 
-// ─── Datos del menú lateral ───────────────────────────────────────────────────
+
 const TRAMITES_DATA = [
     { id: "internaciones", label: "Internaciones", icon: <Navigation size={18} /> },
     { id: "medicamentos", label: "Medicamentos", icon: <Pill size={18} /> },
@@ -33,7 +33,7 @@ const TRAMITES_DATA = [
     { id: "discapacidad", label: "Discapacidad", icon: <Users size={18} /> },
 ];
 
-// ─── Componente principal ─────────────────────────────────────────────────────
+
 export const Tramites: React.FC = () => {
     const [activeTab, setActiveTab] = useState(TRAMITES_DATA[0].id);
     const [searchQuery, setSearchQuery] = useState("");
@@ -107,13 +107,13 @@ export const Tramites: React.FC = () => {
         });
 
         setMatchCount(count);
-        // Scroll to first match
+        
         if (firstMark) (firstMark as Element).scrollIntoView({ behavior: "smooth", block: "center" });
     }, [searchQuery, activeTab]);
 
     const handleTabChange = (id: string) => { setActiveTab(id); };
 
-    // ── Subcomponentes ────────────────────────────────────────────────────────
+    
     const Subtitle = ({ children }: { children: React.ReactNode }) => (
         <h4 style={{ fontSize: fontSize * 0.8 }} className="font-black text-[#1C75BB] uppercase tracking-widest mb-4 mt-8 flex items-center gap-2 border-l-4 border-[#00AEEF] pl-3">
             {children}
@@ -146,7 +146,7 @@ export const Tramites: React.FC = () => {
         return <div className={`p-5 rounded-2xl mb-4 ${styles[color]}`}>{children}</div>;
     };
 
-    // ── Contenido por pestaña ─────────────────────────────────────────────────
+    
     const renderContent = () => {
         switch (activeTab) {
 
@@ -765,11 +765,11 @@ export const Tramites: React.FC = () => {
         }
     };
 
-    // ── Render principal ──────────────────────────────────────────────────────
+    
     return (
         <section id="tramites" className="pt-20 pb-20 bg-slate-50 font-sans min-h-screen text-[#1C75BB]">
 
-            {/* HEADER BAND */}
+
             <div className="bg-[#1C75BB] px-6 md:px-12 py-10 relative mb-10">
                 <div className="flex flex-col items-center text-center gap-3">
                     <div className="p-3 bg-white/10 rounded-2xl">
@@ -785,7 +785,7 @@ export const Tramites: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Control tamaño de fuente — esquina */}
+
                 <div className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-white/10 border border-white/20 rounded-xl p-1">
                     <button
                         onClick={() => setFontSizeIdx(i => Math.max(0, i - 1))}
@@ -818,7 +818,7 @@ export const Tramites: React.FC = () => {
             <div className="max-w-7xl mx-auto px-6 md:px-12">
 
                 <div className="flex flex-col lg:flex-row gap-12">
-                    {/* Menú lateral */}
+
                     <aside className="w-full lg:w-80 flex-shrink-0">
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-1 gap-1 bg-slate-50/50 p-2 rounded-[2.5rem] border border-gray-100 lg:sticky lg:top-28">
                             {TRAMITES_DATA.map((item) => (
@@ -840,9 +840,9 @@ export const Tramites: React.FC = () => {
                         </div>
                     </aside>
 
-                    {/* Contenido */}
+
                     <main ref={mainRef} className="flex-1 bg-white rounded-[3rem] border border-gray-100 shadow-sm p-8 md:p-12 min-h-[650px] overflow-hidden">
-                        {/* Buscador interno */}
+
                         <div className="flex items-center gap-3 mb-8 pb-6 border-b border-gray-100">
                             <div className="relative flex-1 max-w-sm">
                                 <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />

@@ -113,7 +113,6 @@ export const ContactoPrestador: React.FC<ContactoPrestadorProps> = ({ onSessionE
             />
           </div>
 
-          {/* Adjuntar archivos */}
           <div className="space-y-3">
             <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-400">
               <Paperclip size={14} /> Adjuntar archivos subidos

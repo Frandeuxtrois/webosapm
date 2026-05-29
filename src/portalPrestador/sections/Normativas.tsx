@@ -65,7 +65,7 @@ export const Normativas: React.FC<NormativasProps> = ({ onSessionExpired }) => {
     const formatFecha = (iso: string) =>
         new Date(iso).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
-    // ── Vista detalle ─────────────────────────────────────────────────────────
+    
     if (loadingDetalle) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[400px] gap-4 text-[#1C75BB]">
@@ -122,10 +122,9 @@ export const Normativas: React.FC<NormativasProps> = ({ onSessionExpired }) => {
         );
     }
 
-    // ── Vista lista ───────────────────────────────────────────────────────────
+    
     return (
         <div className="space-y-6">
-            {/* Buscador */}
             <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
                 <h2 className="text-xl font-black mb-1 flex items-center gap-3 uppercase tracking-tighter text-[#1C75BB]">
                     <span className="w-1.5 h-6 bg-[#00AEEF] rounded-full"></span>
@@ -167,7 +166,6 @@ export const Normativas: React.FC<NormativasProps> = ({ onSessionExpired }) => {
                 )}
             </div>
 
-            {/* Lista */}
             <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
                 {loading ? (
                     <div className="p-12 space-y-3">

@@ -139,10 +139,8 @@ export const NoticiaDetalle: React.FC<{ id: number; onBack: () => void; onNotici
         .prose * { max-width: 100%; }
       `}</style>
 
-      {/* BARRA DE PROGRESO */}
       <div className="fixed top-0 left-0 z-[60] h-1 bg-celeste transition-all duration-100" style={{ width: `${progress}%` }} />
 
-      {/* HERO IMAGEN */}
       <div className="relative w-full overflow-hidden" style={{ height: '420px' }}>
         {loading ? (
           <div className="absolute inset-0 bg-gray-300 animate-pulse" />
@@ -154,10 +152,8 @@ export const NoticiaDetalle: React.FC<{ id: number; onBack: () => void; onNotici
           </div>
         )}
 
-        {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
 
-        {/* Botón volver */}
         <button
           onClick={onBack}
           className="absolute top-24 left-6 md:left-12 inline-flex items-center gap-2 text-white/80 hover:text-white font-semibold text-sm transition-all bg-black/20 backdrop-blur-sm px-4 py-2 rounded-full"
@@ -165,7 +161,6 @@ export const NoticiaDetalle: React.FC<{ id: number; onBack: () => void; onNotici
           <ArrowLeft size={16} /> Volver
         </button>
 
-        {/* Título sobre imagen */}
         {!loading && noticia && (
           <div className="absolute bottom-0 left-0 right-0 px-6 md:px-16 pb-10">
             <div className="max-w-4xl mx-auto">
@@ -184,7 +179,6 @@ export const NoticiaDetalle: React.FC<{ id: number; onBack: () => void; onNotici
         )}
       </div>
 
-      {/* CUERPO ARTÍCULO */}
       <div className="max-w-4xl mx-auto px-6 md:px-8 py-12">
         {loading && (
           <div className="space-y-4 animate-pulse">
@@ -198,20 +192,17 @@ export const NoticiaDetalle: React.FC<{ id: number; onBack: () => void; onNotici
 
         {!loading && noticia && (
           <>
-            {/* Copete */}
             {noticia.copete && (
               <p className="text-xl text-gray-600 font-medium leading-relaxed border-l-4 border-celeste pl-5 mb-8"
                 dangerouslySetInnerHTML={{ __html: noticia.copete }} />
             )}
 
-            {/* Cuerpo */}
             <div
               className="prose prose-lg prose-blue max-w-none text-gray-700 leading-relaxed overflow-hidden"
               style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
               dangerouslySetInnerHTML={{ __html: noticia.cuerpo }}
             />
 
-            {/* Galería adicional */}
             {noticia.imagenes && noticia.imagenes.length > 1 && (
               <div className="mt-10 grid grid-cols-2 gap-4">
                 {noticia.imagenes.slice(1).map((img) => {
@@ -236,7 +227,6 @@ export const NoticiaDetalle: React.FC<{ id: number; onBack: () => void; onNotici
         )}
       </div>
 
-      {/* LIGHTBOX */}
       {lightboxSrc && <Lightbox src={lightboxSrc} alt="" onClose={() => setLightboxSrc(null)} />}
 
       {/* OTRAS NOTICIAS */}

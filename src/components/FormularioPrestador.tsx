@@ -5,7 +5,6 @@ export const FormularioPrestador: React.FC = () => {
     return (
         <section className="pt-20 min-h-screen bg-slate-50 font-sans text-[#1C75BB] animate-in fade-in duration-500">
 
-            {/* HEADER BAND */}
             <div className="bg-[#1C75BB] px-6 md:px-12 py-10">
                 <div className="flex flex-col items-center text-center gap-3">
                     <div className="p-3 bg-white/10 rounded-2xl">
@@ -24,7 +23,6 @@ export const FormularioPrestador: React.FC = () => {
 
             <div className="max-w-3xl mx-auto px-6 md:px-12 py-8 space-y-4">
 
-                {/* Tarjeta de descarga */}
                 <a
                     href="/formularios/formulario_prestador/rendicion_prestadores.pdf"
                     download
@@ -49,7 +47,6 @@ export const FormularioPrestador: React.FC = () => {
                     </div>
                 </a>
 
-                {/* Info box */}
                 <div className="flex gap-4 p-5 bg-white border border-gray-100 rounded-2xl shadow-sm">
                     <Info size={18} className="text-[#00AEEF] flex-shrink-0 mt-0.5" />
                     <div>

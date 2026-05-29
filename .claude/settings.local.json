@@ -5,7 +5,10 @@
       "Bash(npm install:*)",
       "Bash(npx tailwindcss:*)",
       "Bash(rm -f src/index.css tailwind.config.js postcss.config.js)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(node -e ' *)",
+      "Bash(node -e \"const lr = require\\('lucide-react'\\); console.log\\(['Banknote','QrCode','Mail','ExternalLink','Instagram','Linkedin'].filter\\(k => k in lr\\).join\\(', '\\)\\)\")",
+      "Bash(findstr /i \"router\")"
     ]
   }
 }

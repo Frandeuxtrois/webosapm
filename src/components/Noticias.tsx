@@ -44,7 +44,6 @@ export const Noticias: React.FC<{ onNoticiaClick: (id: number) => void }> = ({ o
   return (
     <section className="min-h-screen bg-gray-50 pt-20 pb-16">
 
-      {/* HEADER BAND */}
       <div className="bg-[#1C75BB] px-6 md:px-12 py-10 mb-10">
         <div className="flex flex-col items-center text-center gap-3">
           <div className="p-3 bg-white/10 rounded-2xl">
@@ -70,7 +69,6 @@ export const Noticias: React.FC<{ onNoticiaClick: (id: number) => void }> = ({ o
           )}
         </div>
 
-        {/* SKELETON */}
         {loading && (
           <div className="space-y-6">
             <SkeletonCard big />
@@ -80,7 +78,6 @@ export const Noticias: React.FC<{ onNoticiaClick: (id: number) => void }> = ({ o
           </div>
         )}
 
-        {/* SIN NOTICIAS */}
         {!loading && noticias.length === 0 && (
           <div className="text-center py-24 text-gray-400">
             <Newspaper size={48} className="mx-auto mb-4 opacity-30" />
@@ -88,7 +85,6 @@ export const Noticias: React.FC<{ onNoticiaClick: (id: number) => void }> = ({ o
           </div>
         )}
 
-        {/* NOTICIA DESTACADA */}
         {!loading && destacada && (
           <div
             onClick={() => onNoticiaClick(destacada.idNoticia)}
@@ -126,7 +122,6 @@ export const Noticias: React.FC<{ onNoticiaClick: (id: number) => void }> = ({ o
           </div>
         )}
 
-        {/* GRILLA DE NOTICIAS */}
         {!loading && resto.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {resto.map((n) => (
@@ -135,7 +130,6 @@ export const Noticias: React.FC<{ onNoticiaClick: (id: number) => void }> = ({ o
                 onClick={() => onNoticiaClick(n.idNoticia)}
                 className="bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer group"
               >
-                {/* Imagen con overlay */}
                 <div className="relative overflow-hidden" style={{ aspectRatio: '5/3' }}>
                   <img
                     src={getImg(n)}
@@ -148,10 +142,8 @@ export const Noticias: React.FC<{ onNoticiaClick: (id: number) => void }> = ({ o
                   </span>
                 </div>
 
-                {/* Separador */}
                 <div className="h-1 w-full bg-gradient-to-r from-celeste via-azul to-celeste" />
 
-                {/* Contenido */}
                 <div className="p-5 overflow-hidden">
                   <div className="flex items-center gap-3 text-gray-400 text-xs mb-2">
                     <span className="flex items-center gap-1"><Calendar size={11} />{formatDate(n.vigenciaDesde)}</span>

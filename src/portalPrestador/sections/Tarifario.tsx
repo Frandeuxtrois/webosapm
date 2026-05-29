@@ -8,7 +8,6 @@ interface TarifarioProps {
 
 const PAGE_SIZE = 20;
 
-// 0 = no atiende, 1 = atiende, 2 = requiere autorización
 const PlanCell: React.FC<{ value: number }> = ({ value }) => {
   if (value === 1) return <Check size={14} className="text-[#00AEEF] mx-auto" strokeWidth={3} />;
   if (value === 2) return <CalendarClock size={13} className="text-amber-500 mx-auto" />;
@@ -93,7 +92,6 @@ export const Tarifario: React.FC<TarifarioProps> = ({ onSessionExpired }) => {
 
   return (
     <div className="space-y-6">
-      {/* Controles */}
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
           <div className="relative flex-1">
@@ -126,7 +124,6 @@ export const Tarifario: React.FC<TarifarioProps> = ({ onSessionExpired }) => {
           </div>
         </div>
 
-        {/* Leyenda */}
         <div className="flex items-center gap-5 mt-4 pt-4 border-t border-gray-100">
           <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Referencia:</span>
           <span className="flex items-center gap-1.5 text-xs font-bold text-red-400"><X size={12} strokeWidth={2.5} /> No Atiende</span>
@@ -135,7 +132,6 @@ export const Tarifario: React.FC<TarifarioProps> = ({ onSessionExpired }) => {
         </div>
       </div>
 
-      {/* Tabla */}
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
         {loading ? (
           <div className="p-12 space-y-3">
@@ -157,7 +153,6 @@ export const Tarifario: React.FC<TarifarioProps> = ({ onSessionExpired }) => {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-slate-50 text-[10px] font-black uppercase tracking-widest text-[#1C75BB]">
-                  {/* Fila agrupadora de planes */}
                   <tr className="border-b border-gray-200">
                     <th className="px-4 py-2" colSpan={4} />
                     {PLANES.map(({ label }) => (
@@ -166,7 +161,6 @@ export const Tarifario: React.FC<TarifarioProps> = ({ onSessionExpired }) => {
                       </th>
                     ))}
                   </tr>
-                  {/* Fila de columnas */}
                   <tr>
                     <th className="px-4 py-3 whitespace-nowrap">Cód. APM</th>
                     <th className="px-4 py-3 whitespace-nowrap">Equiv.</th>
@@ -208,7 +202,6 @@ export const Tarifario: React.FC<TarifarioProps> = ({ onSessionExpired }) => {
               </table>
             </div>
 
-            {/* Paginación */}
             <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 bg-slate-50">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
                 {filtered.length} resultados — pág. {page} de {totalPages}

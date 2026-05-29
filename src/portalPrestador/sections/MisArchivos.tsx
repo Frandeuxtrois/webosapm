@@ -101,7 +101,6 @@ export const MisArchivos: React.FC<MisArchivosProps> = ({ onSessionExpired }) =>
   return (
     <div className="space-y-6">
 
-      {/* Documentos OSAPM */}
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
         <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Documentos OSAPM</p>
         <a
@@ -133,7 +132,6 @@ export const MisArchivos: React.FC<MisArchivosProps> = ({ onSessionExpired }) =>
         </div>
       )}
 
-      {/* Zona de upload */}
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -173,7 +171,6 @@ export const MisArchivos: React.FC<MisArchivosProps> = ({ onSessionExpired }) =>
         </div>
       </div>
 
-      {/* Lista de archivos */}
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
           <h3 className="font-black text-[#1C75BB] text-xs uppercase tracking-widest">Mis archivos</h3>

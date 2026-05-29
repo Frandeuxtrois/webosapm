@@ -18,7 +18,7 @@ export const LoginPrestador: React.FC<LoginPrestadorProps> = ({ onLoginSuccess, 
   const [error, setError] = useState<string | null>(null);
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
-  // Step 1
+  
   const [cuit, setCuit] = useState('');
   const [password, setPassword] = useState('');
 
@@ -107,7 +107,6 @@ export const LoginPrestador: React.FC<LoginPrestadorProps> = ({ onLoginSuccess, 
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-cyan-50 to-slate-100 relative overflow-hidden">
-      {/* Decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 right-20 w-72 h-72 bg-[#00AEEF]/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 left-20 w-96 h-96 bg-[#1C75BB]/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
@@ -119,7 +118,6 @@ export const LoginPrestador: React.FC<LoginPrestadorProps> = ({ onLoginSuccess, 
       </div>
 
       <div className="w-full max-w-md relative z-10">
-        {/* Header */}
         <div className="text-center mb-8 space-y-4">
           <div className="relative inline-block">
             <div className="absolute inset-0 bg-gradient-to-br from-[#00AEEF] to-[#1C75BB] rounded-3xl blur-xl opacity-40 animate-pulse"></div>
@@ -135,7 +133,6 @@ export const LoginPrestador: React.FC<LoginPrestadorProps> = ({ onLoginSuccess, 
           </div>
         </div>
 
-        {/* Card */}
         <div className="relative">
           <div className="absolute inset-0 bg-gradient-to-br from-[#00AEEF] via-[#1C75BB] to-[#00AEEF] rounded-3xl blur-sm opacity-30"></div>
           <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-[#00AEEF]/20 p-8 border border-white/60">
@@ -150,7 +147,6 @@ export const LoginPrestador: React.FC<LoginPrestadorProps> = ({ onLoginSuccess, 
               </div>
             )}
 
-            {/* STEP 1: LOGIN */}
             {step === 'login' && (
               <form onSubmit={handleLogin} className="space-y-6">
                 <div className="space-y-2">
@@ -219,7 +215,6 @@ export const LoginPrestador: React.FC<LoginPrestadorProps> = ({ onLoginSuccess, 
               </form>
             )}
 
-            {/* STEP 2: OLVIDE CLAVE */}
             {step === 'olvide' && (
               <form onSubmit={handleOlvideClave} className="space-y-6">
                 <div className="flex items-center gap-3 mb-2">
@@ -283,7 +278,6 @@ export const LoginPrestador: React.FC<LoginPrestadorProps> = ({ onLoginSuccess, 
               </form>
             )}
 
-            {/* STEP 3: RESET */}
             {step === 'reset' && (
               <form onSubmit={handleReset} className="space-y-6">
                 <div className="flex items-center gap-3 mb-2">
