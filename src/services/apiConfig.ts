@@ -60,6 +60,9 @@ export const API_ENDPOINTS = {
     DATOS_UTILES_TELEFONOS: '/api/DatosUtiles/telefonos-utiles',
 
 
+    CONTACTO_ENVIAR: '/api/Contacto/EnviarConsulta',
+
+
 
 
     

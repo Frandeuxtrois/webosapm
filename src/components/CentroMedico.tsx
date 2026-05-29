@@ -1,40 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     MapPin, Phone, Stethoscope,
     CreditCard, Navigation, MessageCircle, HandHeart,
     ExternalLink, Mail, Banknote, QrCode, Newspaper, ChevronDown
 } from 'lucide-react';
-interface NovedadCard {
-    id: number;
-    titulo: string;
-    copete: string;
-    fecha: string;
-    imagen: string;
-}
+import { apiService, Noticia, BACKOFFICE_API_BASE_URL } from '../services/api';
 
-const NOVEDADES_PLACEHOLDER: NovedadCard[] = [
-    {
-        id: 1,
-        titulo: 'Nueva especialidad en el Centro Médico',
-        copete: 'Bienvenida Dra. Carla Lallopizzo a nuestro equipo.',
-        fecha: '2026-05-14',
-        imagen: '/cm-osapm/reumato.jpg',
-    },
-    {
-        id: 2,
-        titulo: 'Nueva especialidad en el Centro Médico',
-        copete: 'Bienvenida Dra. Anabella Gomez a nuestro equipo.',
-        fecha: '2026-05-14',
-        imagen: '/cm-osapm/neuro.jpg',
-    },
-    {
-        id: 3,
-        titulo: 'Equipo de Rehabilitación renovado',
-        copete: 'Contamos con equipamiento de última generación en el área de Fisiokinesioterapia para mejorar los tratamientos.',
-        fecha: '2025-02-10',
-        imagen: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800',
-    },
-];
+const NOTICIA_PLACEHOLDER_IMG = 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800';
+
+const getNoticiaImg = (n: Noticia) =>
+    n.imagenes?.length ? `${BACKOFFICE_API_BASE_URL}${n.imagenes[0].rutaImagen}` : NOTICIA_PLACEHOLDER_IMG;
+
+const stripHtml = (html: string) => html.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
+
+const formatFecha = (d: string) =>
+    new Date(d).toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' });
 
 
 interface Especialidad {
@@ -142,6 +122,15 @@ export const CentroMedico: React.FC<CentroMedicoProps> = ({ onNoticiasClick }) =
     const [prestacionTab, setPrestacionTab] = useState<'medicas' | 'rehabilitacion' | 'odontologicas'>('medicas');
     const [especialidadesOpen, setEspecialidadesOpen] = useState(false);
     const [prestacionesOpen, setPrestacionesOpen] = useState(false);
+    const [noticias, setNoticias] = useState<Noticia[]>([]);
+    const [loadingNoticias, setLoadingNoticias] = useState(true);
+
+    useEffect(() => {
+        apiService.getNoticias(4)
+            .then(setNoticias)
+            .catch(() => setNoticias([]))
+            .finally(() => setLoadingNoticias(false));
+    }, []);
 
     return (
         <section id="centro-medico" className="pt-20 bg-white font-sans text-[#1C75BB] animate-in fade-in duration-700">
@@ -429,22 +418,39 @@ export const CentroMedico: React.FC<CentroMedicoProps> = ({ onNoticiasClick }) =
                     <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight">Novedades</h2>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {NOVEDADES_PLACEHOLDER.map(n => (
-                        <div key={n.id} onClick={onNoticiasClick} className="bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-                            <div className="aspect-[16/9] overflow-hidden">
-                                <img src={n.imagen} alt={n.titulo} className="w-full h-full object-cover" />
+                {loadingNoticias ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {[1, 2, 3].map(i => (
+                            <div key={i} className="bg-white rounded-3xl overflow-hidden animate-pulse">
+                                <div className="aspect-[16/9] bg-gray-200" />
+                                <div className="p-6 space-y-3">
+                                    <div className="h-3 w-24 bg-gray-200 rounded-full" />
+                                    <div className="h-5 w-3/4 bg-gray-200 rounded-full" />
+                                    <div className="h-3 w-full bg-gray-200 rounded-full" />
+                                </div>
                             </div>
-                            <div className="p-6">
-                                <p className="text-[12px] font-black uppercase tracking-widest text-[#00AEEF] mb-2">
-                                    {new Date(n.fecha).toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' })}
-                                </p>
-                                <h3 className="font-black text-[#1C75BB] text-base uppercase tracking-tight leading-tight mb-2 line-clamp-2">{n.titulo}</h3>
-                                <p className="text-gray-400 text-sm leading-relaxed line-clamp-3">{n.copete}</p>
+                        ))}
+                    </div>
+                ) : noticias.length === 0 ? (
+                    <p className="text-gray-400 text-sm font-bold uppercase tracking-widest">No hay novedades publicadas aún.</p>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {noticias.map(n => (
+                            <div key={n.idNoticia} onClick={onNoticiasClick} className="bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+                                <div className="aspect-[16/9] overflow-hidden">
+                                    <img src={getNoticiaImg(n)} alt={n.titulo} className="w-full h-full object-cover" />
+                                </div>
+                                <div className="p-6">
+                                    <p className="text-[12px] font-black uppercase tracking-widest text-[#00AEEF] mb-2">
+                                        {formatFecha(n.vigenciaDesde)}
+                                    </p>
+                                    <h3 className="font-black text-[#1C75BB] text-base uppercase tracking-tight leading-tight mb-2 line-clamp-2">{n.titulo}</h3>
+                                    <p className="text-gray-400 text-sm leading-relaxed line-clamp-3">{stripHtml(n.copete)}</p>
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* MEDIOS DE PAGO */}

@@ -1,5 +1,6 @@
 import { Plan } from '../types';
 import { PLANS } from '../constants';
+import { API_BASE_URL, API_ENDPOINTS } from './apiConfig';
 
 const IS_DEV = import.meta.env.DEV;
 const OSAM_API_BASE_URL = IS_DEV ? '/api-main/AppOSAPM' : 'https://appapis.apm.org.ar/AppOSAPM';
@@ -160,10 +161,17 @@ export const apiService = {
     });
   },
 
-  submitContactForm: async (data: { name: string; email: string; message: string }) => {
-    return new Promise((resolve) => {
-      setTimeout(() => resolve({ success: true, message: 'Consulta enviada correctamente.' }), 800);
+  submitContactForm: async (data: { nombre: string; email: string; mensaje: string }) => {
+    const res = await fetch(`${API_BASE_URL}${API_ENDPOINTS.CONTACTO_ENVIAR}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
     });
+    if (!res.ok) {
+      const status = res.status;
+      throw { status };
+    }
+    return res.json();
   },
 
   getNoticias: async (idSistema: number = 3): Promise<Noticia[]> => {

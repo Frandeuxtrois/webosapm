@@ -4,19 +4,39 @@ import { Phone, Mail, MapPin } from 'lucide-react';
 import { apiService } from '../services/api';
 
 export const Contact: React.FC = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ nombre: '', email: '', mensaje: '' });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const emailValido = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    if (!formData.nombre.trim() || !formData.email.trim() || !formData.mensaje.trim()) {
+      setError('Completá todos los campos antes de enviar.');
+      return;
+    }
+    if (!emailValido(formData.email)) {
+      setError('El email no tiene un formato válido.');
+      return;
+    }
     setLoading(true);
-    await apiService.submitContactForm(formData);
-    setLoading(false);
-    setSuccess(true);
-    setFormData({ name: '', email: '', message: '' });
-
-    setTimeout(() => setSuccess(false), 5000);
+    try {
+      await apiService.submitContactForm(formData);
+      setSuccess(true);
+      setFormData({ nombre: '', email: '', mensaje: '' });
+      setTimeout(() => setSuccess(false), 5000);
+    } catch (err: any) {
+      if (err?.status === 429) {
+        setError('Demasiados intentos. Aguardá unos minutos antes de enviar otra consulta.');
+      } else {
+        setError('No pudimos enviar tu mensaje. Intentá de nuevo o escribinos a osapm@apm.org.ar.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -85,9 +105,8 @@ export const Contact: React.FC = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Nombre Completo</label>
                     <input
                       type="text"
-                      name="name"
-                      required
-                      value={formData.name}
+                      name="nombre"
+                      value={formData.nombre}
                       onChange={handleChange}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-celeste focus:ring-2 focus:ring-celeste/20 outline-none transition-all"
                       placeholder="Juan Pérez"
@@ -98,7 +117,6 @@ export const Contact: React.FC = () => {
                     <input
                       type="email"
                       name="email"
-                      required
                       value={formData.email}
                       onChange={handleChange}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-celeste focus:ring-2 focus:ring-celeste/20 outline-none transition-all"
@@ -109,14 +127,16 @@ export const Contact: React.FC = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Consulta</label>
                     <textarea
                       rows={4}
-                      name="message"
-                      required
-                      value={formData.message}
+                      name="mensaje"
+                      value={formData.mensaje}
                       onChange={handleChange}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-celeste focus:ring-2 focus:ring-celeste/20 outline-none transition-all"
                       placeholder="Escribí tu mensaje aquí..."
                     ></textarea>
                   </div>
+                  {error && (
+                    <p className="text-sm font-medium text-red-500">{error}</p>
+                  )}
                   <Button type="submit" disabled={loading} className="w-full">
                     {loading ? 'Enviando...' : 'Enviar mensaje'}
                   </Button>

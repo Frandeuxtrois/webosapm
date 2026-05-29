@@ -178,7 +178,7 @@ function AppContent() {
         {currentView === 'formulario-salud' && <FormularioSalud />}
         {currentView === 'formulario-prestador' && <FormularioPrestador />}
         {currentView === 'centro-medico' && <CentroMedico onNoticiasClick={() => navigateTo('novedades-cm')} />}
-        {currentView === 'novedades-cm' && <NovedadesCM />}
+        {currentView === 'novedades-cm' && <NovedadesCM onNoticiaClick={(id) => navigateToNoticia(id)} onBack={() => navigateTo('centro-medico')} />}
         {currentView === 'seccionales' && <Seccionales />}
         {currentView === 'telefonos-utiles' && <TelefonosUtiles />}
         {currentView === 'tramites' && <Tramites />}

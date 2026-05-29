@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, Phone, ArrowLeft, Loader2, Navigation, XCircle } from 'lucide-react';
+import { Search, MapPin, Phone, ArrowLeft, Loader2, Navigation, XCircle, AlertCircle } from 'lucide-react';
 import { cartillaService } from '../services/cartillaService';
 import { useAuth } from '../context/authContext';
 
@@ -18,6 +18,12 @@ export const Cartilla: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [loadingEsp, setLoadingEsp] = useState(false);
     const [view, setView] = useState<'filtros' | 'resultados'>('filtros');
+    const [toast, setToast] = useState<string | null>(null);
+
+    const showToast = (msg: string) => {
+        setToast(msg);
+        setTimeout(() => setToast(null), 4000);
+    };
 
     
     const [filtros, setFiltros] = useState({
@@ -88,10 +94,10 @@ export const Cartilla: React.FC = () => {
             if (data.length > 0) {
                 setView('resultados');
             } else {
-                alert("Sin resultados para esta selección.");
+                showToast("Sin resultados para esta selección. Probá con otros filtros.");
             }
         } catch (error) {
-            alert("Error al realizar la búsqueda.");
+            showToast("Error al realizar la búsqueda. Intentá de nuevo.");
         } finally {
             setLoading(false);
         }
@@ -118,6 +124,12 @@ export const Cartilla: React.FC = () => {
 
     return (
         <div className="animate-in fade-in duration-700 text-[#1C75BB] font-sans">
+            {toast && (
+                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-[#1C75BB] text-white px-5 py-3.5 rounded-2xl shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-300 max-w-sm w-full mx-4">
+                    <AlertCircle size={18} className="shrink-0 text-[#00AEEF]" />
+                    <p className="text-sm font-bold">{toast}</p>
+                </div>
+            )}
             {view === 'filtros' ? (
                 <div className="max-w-4xl mx-auto bg-white rounded-[2rem] shadow-sm border border-gray-100 p-8 md:p-12">
 
