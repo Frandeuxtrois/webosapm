@@ -61,30 +61,45 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           </div>
 
-          <nav className="hidden md:flex space-x-3 lg:space-x-5 items-center h-full">
+          <nav className="hidden md:flex items-center h-full gap-1">
+
+            <button
+              onClick={() => { onHomeClick?.(); setIsOpen(false); }}
+              className="text-[#1C75BB] hover:text-[#00AEEF] font-semibold text-[12px] uppercase tracking-wider transition-colors leading-none px-3 py-1.5 rounded-lg"
+            >
+              Inicio
+            </button>
+
+            <div className="w-px h-4 bg-gray-200 mx-1" />
 
             <button
               onClick={() => { onCentroMedicoClick?.(); setIsOpen(false); }}
-              className="text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider transition-colors leading-none"
+              className="text-[#1C75BB] hover:text-[#00AEEF] font-semibold text-[12px] uppercase tracking-wider transition-colors leading-none px-3 py-1.5 rounded-lg"
             >
               Centro Médico
             </button>
 
+            <div className="w-px h-4 bg-gray-200 mx-1" />
+
             <button
               onClick={() => { onNoticiasClick?.(); setIsOpen(false); }}
-              className="text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider transition-colors leading-none"
+              className="text-[#1C75BB] hover:text-[#00AEEF] font-semibold text-[12px] uppercase tracking-wider transition-colors leading-none px-3 py-1.5 rounded-lg"
             >
               Noticias
             </button>
 
-            {NAV_STRUCTURE.map((group) => (
-              <div key={group.label} className="relative group flex items-center h-full">
+            <div className="w-px h-4 bg-gray-200 mx-1" />
+
+            {NAV_STRUCTURE.map((group, i) => (
+              <React.Fragment key={group.label}>
+                {i > 0 && <div className="w-px h-4 bg-gray-200 mx-1" />}
+              <div className="relative group flex items-center h-full">
                 {group.items ? (
-                  <button className="flex items-center text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider transition-colors leading-none">
+                  <button className="flex items-center text-[#1C75BB] hover:text-[#00AEEF] font-semibold text-[12px] uppercase tracking-wider transition-colors leading-none px-3 py-1.5 rounded-lg">
                     {group.label} <ChevronDown className="ml-1 h-3.5 w-3.5" />
                   </button>
                 ) : (
-                  <a href={group.href} onClick={(e) => handleNavClick(e, group.href!)} className="text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider transition-colors leading-none">
+                  <a href={group.href} onClick={(e) => handleNavClick(e, group.href!)} className="text-[#1C75BB] hover:text-[#00AEEF] font-semibold text-[12px] uppercase tracking-wider transition-colors leading-none px-3 py-1.5 rounded-lg">
                     {group.label}
                   </a>
                 )}
@@ -98,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({
                             key={item.label}
                             href={item.href}
                             onClick={(e) => handleNavClick(e, item.href)}
-                            className="block px-5 py-3 text-[11px] font-bold hover:bg-slate-50 hover:text-[#00AEEF] transition-colors uppercase tracking-tight"
+                            className="block px-5 py-3 text-[13px] font-semibold hover:bg-[#00AEEF]/10 hover:text-[#00AEEF] transition-colors uppercase tracking-tight"
                           >
                             {item.label}
                           </a>
@@ -108,17 +123,20 @@ export const Header: React.FC<HeaderProps> = ({
                   </div>
                 )}
               </div>
+              </React.Fragment>
             ))}
+
+            <div className="w-px h-4 bg-gray-200 mx-1" />
 
             {!isLoggedIn && (
               <div className="relative group flex items-center h-full">
-                <button className="text-[#1C75BB] hover:text-[#00AEEF] font-bold text-[12px] uppercase tracking-wider leading-none transition-colors flex items-center">
+                <button className="text-[#1C75BB] hover:text-[#00AEEF] font-semibold text-[12px] uppercase tracking-wider leading-none transition-colors flex items-center px-3 py-1.5 rounded-lg">
                   Ingresar <ChevronDown className="ml-1 h-3.5 w-3.5" />
                 </button>
                 <div className="absolute right-0 top-full hidden group-hover:block pt-2 animate-in fade-in zoom-in-95 duration-200">
                   <div className="w-52 rounded-2xl shadow-2xl bg-white border border-gray-100 overflow-hidden">
                     <div className="py-2 text-[#1C75BB]">
-                      <button onClick={() => onActionClick?.('afiliado')} className="w-full text-left block px-5 py-3 text-[11px] font-bold hover:bg-slate-50 hover:text-[#00AEEF] transition-colors uppercase">Portal Afiliados</button>
+                      <button onClick={() => onActionClick?.('afiliado')} className="w-full text-left block px-5 py-3 text-[13px] font-semibold hover:bg-[#00AEEF]/10 hover:text-[#00AEEF] transition-colors uppercase">Portal Afiliados</button>
                       <button onClick={() => onActionClick?.('prestador')} className="w-full text-left block px-5 py-3 text-[11px] font-bold hover:bg-slate-50 hover:text-[#00AEEF] rounded-xl transition-colors uppercase">Portal Prestadores</button>
                     </div>
                   </div>

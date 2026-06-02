@@ -1,180 +1,115 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from './ui/Button';
-import { ChevronLeft, ChevronRight, Smartphone, CheckCircle2, ArrowRight, Calendar } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ArrowRight, Newspaper } from 'lucide-react';
 import { apiService, Noticia, BACKOFFICE_API_BASE_URL } from '../services/api';
 
 const PLACEHOLDER_IMAGE = 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=800';
 
 const formatDate = (dateStr: string) => {
   try {
-    return new Date(dateStr).toLocaleDateString('es-AR', { month: 'long', year: 'numeric' });
-  } catch {
-    return '';
-  }
+    return new Date(dateStr).toLocaleDateString('es-AR', { day: '2-digit', month: 'short' }).toUpperCase();
+  } catch { return ''; }
 };
 
-const getImages = (noticia: Noticia): string[] => {
-  if (!noticia.imagenes || noticia.imagenes.length === 0) return [PLACEHOLDER_IMAGE];
-  return noticia.imagenes.map((img) => `${BACKOFFICE_API_BASE_URL}${img.rutaImagen}`).filter(Boolean);
-};
+const getThumb = (n: Noticia) =>
+  n.imagenes?.length ? `${BACKOFFICE_API_BASE_URL}${n.imagenes[0].rutaImagen}` : PLACEHOLDER_IMAGE;
 
 export const Hero: React.FC<{ onNoticiaClick?: (id: number) => void }> = ({ onNoticiaClick }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [noticias, setNoticias] = useState<Noticia[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    apiService.getNoticias(3)
-      .then(setNoticias)
-      .catch((err) => console.error('Error cargando noticias:', err))
-      .finally(() => setLoading(false));
+    apiService.getNoticias(3).then(setNoticias).catch(() => {});
   }, []);
 
-  const scrollToPlanes = () => {
-    const planesSection = document.getElementById('planes');
-    if (planesSection) planesSection.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    if (noticias.length === 0) return;
-    const timer = setInterval(() => nextSlide(), 9000);
-    return () => clearInterval(timer);
-  }, [currentIndex, noticias.length]);
-
-  const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % noticias.length);
-  const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + noticias.length) % noticias.length);
+  const scrollToPlanes = () =>
+    document.getElementById('planes')?.scrollIntoView({ behavior: 'smooth' });
 
   return (
-    <section className="relative flex items-center bg-gradient-to-br from-celeste to-azul overflow-hidden min-h-screen h-auto lg:h-screen pt-20 pb-10 lg:pb-0">
+    <section className="relative min-h-screen flex flex-col overflow-hidden">
 
-      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-white opacity-10 blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-white opacity-10 blur-3xl"></div>
+      {/* BG image — background-size para controlar zoom */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: 'url(/familia.png)',
+          backgroundSize: '78% auto',
+          backgroundPosition: 'right 15%',
+          backgroundRepeat: 'no-repeat',
+          backgroundColor: '#1565a8',
+        }}
+      />
 
-      <div className="relative z-10 w-full flex flex-col lg:flex-row items-stretch lg:items-center px-8 lg:pl-16 lg:pr-0">
+      {/* Overlay SVG — C invertida, gradiente celeste → azul */}
+      {/* Overlay — gradiente diagonal, de sólido a transparente */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(105deg, #1C75BB 0%, #1C75BB 22%, #1a8fd1 36%, rgba(0,174,239,0.25) 50%, transparent 63%)',
+        }}
+      />
 
-        <div className="w-full lg:w-[42%] shrink-0 text-center lg:text-left space-y-4 animate-fade-in -mt-12">
-          <div className="inline-flex items-center gap-2">
-            <span className="block w-6 h-[2px] bg-white/60 rounded-full" />
-            <p className="text-white/90 text-base font-black uppercase tracking-[0.25em]">
-              Obra Social de Agentes de Propaganda Médica
-            </p>
-            <span className="block w-6 h-[2px] bg-white/60 rounded-full" />
-          </div>
-
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight tracking-tight">
-            Tu salud, <br />
-            <span className="text-white opacity-90 font-light italic">a tu ritmo.</span>
-          </h1>
-
-          <p className="text-lg md:text-xl text-white/95 max-w-xl mx-auto lg:mx-0 font-light leading-relaxed">
-            Redefinimos el cuidado de la salud priorizando tu tiempo y tu tranquilidad. Creemos en una medicina de <strong>alta calidad</strong> impulsada por la innovación tecnológica, ofreciéndote una experiencia digital fluida, segura y transparente.
+      {/* Main content */}
+      <div className="relative z-10 flex-1 flex items-center pt-20 pb-10">
+        <div className="px-8 lg:px-16 max-w-xl">
+          <p className="text-white/60 text-[11px] font-black uppercase tracking-[0.35em] mb-5">
+            Obra Social de Agentes de Propaganda Médica
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start pt-2">
-            <Button variant="white" className="text-azul font-black shadow-xl hover:shadow-2xl hover:scale-105 transition-all px-8 py-3 text-base">
+          <h1 className="text-6xl md:text-7xl font-black text-white leading-[0.95] tracking-tighter mb-5">
+            Tu salud,<br />
+            <span className="font-light italic text-white/90">a tu ritmo.</span>
+          </h1>
+          <p className="text-white/75 text-base leading-relaxed max-w-sm mb-8">
+            Cobertura nacional, atención personalizada y gestión 100% digital. Más de 70 años cuidando tu salud.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={scrollToPlanes}
+              className="bg-white text-[#1C75BB] font-black px-7 py-3.5 rounded-full hover:bg-[#00AEEF] hover:text-white transition-all duration-300 shadow-xl text-sm uppercase tracking-wider"
+            >
               Sumarme ahora
-            </Button>
-            <button onClick={scrollToPlanes} className="px-8 py-3 rounded-full border-2 border-white text-white bg-transparent hover:bg-white/10 backdrop-blur-sm text-base font-medium transition-all duration-300">
+            </button>
+            <button
+              onClick={scrollToPlanes}
+              className="border-2 border-white/40 text-white font-semibold px-7 py-3.5 rounded-full hover:bg-white/10 backdrop-blur-sm transition-all duration-300 text-sm uppercase tracking-wider"
+            >
               Conocé nuestros planes
             </button>
           </div>
-
-          <div className="flex flex-wrap gap-4 justify-center lg:justify-start pt-2 text-white/80">
-            <div className="flex items-center gap-2">
-              <Smartphone size={16} />
-              <span className="text-xs font-medium">App Propia</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 size={16} />
-              <span className="text-xs font-medium">Gestión Simple</span>
-            </div>
-          </div>
         </div>
-
-        <div className="w-full lg:flex-1 relative flex flex-col items-center justify-center lg:pr-4 mt-8 lg:ml-10">
-          <div className="relative w-full h-[560px] lg:h-[600px] flex items-center justify-center">
-
-            {loading && (
-              <div className="absolute w-full bg-white rounded-[2.5rem] overflow-hidden shadow-2xl animate-pulse">
-                <div className="h-[360px] w-full bg-gray-200" />
-                <div className="h-1 w-full bg-gradient-to-r from-celeste via-azul to-celeste" />
-                <div className="px-8 py-7 flex flex-col gap-3">
-                  <div className="h-4 w-24 bg-gray-200 rounded-full" />
-                  <div className="h-7 w-3/4 bg-gray-200 rounded-full" />
-                  <div className="h-4 w-full bg-gray-200 rounded-full" />
-                  <div className="h-4 w-2/3 bg-gray-200 rounded-full" />
-                </div>
-              </div>
-            )}
-
-            {!loading && noticias.map((item, index) => {
-              let position = index - currentIndex;
-              if (position < 0) position += noticias.length;
-              const isActive = position === 0;
-              const isNext = position === 1 || (currentIndex === noticias.length - 1 && index === 0);
-              const images = getImages(item);
-
-              return (
-                <div
-                  key={item.idNoticia}
-                  className={`absolute w-full transition-all duration-700 transform
-                    ${isActive
-                      ? 'z-30 opacity-100 translate-x-0 translate-y-0 scale-100 rotate-0'
-                      : isNext
-                        ? 'z-20 opacity-40 translate-x-10 translate-y-6 scale-90 rotate-2'
-                        : 'z-10 opacity-0 translate-x-20 scale-75'
-                    }`}
-                >
-                  <div className={`rounded-[2.5rem] overflow-hidden shadow-2xl ${isActive ? 'shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]' : ''}`}>
-                    <div className="w-full relative overflow-hidden bg-gray-100" style={{ height: '360px', borderRadius: '2.5rem 2.5rem 0 0' }}>
-                      <img src={images[0]} alt={item.titulo} className="absolute inset-0 w-full h-full object-cover" />
-                      <div className="absolute top-6 left-6 z-20">
-                        <span className="px-4 py-1.5 text-xs font-bold text-white bg-celeste backdrop-blur-md rounded-full uppercase tracking-widest shadow-md">
-                          Novedad
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="h-1 w-full bg-gradient-to-r from-celeste via-azul to-celeste" />
-
-                    <div className="px-8 py-7 bg-white flex flex-col gap-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-gray-400 text-sm font-medium">
-                          <Calendar size={14} />
-                          <span>{formatDate(item.vigenciaDesde)}</span>
-                        </div>
-                        <span className="text-sm font-semibold text-celeste uppercase tracking-wider">Novedad</span>
-                      </div>
-                      <h3 className="text-2xl font-black text-slate-800 leading-tight">{item.titulo}</h3>
-                      <p className="text-base text-gray-500 leading-relaxed font-normal line-clamp-2">{item.copete}</p>
-                      <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                        <button
-                          onClick={() => onNoticiaClick?.(item.idNoticia)}
-                          className="inline-flex items-center gap-1.5 text-sm font-semibold text-celeste hover:gap-3 transition-all duration-200"
-                        >
-                          Leer más <ArrowRight size={15} />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {!loading && noticias.length > 1 && (
-            <div className="flex gap-6 mt-12 z-40">
-              <button onClick={prevSlide} className="p-2 rounded-full bg-white/20 text-white backdrop-blur-xl border border-white/30 hover:bg-white/40 transition-all shadow-xl active:scale-90">
-                <ChevronLeft size={18} />
-              </button>
-              <button onClick={nextSlide} className="p-2 rounded-full bg-white/20 text-white backdrop-blur-xl border border-white/30 hover:bg-white/40 transition-all shadow-xl active:scale-90">
-                <ChevronRight size={18} />
-              </button>
-            </div>
-          )}
-        </div>
-
       </div>
+
+      {/* News strip — 3 cards horizontales, bottom right */}
+      {noticias.length > 0 && (
+        <div className="absolute bottom-8 right-6 lg:right-10 z-20 w-[600px]">
+          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden shadow-2xl">
+
+            <div className="flex items-center gap-2 px-5 pt-3 pb-2 border-b border-white/10">
+              <Newspaper size={12} className="text-[#00AEEF]" />
+              <span className="text-white/60 text-[12px] font-black uppercase tracking-[0.25em]">Últimas novedades</span>
+            </div>
+
+            <div className="grid grid-cols-3 divide-x divide-white/10">
+              {noticias.slice(0, 3).map(n => (
+                <button
+                  key={n.idNoticia}
+                  onClick={() => onNoticiaClick?.(n.idNoticia)}
+                  className="flex flex-col gap-2 p-4 hover:bg-white/10 transition-colors text-left group"
+                >
+                  <div className="relative h-[80px] rounded-xl overflow-hidden">
+                    <img src={getThumb(n)} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90" />
+                  </div>
+                  <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest">{formatDate(n.vigenciaDesde)}</p>
+                  <p className="text-white text-[16px] font-semibold leading-snug line-clamp-2 group-hover:text-[#00AEEF] transition-colors">{n.titulo}</p>
+                  <span className="flex items-center gap-1 text-[#00AEEF]/70 text-[11px] font-bold group-hover:text-[#00AEEF] transition-colors mt-auto">
+                    Leer más <ArrowRight size={10} />
+                  </span>
+                </button>
+              ))}
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </section>
   );
 };

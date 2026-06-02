@@ -24,7 +24,8 @@ export const Login: React.FC<LoginProps> = ({ onBack, onLoginSuccess, onGoToRegi
 
   const [formData, setFormData] = useState({ dni: '', password: '' });
   const [recDni, setRecDni] = useState('');
-  const [resetCodigo, setResetCodigo] = useState('');
+  const [recEmail, setRecEmail] = useState('');
+  const [resetToken, setResetToken] = useState('');
   const [resetPassword, setResetPassword] = useState('');
   const [resetPasswordConfirm, setResetPasswordConfirm] = useState('');
 
@@ -36,13 +37,16 @@ export const Login: React.FC<LoginProps> = ({ onBack, onLoginSuccess, onGoToRegi
       const res = await fetch(`${API_BASE_URL}${API_ENDPOINTS.OLVIDE_CLAVE}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ dni: recDni }),
+        body: JSON.stringify({ DNI: recDni, Email: recEmail }),
       });
       if (res.ok) {
+        setResetToken('');
         setStep('reset');
+      } else if (res.status === 429) {
+        setError('Demasiados intentos. Aguardá unos minutos antes de pedir otro código.');
       } else {
         const data = await res.json().catch(() => ({}));
-        setError(data.message || 'No se pudo enviar el código. Verificá el DNI ingresado.');
+        setError(data.mensaje || 'Los datos no coinciden con nuestros registros.');
       }
     } catch {
       setError('Error de conexión con el servidor.');
@@ -63,13 +67,15 @@ export const Login: React.FC<LoginProps> = ({ onBack, onLoginSuccess, onGoToRegi
       const res = await fetch(`${API_BASE_URL}${API_ENDPOINTS.EJECUTAR_RESET}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ dni: recDni, codigo: resetCodigo, nuevaPassword: resetPassword }),
+        body: JSON.stringify({ DNI: recDni, Token: resetToken, NuevaPassword: resetPassword }),
       });
       if (res.ok) {
         setStep('exito');
+      } else if (res.status === 429) {
+        setError('Demasiados intentos. Aguardá unos minutos e intentá de nuevo.');
       } else {
         const data = await res.json().catch(() => ({}));
-        setError(data.message || 'Código incorrecto o expirado.');
+        setError(data.mensaje || 'El código es inválido o ha expirado. Pedí uno nuevo.');
       }
     } catch {
       setError('Error de conexión con el servidor.');
@@ -137,12 +143,22 @@ export const Login: React.FC<LoginProps> = ({ onBack, onLoginSuccess, onGoToRegi
               <input
                 type="text" inputMode="numeric" required
                 className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl py-4 px-5 outline-none font-medium text-[#111111] focus:border-[#00AEEF] transition-all"
-                placeholder="Ingresá tu DNI sin puntos"
+                placeholder="Sin puntos ni espacios"
                 value={recDni}
                 onChange={e => setRecDni(e.target.value.replace(/\D/g, ''))}
               />
             </div>
-            <button type="submit" disabled={isLoading || !recDni} className="w-full bg-gradient-to-r from-[#00AEEF] to-[#1C75BB] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-[#00AEEF]/40 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-[#111111]">Email</label>
+              <input
+                type="email" required
+                className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl py-4 px-5 outline-none font-medium text-[#111111] focus:border-[#00AEEF] transition-all"
+                placeholder="El email asociado a tu cuenta"
+                value={recEmail}
+                onChange={e => setRecEmail(e.target.value)}
+              />
+            </div>
+            <button type="submit" disabled={isLoading || !recDni || !recEmail} className="w-full bg-gradient-to-r from-[#00AEEF] to-[#1C75BB] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-[#00AEEF]/40 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
               {isLoading ? <Loader2 className="animate-spin" size={20} /> : <><span>Enviar código</span><ArrowRight size={18} /></>}
             </button>
           </form>
@@ -170,14 +186,24 @@ export const Login: React.FC<LoginProps> = ({ onBack, onLoginSuccess, onGoToRegi
           {error && <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-2xl">⚠️ {error}</div>}
           <form onSubmit={handleEjecutarReset} className="space-y-5">
             <div className="space-y-2">
-              <label className="block text-sm font-semibold text-[#111111]">Código recibido por email</label>
+              <div className="flex items-center justify-between">
+                <label className="block text-sm font-semibold text-[#111111]">Código recibido por email</label>
+                <button
+                  type="button"
+                  onClick={() => { setError(null); handleSolicitarReset({ preventDefault: () => {} } as React.FormEvent); }}
+                  className="text-xs text-[#00AEEF] hover:underline font-semibold"
+                >
+                  Reenviar código
+                </button>
+              </div>
               <input
-                type="text" required
-                className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl py-4 px-5 outline-none font-medium text-[#111111] focus:border-[#00AEEF] transition-all tracking-widest"
-                placeholder="Ej: 123456"
-                value={resetCodigo}
-                onChange={e => setResetCodigo(e.target.value)}
+                type="text" inputMode="numeric" required maxLength={6}
+                className="w-full bg-slate-50 border-2 border-slate-200 rounded-xl py-4 px-5 outline-none font-medium text-[#111111] focus:border-[#00AEEF] transition-all tracking-[0.5em] text-center"
+                placeholder="• • • • • •"
+                value={resetToken}
+                onChange={e => setResetToken(e.target.value.replace(/\D/g, '').slice(0, 6))}
               />
+              <p className="text-[11px] text-gray-400 font-medium">El código vence a los 15 minutos.</p>
             </div>
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-[#111111]">Nueva contraseña</label>
@@ -204,7 +230,7 @@ export const Login: React.FC<LoginProps> = ({ onBack, onLoginSuccess, onGoToRegi
                 onChange={e => setResetPasswordConfirm(e.target.value)}
               />
             </div>
-            <button type="submit" disabled={isLoading || !resetCodigo || !resetPassword || !resetPasswordConfirm} className="w-full bg-gradient-to-r from-[#00AEEF] to-[#1C75BB] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-[#00AEEF]/40 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+            <button type="submit" disabled={isLoading || resetToken.length < 6 || !resetPassword || !resetPasswordConfirm} className="w-full bg-gradient-to-r from-[#00AEEF] to-[#1C75BB] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-[#00AEEF]/40 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
               {isLoading ? <Loader2 className="animate-spin" size={20} /> : <><span>Cambiar contraseña</span><ArrowRight size={18} /></>}
             </button>
           </form>

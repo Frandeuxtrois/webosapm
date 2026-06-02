@@ -186,7 +186,7 @@ export const CentroMedico: React.FC<CentroMedicoProps> = ({ onNoticiasClick }) =
                     <div className="w-16 h-1 bg-[#00AEEF] rounded-full mb-6" />
 
                     <div className="flex flex-wrap gap-2 mb-6">
-                        {['4 Consultorios Médicos', 'Rehabilitación', '2 Consultorios Odontológicos', 'Radiología Dental', 'Quirófano Odontológico'].map(t => (
+                        {['5 Consultorios Médicos', 'Rehabilitación', '3 Consultorios Odontológicos', 'Radiología Dental', 'Quirófano Odontológico'].map(t => (
                             <span key={t} className="text-[12px] font-bold bg-[#00AEEF]/10 text-[#1C75BB] px-3 py-1.5 rounded-full">{t}</span>
                         ))}
                     </div>

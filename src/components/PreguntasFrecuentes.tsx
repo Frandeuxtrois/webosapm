@@ -102,7 +102,7 @@ export const PreguntasFrecuentes: React.FC = () => {
                             <p className="text-sm font-medium opacity-80 leading-relaxed">Nuestro equipo de atención al afiliado está listo para ayudarte con gestiones complejas.</p>
                         </div>
                         <a
-                            href="mailto:autorizaciones@apm.org.ar"
+                            href="mailto:osapm@apm.org.ar"
                             className="mt-8 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#00AEEF] group-hover:text-white transition-colors"
                         >
                             Contactar <ArrowRight size={16} />
