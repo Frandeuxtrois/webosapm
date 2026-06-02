@@ -85,6 +85,7 @@ const ESPECIALIDADES: Especialidad[] = [
     { nombre: "Endocrinología" },
     { nombre: "Gastroenterología" },
     { nombre: "Neurología" },
+    { nombre: "Osteopatía" },
     { nombre: "Pediatría" },
     { nombre: "Reumatología", procedimientos: ["Capilaroscopía"] },
 ];
@@ -282,7 +283,7 @@ export const CentroMedico: React.FC<CentroMedicoProps> = ({ onNoticiasClick }) =
                     <div className="max-w-7xl mx-auto px-4 lg:px-8 animate-in fade-in slide-in-from-top-2 duration-300 pt-8">
                         {/* Médicas y Rehabilitación */}
                         <div className="mb-12">
-                            <p className="text-[13px] font-black uppercase tracking-widest text-[#00AEEF] mb-5 flex items-center gap-3">
+                            <p className="text-[14px] font-black uppercase tracking-widest text-[#00AEEF] mb-5 flex items-center gap-3">
                                 <span className="w-5 h-[2px] bg-[#00AEEF] rounded-full inline-block" />
                                 Médicas y Rehabilitación
                             </p>
@@ -290,7 +291,7 @@ export const CentroMedico: React.FC<CentroMedicoProps> = ({ onNoticiasClick }) =
                                 {ESPECIALIDADES.map((esp) => (
                                     <div key={esp.nombre} className="flex items-center gap-3 p-5 bg-white border border-gray-100 rounded-2xl hover:border-[#00AEEF] hover:shadow-md transition-all">
                                         <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] flex-shrink-0" />
-                                        <p className="font-bold text-[13px] uppercase tracking-wide text-[#1C75BB]">{esp.nombre}</p>
+                                        <p className="font-bold text-[14px] text-slate-600">{esp.nombre}</p>
                                     </div>
                                 ))}
                             </div>
@@ -298,7 +299,7 @@ export const CentroMedico: React.FC<CentroMedicoProps> = ({ onNoticiasClick }) =
 
                         {/* Odontológicas */}
                         <div>
-                            <p className="text-[13px] font-black uppercase tracking-widest text-[#00AEEF] mb-5 flex items-center gap-3">
+                            <p className="text-[14px] font-black uppercase tracking-widest text-[#00AEEF] mb-5 flex items-center gap-3">
                                 <span className="w-5 h-[2px] bg-[#00AEEF] rounded-full inline-block" />
                                 Odontológicas
                             </p>
@@ -306,7 +307,7 @@ export const CentroMedico: React.FC<CentroMedicoProps> = ({ onNoticiasClick }) =
                                 {ODONTOLOGIA.map((item, idx) => (
                                     <div key={idx} className="flex items-center gap-4 p-5 bg-white border border-gray-100 rounded-2xl hover:border-[#00AEEF] hover:shadow-md transition-all group cursor-default">
                                         <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] group-hover:scale-150 transition-transform flex-shrink-0" />
-                                        <p className="font-bold text-[13px] uppercase tracking-wide text-[#1C75BB] group-hover:text-[#00AEEF] transition-colors">{item}</p>
+                                        <p className="font-bold text-[14px] text-slate-600 group-hover:text-[#00AEEF] transition-colors">{item}</p>
                                     </div>
                                 ))}
                             </div>
@@ -376,7 +377,7 @@ export const CentroMedico: React.FC<CentroMedicoProps> = ({ onNoticiasClick }) =
                                         {esp.procedimientos!.map((p, i) => (
                                             <li key={i} className="flex items-start gap-3 p-4 bg-slate-50 rounded-2xl border border-gray-100">
                                                 <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] flex-shrink-0 mt-1.5" />
-                                                <p className="font-bold text-[13px] text-[#1C75BB] leading-snug">{p}</p>
+                                                <p className="font-bold text-[13px] text-slate-600 leading-snug">{p}</p>
                                             </li>
                                         ))}
                                     </ul>
@@ -389,7 +390,7 @@ export const CentroMedico: React.FC<CentroMedicoProps> = ({ onNoticiasClick }) =
                             {PRESTACIONES_REHAB.map((item, idx) => (
                                 <div key={idx} className="flex items-center gap-3 p-5 bg-white border border-gray-100 rounded-2xl hover:border-[#00AEEF] hover:shadow-md transition-all">
                                     <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] flex-shrink-0" />
-                                    <p className="font-bold text-[13px] uppercase tracking-wide text-[#1C75BB]">{item}</p>
+                                    <p className="font-bold text-[13px] text-slate-600">{item}</p>
                                 </div>
                             ))}
                         </div>
@@ -399,7 +400,7 @@ export const CentroMedico: React.FC<CentroMedicoProps> = ({ onNoticiasClick }) =
                             {ODONTOLOGIA.map((item, idx) => (
                                 <div key={idx} className="flex items-center gap-3 p-5 bg-white border border-gray-100 rounded-2xl hover:border-[#00AEEF] hover:shadow-md transition-all">
                                     <div className="w-1.5 h-1.5 rounded-full bg-[#00AEEF] flex-shrink-0" />
-                                    <p className="font-bold text-[13px] uppercase tracking-wide text-[#1C75BB]">{item}</p>
+                                    <p className="font-bold text-[13px] text-slate-600">{item}</p>
                                 </div>
                             ))}
                         </div>
