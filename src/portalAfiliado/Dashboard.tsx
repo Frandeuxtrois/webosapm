@@ -16,9 +16,10 @@ import { useAuth } from '../context/authContext';
 
 interface DashboardProps {
     onLogout: () => void;
+    onGoHome?: () => void;
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ onLogout, onGoHome }) => {
     const { user, loading: authLoading } = useAuth();
     const [activeSection, setActiveSection] = useState('grupo-familiar');
     const [perfilReal, setPerfilReal] = useState<any>(null);
@@ -436,9 +437,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                         <img src={headerLogo} alt="Logo" className="h-10 lg:h-12 object-contain" />
                         <span className="hidden md:block text-[10px] font-black uppercase tracking-[0.3em] border-l pl-6 border-gray-100 text-gray-400">Portal Afiliados</span>
                     </div>
-                    <button onClick={onLogout} className="flex items-center gap-2 px-5 py-2 bg-slate-100 text-[#1C75BB] rounded-2xl font-black text-[10px] transition-all shadow-sm hover:bg-red-50 hover:text-red-500 uppercase tracking-widest active:scale-95">
-                        <LogOut size={16} /> Salir
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button onClick={onGoHome} className="flex items-center gap-2 px-5 py-2 bg-slate-100 text-[#1C75BB] rounded-2xl font-black text-[10px] transition-all shadow-sm hover:bg-[#00AEEF]/10 hover:text-[#00AEEF] uppercase tracking-widest active:scale-95">
+                            <Home size={14} /> Inicio
+                        </button>
+                        <button onClick={onLogout} className="flex items-center gap-2 px-5 py-2 bg-slate-100 text-[#1C75BB] rounded-2xl font-black text-[10px] transition-all shadow-sm hover:bg-red-50 hover:text-red-500 uppercase tracking-widest active:scale-95">
+                            <LogOut size={16} /> Salir
+                        </button>
+                    </div>
                 </div>
             </header>
 

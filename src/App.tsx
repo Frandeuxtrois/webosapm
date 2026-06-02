@@ -93,7 +93,7 @@ function AppContent() {
 
   
   if (currentView === 'portal-afiliado' && isLoggedIn) {
-    return <Dashboard onLogout={() => { logout(); navigateTo('home'); }} />;
+    return <Dashboard onLogout={() => { logout(); navigateTo('home'); }} onGoHome={() => navigateTo('home')} />;
   }
 
   if (currentView === 'portal-prestador') {

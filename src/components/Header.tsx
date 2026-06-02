@@ -113,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({
                             key={item.label}
                             href={item.href}
                             onClick={(e) => handleNavClick(e, item.href)}
-                            className="block px-5 py-3 text-[13px] font-semibold hover:bg-[#00AEEF]/10 hover:text-[#00AEEF] transition-colors uppercase tracking-tight"
+                            className="block px-5 py-3 text-[11px] font-semibold hover:bg-[#00AEEF]/10 hover:text-[#00AEEF] transition-colors uppercase tracking-tight"
                           >
                             {item.label}
                           </a>
@@ -136,8 +136,8 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="absolute right-0 top-full hidden group-hover:block pt-2 animate-in fade-in zoom-in-95 duration-200">
                   <div className="w-52 rounded-2xl shadow-2xl bg-white border border-gray-100 overflow-hidden">
                     <div className="py-2 text-[#1C75BB]">
-                      <button onClick={() => onActionClick?.('afiliado')} className="w-full text-left block px-5 py-3 text-[13px] font-semibold hover:bg-[#00AEEF]/10 hover:text-[#00AEEF] transition-colors uppercase">Portal Afiliados</button>
-                      <button onClick={() => onActionClick?.('prestador')} className="w-full text-left block px-5 py-3 text-[11px] font-bold hover:bg-slate-50 hover:text-[#00AEEF] rounded-xl transition-colors uppercase">Portal Prestadores</button>
+                      <button onClick={() => onActionClick?.('afiliado')} className="w-full text-left block px-5 py-3 text-[11px] font-semibold hover:bg-[#00AEEF]/10 hover:text-[#00AEEF] transition-colors uppercase">Portal Afiliados</button>
+                      <button onClick={() => onActionClick?.('prestador')} className="w-full text-left block px-5 py-3 text-[11px] font-semibold hover:bg-[#00AEEF]/10 hover:text-[#00AEEF] transition-colors uppercase">Portal Prestadores</button>
                     </div>
                   </div>
                 </div>
@@ -146,7 +146,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             <button
               onClick={() => isLoggedIn ? onActionClick?.('afiliado') : onAfiliarseClick?.()}
-              className={`ml-2 group relative flex items-center gap-1.5 px-6 py-3 rounded-xl text-[13px] font-black uppercase tracking-tight transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95 overflow-hidden
+              className={`ml-2 group relative flex items-center gap-1.5 px-6 py-3 rounded-xl text-[12px] font-black uppercase tracking-tight transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95 overflow-hidden
               ${isLoggedIn
                 ? 'bg-white border-2 border-celeste text-celeste hover:bg-celeste hover:text-white'
                 : 'bg-gradient-to-r from-[#00AEEF] to-[#1C75BB] text-white'}`}
