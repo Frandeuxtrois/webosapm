@@ -25,7 +25,6 @@ const pinIcon = new L.DivIcon({
     popupAnchor: [0, -36],
 });
 
-// Fuerza recalculo de tiles al montar (fix carga incompleta)
 const MapFix: React.FC = () => {
     const map = useMap();
     useEffect(() => {
@@ -72,11 +71,14 @@ const SECCIONALES_DATA = [
 export const Seccionales: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [activePin, setActivePin] = useState<string | null>(null);
+    const [expanded, setExpanded] = useState(false);
 
     const filteredSeccionales = SECCIONALES_DATA.filter(sec =>
         sec.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         sec.direccion.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const visibleSeccionales = searchTerm || expanded ? filteredSeccionales : filteredSeccionales.slice(0, 6);
 
     return (
         <section id="seccionales" className="pt-32 pb-20 bg-white font-sans text-[#1C75BB] overflow-x-hidden">
@@ -87,9 +89,9 @@ export const Seccionales: React.FC = () => {
                     <div className="space-y-4">
                         <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#00AEEF]/10 rounded-full">
                             <Navigation size={16} className="text-[#00AEEF]" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#00AEEF]">Presencia Nacional</span>
+                            <span className="text-[11px] font-black uppercase tracking-widest text-[#00AEEF]">Presencia Nacional</span>
                         </div>
-                        <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">
+                        <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-none">
                             ¿Dónde nos <br /> <span className="text-[#00AEEF]">Encontramos?</span>
                         </h2>
                     </div>
@@ -123,7 +125,6 @@ export const Seccionales: React.FC = () => {
                         <TileLayer
                             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
                         />
-                        {/* Islas Malvinas — tapa el texto del tile */}
                         <Marker
                             position={[-51.7, -59.0]}
                             zIndexOffset={1000}
@@ -168,14 +169,14 @@ export const Seccionales: React.FC = () => {
                         ))}
                     </MapContainer>
 
-<div className="absolute bottom-6 left-6 bg-[#1C75BB] text-white p-4 rounded-2xl shadow-xl hidden lg:block border border-white/20 z-[1000]">
+                    <div className="absolute bottom-6 left-6 bg-[#1C75BB] text-white p-4 rounded-2xl shadow-xl hidden lg:block border border-white/20 z-[1000]">
                         <p className="text-[10px] font-black uppercase tracking-widest text-[#00AEEF] mb-1">Mapa Interactivo</p>
                         <p className="text-xs font-bold opacity-80">{SECCIONALES_DATA.length} seccionales en todo el país</p>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredSeccionales.map((sec, idx) => (
+                    {visibleSeccionales.map((sec, idx) => (
                         <div key={idx} className="group bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:border-[#00AEEF]/30 transition-all relative overflow-hidden flex flex-col justify-between">
                             <div className="absolute top-0 left-0 w-1.5 h-full bg-[#00AEEF] opacity-0 group-hover:opacity-100 transition-all"></div>
 
@@ -186,7 +187,7 @@ export const Seccionales: React.FC = () => {
                                     </div>
                                     <ChevronRight size={16} className="text-slate-200 group-hover:text-[#00AEEF] transition-colors" />
                                 </div>
-                                <h3 className="text-xl font-black uppercase tracking-tight mb-2 leading-tight">
+                                <h3 className="text-lg font-black uppercase tracking-tight mb-2 leading-tight">
                                     {sec.nombre}
                                 </h3>
                                 <div className="space-y-4 pt-4 border-t border-slate-50">
@@ -222,6 +223,17 @@ export const Seccionales: React.FC = () => {
                 {filteredSeccionales.length === 0 && (
                     <div className="py-20 text-center">
                         <p className="text-xl font-bold opacity-30 uppercase tracking-widest">No se encontraron seccionales para tu búsqueda</p>
+                    </div>
+                )}
+
+                {!searchTerm && filteredSeccionales.length > 6 && (
+                    <div className="flex justify-center mt-8">
+                        <button
+                            onClick={() => setExpanded(e => !e)}
+                            className="flex items-center gap-2 px-8 py-3 bg-white border-2 border-[#00AEEF]/30 text-[#1C75BB] font-black text-[11px] uppercase tracking-widest rounded-full hover:bg-[#00AEEF] hover:text-white hover:border-[#00AEEF] transition-all shadow-sm"
+                        >
+                            {expanded ? `Ver menos ↑` : `Ver las ${filteredSeccionales.length - 6} seccionales restantes ↓`}
+                        </button>
                     </div>
                 )}
             </div>

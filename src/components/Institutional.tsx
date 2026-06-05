@@ -7,15 +7,15 @@ export const Institutional: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-celeste">
+            <h2 className="text-4xl md:text-5xl font-black mb-6 text-[#00AEEF]">
               Más de 70 años cuidando lo más importante
             </h2>
-            <p className="text-gray-300 mb-6 leading-relaxed">
+            <p className="text-sm text-gray-300 mb-6 leading-relaxed">
               Somos una Obra Social comprometida con la excelencia médica y la calidez humana.
               Nuestra misión es brindar acceso a la salud de calidad a miles de familias,
               innovando constantemente en nuestros servicios y atención.
             </p>
-            <p className="text-gray-300 mb-8 leading-relaxed">
+            <p className="text-sm text-gray-300 mb-8 leading-relaxed">
               Contamos con convenios en las instituciones más prestigiosas del país y una red
               de profesionales de primer nivel.
             </p>

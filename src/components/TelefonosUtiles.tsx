@@ -38,11 +38,15 @@ const TELEFONOS_DATA = [
 
 export const TelefonosUtiles: React.FC = () => {
     const [search, setSearch] = useState("");
+    const [expanded, setExpanded] = useState(false);
 
     const filteredData = TELEFONOS_DATA.filter(item =>
         item.region.toLowerCase().includes(search.toLowerCase()) ||
         item.servicio.toLowerCase().includes(search.toLowerCase())
     );
+
+    const nonDestacados = filteredData.filter(i => !i.destacado);
+    const visibleData = search || expanded ? nonDestacados : nonDestacados.slice(0, 6);
 
     return (
         <section id="telefonos" className="pt-32 pb-20 bg-white font-sans text-[#1C75BB] overflow-x-hidden animate-in fade-in duration-700">
@@ -55,7 +59,7 @@ export const TelefonosUtiles: React.FC = () => {
                             <AlertCircle size={18} />
                             <span className="text-[10px] font-black uppercase tracking-widest">Atención las 24 Horas</span>
                         </div>
-                        <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-tight">
+                        <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-tight">
                             Teléfonos <br /> <span className="text-[#00AEEF]">Útiles</span>
                         </h2>
                     </div>
@@ -99,7 +103,7 @@ export const TelefonosUtiles: React.FC = () => {
 
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredData.filter(i => !i.destacado).map((item, idx) => (
+                    {visibleData.map((item, idx) => (
                         <div key={idx} className="group bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl hover:border-[#00AEEF]/20 transition-all flex flex-col justify-between overflow-hidden relative">
                             <div className="absolute top-0 left-0 w-1.5 h-full bg-[#00AEEF] opacity-0 group-hover:opacity-100 transition-all"></div>
 
@@ -107,12 +111,12 @@ export const TelefonosUtiles: React.FC = () => {
                                 <div className="flex justify-between items-start mb-6">
                                     <div className="flex items-center gap-2 text-[#00AEEF]">
                                         <MapPin size={16} />
-                                        <span className="text-[10px] font-black uppercase tracking-widest">{item.region}</span>
+                                        <span className="text-[11px] font-black uppercase tracking-widest">{item.region}</span>
                                     </div>
                                     <Activity size={18} className="text-slate-100 group-hover:text-[#00AEEF]/20 transition-colors" />
                                 </div>
 
-                                <h4 className="text-lg font-black uppercase leading-tight mb-6 text-[#1C75BB] min-h-[3rem]">
+                                <h4 className="text-base font-black uppercase tracking-tight leading-tight mb-6 text-[#1C75BB] min-h-[3rem]">
                                     {item.servicio}
                                 </h4>
 
@@ -141,6 +145,17 @@ export const TelefonosUtiles: React.FC = () => {
                 {filteredData.length === 0 && (
                     <div className="py-20 text-center">
                         <p className="text-xl font-bold opacity-20 uppercase tracking-widest">No se encontraron resultados para "{search}"</p>
+                    </div>
+                )}
+
+                {!search && nonDestacados.length > 6 && (
+                    <div className="flex justify-center mt-8">
+                        <button
+                            onClick={() => setExpanded(e => !e)}
+                            className="flex items-center gap-2 px-8 py-3 bg-white border-2 border-[#00AEEF]/30 text-[#1C75BB] font-black text-[11px] uppercase tracking-widest rounded-full hover:bg-[#00AEEF] hover:text-white hover:border-[#00AEEF] transition-all shadow-sm"
+                        >
+                            {expanded ? `Ver menos ↑` : `Ver los ${nonDestacados.length - 6} restantes ↓`}
+                        </button>
                     </div>
                 )}
             </div>

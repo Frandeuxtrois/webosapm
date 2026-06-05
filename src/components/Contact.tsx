@@ -50,8 +50,8 @@ export const Contact: React.FC = () => {
           <div className="grid lg:grid-cols-2 gap-16">
 
             <div className="space-y-8">
-              <h2 className="text-3xl font-bold text-oscuro">Estamos para ayudarte</h2>
-              <p className="text-gray-600">
+              <h2 className="text-4xl md:text-5xl font-black text-[#1C75BB]">Estamos para ayudarte</h2>
+              <p className="text-sm text-gray-600 leading-relaxed">
                 Si tenés dudas sobre nuestros planes o necesitás asistencia, completá el formulario
                 y un asesor se pondrá en contacto con vos a la brevedad.
               </p>

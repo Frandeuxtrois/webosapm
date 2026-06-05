@@ -128,7 +128,7 @@ export const FormularioSalud: React.FC = () => {
                 </div>
 
                 <p className="text-center text-gray-400 font-bold uppercase tracking-[0.2em] mt-6 text-[9px] italic">
-                    Dudas: consultá en tu seccional o escribinos a <span className="not-italic text-[#00AEEF]">autorizaciones@apm.org.ar</span>
+                    Dudas: consultá en tu seccional o escribinos a <span className="not-italic text-[#00AEEF]">osapm@apm.org.ar</span>
                 </p>
             </div>
         </section>

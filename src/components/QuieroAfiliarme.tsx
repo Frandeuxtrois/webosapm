@@ -89,7 +89,7 @@ export const QuieroAfiliarme: React.FC = () => {
             <FileText size={28} className="text-[#00AEEF]" />
           </div>
           <div>
-            <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white leading-none">
+            <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-white leading-none">
               Formulario de <span className="text-[#00AEEF]">Afiliación</span>
             </h1>
           </div>

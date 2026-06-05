@@ -50,10 +50,10 @@ export const Noticias: React.FC<{ onNoticiaClick: (id: number) => void }> = ({ o
             <Newspaper size={28} className="text-[#00AEEF]" />
           </div>
           <div>
-            <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white leading-none">
+            <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-white leading-none">
               Noticias <span className="text-[#00AEEF]">OSAPM</span>
             </h1>
-            <p className="text-white/60 font-bold uppercase text-[10px] tracking-[0.25em] mt-1">
+            <p className="text-white/60 font-black uppercase text-[11px] tracking-widest mt-1">
               Portal de noticias
             </p>
           </div>

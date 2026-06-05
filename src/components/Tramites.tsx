@@ -603,7 +603,7 @@ export const Tramites: React.FC = () => {
                             "Lugar donde se realizará la prestación",
                             "Correo al que debe remitirse la autorización"
                         ]} />
-                        <TextP className="italic" style={{ fontSize: fontSize * 0.85, color: '#9ca3af' }}>Las autorizaciones pueden solicitarse en las Seccionales de OSAPM de la R.A. personalmente o por internet a <strong>autorizaciones@apm.org.ar</strong>. Si se realiza fuera de horario, se recibirá respuesta el día hábil posterior.</TextP>
+                        <TextP className="italic" style={{ fontSize: fontSize * 0.85, color: '#9ca3af' }}>Las autorizaciones pueden solicitarse en las Seccionales de OSAPM de la R.A. personalmente o por internet a <strong>osapm@apm.org.ar</strong>. Si se realiza fuera de horario, se recibirá respuesta el día hábil posterior.</TextP>
                         <InfoBox color="orange">
                             <p style={{ fontSize: fontSize * 0.85 }} className="font-bold text-orange-700 uppercase leading-relaxed">
                                 ⚠️ Recomendación: No solicitar turnos para la realización de prácticas o estudios hasta no contar con la correspondiente autorización.

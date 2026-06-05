@@ -21,7 +21,7 @@ export const Services: React.FC<ServicesProps> = ({ onCartillaClick }) => {
                     {service.icon}
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-oscuro mb-3 group-hover:text-azul transition-colors">{service.title}</h3>
+              <h3 className="text-lg font-black text-[#1C75BB] mb-3 group-hover:text-[#00AEEF] transition-colors">{service.title}</h3>
               <p className="text-gray-600 leading-relaxed text-sm">
                 {service.description}
               </p>

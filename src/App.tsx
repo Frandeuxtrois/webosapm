@@ -3,8 +3,8 @@ import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { Plans } from './components/Plans';
 import { Services } from './components/Services';
-import { Institutional } from './components/Institutional';
 import { Procedures } from './components/Procedures';
+import { Institutional } from './components/Institutional';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { Login } from './portalAfiliado/Login';
@@ -135,6 +135,7 @@ function AppContent() {
     <div className="min-h-screen bg-white font-sans text-[#1C75BB]">
       <Header
         isLoggedIn={isLoggedIn}
+        currentView={currentView}
         onActionClick={(type) => {
           if (type === 'prestador') {
             navigateTo('portal-prestador');

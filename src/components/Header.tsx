@@ -7,6 +7,7 @@ import headerLogo from '../assets/headerlogo.png';
 
 interface HeaderProps {
   isLoggedIn?: boolean;
+  currentView?: string;
   onActionClick?: (type: 'afiliado' | 'prestador') => void;
   onAfiliarseClick?: () => void;
   onCentroMedicoClick?: () => void;
@@ -15,8 +16,12 @@ interface HeaderProps {
   onNoticiasClick?: () => void;
 }
 
+const INFO_VIEWS = ['tramites', 'preguntas-frecuentes', 'quiero-afiliarme', 'formulario-salud', 'formulario-prestador', 'cartilla'];
+const CONTACTO_VIEWS = ['seccionales', 'telefonos-utiles'];
+
 export const Header: React.FC<HeaderProps> = ({
   isLoggedIn,
+  currentView,
   onActionClick,
   onAfiliarseClick,
   onCentroMedicoClick,
@@ -24,6 +29,8 @@ export const Header: React.FC<HeaderProps> = ({
   onSectionClick,
   onNoticiasClick
 }) => {
+  const navCls = (active: boolean) =>
+    `relative text-[#1C75BB] font-semibold text-[12px] uppercase tracking-wider leading-none px-3 py-1.5 transition-all duration-300 hover:-translate-y-[2px] before:content-[''] before:absolute before:bottom-[-1px] before:left-0 before:right-0 before:h-[3px] before:bg-[#00AEEF] before:origin-bottom before:transition-transform before:duration-300 ${active ? 'before:scale-y-100 text-[#00AEEF]' : 'before:scale-y-0 hover:before:scale-y-100 hover:text-[#00AEEF]'}`;
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
@@ -63,28 +70,19 @@ export const Header: React.FC<HeaderProps> = ({
 
           <nav className="hidden md:flex items-center h-full gap-1">
 
-            <button
-              onClick={() => { onHomeClick?.(); setIsOpen(false); }}
-              className="text-[#1C75BB] hover:text-[#00AEEF] font-semibold text-[12px] uppercase tracking-wider transition-colors leading-none px-3 py-1.5 rounded-lg"
-            >
+            <button onClick={() => { onHomeClick?.(); setIsOpen(false); }} className={navCls(currentView === 'home')}>
               Inicio
             </button>
 
             <div className="w-px h-4 bg-gray-200 mx-1" />
 
-            <button
-              onClick={() => { onCentroMedicoClick?.(); setIsOpen(false); }}
-              className="text-[#1C75BB] hover:text-[#00AEEF] font-semibold text-[12px] uppercase tracking-wider transition-colors leading-none px-3 py-1.5 rounded-lg"
-            >
+            <button onClick={() => { onCentroMedicoClick?.(); setIsOpen(false); }} className={navCls(currentView === 'centro-medico' || currentView === 'novedades-cm')}>
               Centro Médico
             </button>
 
             <div className="w-px h-4 bg-gray-200 mx-1" />
 
-            <button
-              onClick={() => { onNoticiasClick?.(); setIsOpen(false); }}
-              className="text-[#1C75BB] hover:text-[#00AEEF] font-semibold text-[12px] uppercase tracking-wider transition-colors leading-none px-3 py-1.5 rounded-lg"
-            >
+            <button onClick={() => { onNoticiasClick?.(); setIsOpen(false); }} className={navCls(currentView === 'noticias' || currentView === 'noticia-detalle')}>
               Noticias
             </button>
 
@@ -95,11 +93,14 @@ export const Header: React.FC<HeaderProps> = ({
                 {i > 0 && <div className="w-px h-4 bg-gray-200 mx-1" />}
               <div className="relative group flex items-center h-full">
                 {group.items ? (
-                  <button className="flex items-center text-[#1C75BB] hover:text-[#00AEEF] font-semibold text-[12px] uppercase tracking-wider transition-colors leading-none px-3 py-1.5 rounded-lg">
+                  <button className={`flex items-center ${navCls(
+                    (group.label === 'Información' && INFO_VIEWS.some(v => currentView === v)) ||
+                    (group.label === 'Contacto' && (currentView === 'contacto' || CONTACTO_VIEWS.some(v => currentView === v)))
+                  )}`}>
                     {group.label} <ChevronDown className="ml-1 h-3.5 w-3.5" />
                   </button>
                 ) : (
-                  <a href={group.href} onClick={(e) => handleNavClick(e, group.href!)} className="text-[#1C75BB] hover:text-[#00AEEF] font-semibold text-[12px] uppercase tracking-wider transition-colors leading-none px-3 py-1.5 rounded-lg">
+                  <a href={group.href} onClick={(e) => handleNavClick(e, group.href!)} className={navCls(false)}>
                     {group.label}
                   </a>
                 )}
@@ -130,7 +131,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             {!isLoggedIn && (
               <div className="relative group flex items-center h-full">
-                <button className="text-[#1C75BB] hover:text-[#00AEEF] font-semibold text-[12px] uppercase tracking-wider leading-none transition-colors flex items-center px-3 py-1.5 rounded-lg">
+                <button className={`flex items-center ${navCls(false)}`}>
                   Ingresar <ChevronDown className="ml-1 h-3.5 w-3.5" />
                 </button>
                 <div className="absolute right-0 top-full hidden group-hover:block pt-2 animate-in fade-in zoom-in-95 duration-200">

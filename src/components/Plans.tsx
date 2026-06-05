@@ -17,8 +17,8 @@ export const Plans: React.FC<{ onPlanClick?: () => void }> = ({ onPlanClick }) =
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-oscuro mb-4">Planes diseñados para vos</h2>
-          <p className="text-gray-600 text-lg">
+          <h2 className="text-4xl md:text-5xl font-black text-[#1C75BB] mb-4">Planes diseñados para vos</h2>
+          <p className="text-sm text-gray-600 leading-relaxed">
             Elegí la cobertura que mejor se adapta a tus necesidades y a tu presupuesto.
             Sin letra chica, con total transparencia.
           </p>
@@ -32,13 +32,13 @@ export const Plans: React.FC<{ onPlanClick?: () => void }> = ({ onPlanClick }) =
               className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl hover:-translate-y-2 hover:ring-2 hover:ring-celeste transition-all duration-300 flex flex-col overflow-hidden cursor-pointer"
             >
               <div className="p-8 flex-grow">
-                <h3 className="text-2xl font-bold text-azul mb-6 group-hover:text-celeste transition-colors duration-300">{plan.name}</h3>
+                <h3 className="text-lg font-black text-[#1C75BB] mb-6 group-hover:text-[#00AEEF] transition-colors duration-300">{plan.name}</h3>
 
                 <ul className="space-y-4">
                   {plan.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start">
                       <Check className="h-5 w-5 text-celeste shrink-0 mt-0.5" />
-                      <span className="ml-3 text-gray-700 text-sm">{feature}</span>
+                      <span className="ml-3 text-sm text-gray-600">{feature}</span>
                     </li>
                   ))}
                 </ul>

@@ -30,10 +30,10 @@ export const PreguntasFrecuentes: React.FC = () => {
                         <HelpCircle size={28} className="text-[#00AEEF]" />
                     </div>
                     <div>
-                        <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-white leading-none">
+                        <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-white leading-none">
                             Preguntas <span className="text-[#00AEEF]">Frecuentes</span>
                         </h2>
-                        <p className="text-white/60 font-bold uppercase text-[10px] tracking-[0.25em] mt-1">
+                        <p className="text-white/60 font-black uppercase text-[11px] tracking-widest mt-1">
                             Resolvé tus dudas de forma inmediata
                         </p>
                     </div>
@@ -69,7 +69,7 @@ export const PreguntasFrecuentes: React.FC = () => {
                                     onClick={() => togglePregunta(index)}
                                     className="w-full flex items-center justify-between p-6 md:p-8 text-left outline-none"
                                 >
-                                    <h3 className="text-lg md:text-xl font-bold tracking-tight text-[#111111] pr-4">
+                                    <h3 className="text-base md:text-lg font-black tracking-tight text-[#1C75BB] pr-4">
                                         {item.pregunta}
                                     </h3>
                                     <div className={`shrink-0 transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`}>
@@ -84,7 +84,7 @@ export const PreguntasFrecuentes: React.FC = () => {
                                 {openIndex === index && (
                                     <div className="px-6 md:px-8 pb-8 animate-in fade-in slide-in-from-top-2 duration-300">
                                         <div className="h-[2px] w-12 bg-[#00AEEF] mb-6 rounded-full opacity-50"></div>
-                                        <p className="text-gray-600 leading-relaxed font-medium text-base">
+                                        <p className="text-sm text-gray-600 leading-relaxed font-medium">
                                             {item.respuesta}
                                         </p>
                                     </div>
@@ -98,7 +98,7 @@ export const PreguntasFrecuentes: React.FC = () => {
                     <div className="p-8 bg-[#1C75BB] rounded-[2.5rem] text-white shadow-xl flex flex-col justify-between group cursor-pointer hover:scale-[1.02] transition-all">
                         <div className="space-y-4">
                             <MessageCircle size={40} className="text-[#00AEEF]" />
-                            <h4 className="text-xl font-black uppercase tracking-tighter">¿Aún tenés dudas?</h4>
+                            <h4 className="text-lg font-black uppercase tracking-tighter">¿Aún tenés dudas?</h4>
                             <p className="text-sm font-medium opacity-80 leading-relaxed">Nuestro equipo de atención al afiliado está listo para ayudarte con gestiones complejas.</p>
                         </div>
                         <a
@@ -112,8 +112,8 @@ export const PreguntasFrecuentes: React.FC = () => {
                     <div className="p-8 bg-slate-50 border-2 border-slate-100 rounded-[2.5rem] flex flex-col justify-between">
                         <div className="space-y-4">
                             <Phone size={40} className="text-[#00AEEF]" />
-                            <h4 className="text-xl font-black uppercase tracking-tighter text-[#111111]">Mesa de Ayuda</h4>
-                            <p className="text-sm font-bold text-gray-500">Llamanos de Lunes a Viernes de 9:00 a 18:00 hs para consultas administrativas.</p>
+                            <h4 className="text-lg font-black uppercase tracking-tighter text-[#1C75BB]">Mesa de Ayuda</h4>
+                            <p className="text-sm text-gray-600 leading-relaxed">Llamanos de Lunes a Viernes de 9:00 a 18:00 hs para consultas administrativas.</p>
                         </div>
                         <p className="mt-8 text-2xl font-black text-[#1C75BB]">4633-7878</p>
                     </div>
