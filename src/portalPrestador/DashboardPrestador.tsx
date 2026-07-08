@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard, ReceiptText, ClipboardList, FolderOpen,
-  MessageCircle, LogOut, Menu, X, ChevronRight, Loader2, Users, BookOpen, KeyRound, Accessibility
+  MessageCircle, LogOut, Menu, X, ChevronRight, Loader2, Users, BookOpen, KeyRound, Accessibility, Pill
 } from 'lucide-react';
 import { apiService, DatosPrestador } from '../services/api';
 import { PerfilPrestador } from './sections/PerfilPrestador';
@@ -13,13 +13,14 @@ import { BuscadorAfiliados } from './sections/BuscadorAfiliados';
 import { Normativas } from './sections/Normativas';
 import { CambiarClave } from './sections/CambiarClave';
 import { ArchivoDiscapacidad } from './sections/ArchivoDiscapacidad';
+import { PrescripcionDiscapacidad } from './sections/PrescripcionDiscapacidad';
 import headerLogo from '../assets/headerlogo.png';
 
 interface DashboardPrestadorProps {
   onLogout: () => void;
 }
 
-type Section = 'inicio' | 'liquidaciones' | 'tarifario' | 'archivos' | 'contacto' | 'afiliados' | 'normativas' | 'clave' | 'discapacidad';
+type Section = 'inicio' | 'liquidaciones' | 'tarifario' | 'archivos' | 'contacto' | 'afiliados' | 'normativas' | 'clave' | 'discapacidad' | 'prescripcion';
 
 const BASE_MENU: { id: Section; icon: any; label: string }[] = [
   { id: 'inicio',        icon: LayoutDashboard, label: 'Inicio' },
@@ -29,6 +30,7 @@ const BASE_MENU: { id: Section; icon: any; label: string }[] = [
   { id: 'afiliados',     icon: Users,            label: 'Afiliados' },
   { id: 'normativas',    icon: BookOpen,         label: 'Normativas' },
   { id: 'discapacidad',  icon: Accessibility,    label: 'Discapacidad' },
+  { id: 'prescripcion',  icon: Pill,             label: 'Prescripción de Medicamentos para Discapacidad' },
   { id: 'clave',         icon: KeyRound,         label: 'Cambiar Clave' },
   { id: 'contacto',      icon: MessageCircle,    label: 'Contacto' },
 ];
@@ -57,7 +59,8 @@ export const DashboardPrestador: React.FC<DashboardPrestadorProps> = ({ onLogout
   const handleSessionExpired = () => onLogout();
 
   const menuItems = BASE_MENU.filter(item =>
-    item.id !== 'discapacidad' || datos?.esDiscapacidad === true
+    (item.id !== 'discapacidad' || datos?.esDiscapacidad === true) &&
+    (item.id !== 'prescripcion' || datos?.esSesam === true)
   );
 
   const handleNavClick = (id: Section) => {
@@ -91,6 +94,8 @@ export const DashboardPrestador: React.FC<DashboardPrestadorProps> = ({ onLogout
         return <CambiarClave onSessionExpired={handleSessionExpired} />;
       case 'discapacidad':
         return <ArchivoDiscapacidad onSessionExpired={handleSessionExpired} />;
+      case 'prescripcion':
+        return <PrescripcionDiscapacidad onSessionExpired={handleSessionExpired} />;
       case 'contacto':
         return <ContactoPrestador onSessionExpired={handleSessionExpired} />;
       default:

@@ -50,6 +50,36 @@ export interface EspecialidadPrestador {
   sspCodigo: string;
 }
 
+export interface MedicamentoVademecum {
+  id: number;
+  nombre: string | null;
+  droga: string | null;
+  presentacion: string | null;
+  laboratorio: string | null;
+}
+
+export interface DiscapacidadItem {
+  tipo: string | null;
+  diagnostico: string | null;
+  vtoCUD: string | null;
+}
+
+export interface AfiliadoPrescripcion {
+  codAfiliado: number | null;
+  nroParentesco: number;
+  nombre: string | null;
+  dni: string | null;
+  fechaNac: string | null;
+  telefono: string | null;
+  domicilio: string | null;
+  localidad: string | null;
+  provincia: string | null;
+  plan: string | null;
+  email: string | null;
+  vtoCUD: string | null;
+  discapacidades: DiscapacidadItem[];
+}
+
 export interface DatosPrestador {
   prestadorId: number;
   nombre: string;
@@ -61,6 +91,7 @@ export interface DatosPrestador {
   esSubprestador: boolean;
   razonSocialSuperior: string | null;
   esDiscapacidad: boolean;
+  esSesam: boolean;
   especialidades: EspecialidadPrestador[];
   planes: PlanPrestador[];
   datosAnexos: DatoAnexo[];
@@ -240,6 +271,29 @@ export const apiService = {
   updateDatosPrestador: async (data: { email?: string; telefono?: string; direccion?: string }) => {
     const r = await pfetch(`${PRESTADOR_BASE}/api/Prestador/updateDatos`, {
       method: 'PUT', body: JSON.stringify(data)
+    });
+    if (!r.ok) throw new Error(`${r.status}`);
+    return r.json();
+  },
+
+  // SESAM — Prescripción de Medicamentos para Discapacidad
+  buscarAfiliadoPrescripcion: async (documento?: string, nroAfiliado?: string): Promise<AfiliadoPrescripcion> => {
+    const qs = documento ? `?documento=${encodeURIComponent(documento)}` : `?nroAfiliado=${encodeURIComponent(nroAfiliado ?? '')}`;
+    const r = await pfetch(`${PRESTADOR_BASE}/api/PrescripcionDiscapacidad/buscar-afiliado${qs}`);
+    if (r.status === 404) throw new Error('No se encontró el afiliado.');
+    if (!r.ok) throw new Error(`${r.status}`);
+    return r.json();
+  },
+
+  buscarMedicamentoVademecum: async (texto: string): Promise<MedicamentoVademecum[]> => {
+    const r = await pfetch(`${PRESTADOR_BASE}/api/PrescripcionDiscapacidad/buscar-medicamento?texto=${encodeURIComponent(texto)}`);
+    if (!r.ok) throw new Error(`${r.status}`);
+    return r.json();
+  },
+
+  enviarPrescripcion: async (data: any): Promise<{ mensaje: string }> => {
+    const r = await pfetch(`${PRESTADOR_BASE}/api/PrescripcionDiscapacidad/enviar`, {
+      method: 'POST', body: JSON.stringify(data)
     });
     if (!r.ok) throw new Error(`${r.status}`);
     return r.json();
