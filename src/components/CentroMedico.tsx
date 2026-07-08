@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     MapPin, Phone, Stethoscope,
     CreditCard, Navigation, MessageCircle, HandHeart,
-    ExternalLink, Mail, Banknote, QrCode, Newspaper, ChevronDown
+    ExternalLink, Mail, Banknote, QrCode, Newspaper, ChevronDown,
+    ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { apiService, Noticia, BACKOFFICE_API_BASE_URL } from '../services/api';
 
@@ -23,16 +24,9 @@ interface Especialidad {
 }
 
 const ESPECIALIDADES: Especialidad[] = [
-    { nombre: "Clínica Médica", procedimientos: ["Consulta Clínica Médica"] },
     { nombre: "Cardiología", procedimientos: ["Electrocardiograma"] },
-    {
-        nombre: "Traumatología",
-        procedimientos: [
-            "Infiltraciones de Traumatología, con o sin medicación incluida (Corticoides / Ácido Hialurónico)",
-            "Curaciones",
-            "Extracción de puntos"
-        ]
-    },
+    { nombre: "Cirugía General" },
+    { nombre: "Clínica Médica", procedimientos: ["Consulta Clínica Médica"] },
     {
         nombre: "Dermatología",
         procedimientos: [
@@ -47,6 +41,9 @@ const ESPECIALIDADES: Especialidad[] = [
             "Infiltración de queloides"
         ]
     },
+    { nombre: "Diabetología" },
+    { nombre: "Endocrinología" },
+    { nombre: "Gastroenterología" },
     {
         nombre: "Ginecología",
         procedimientos: [
@@ -65,13 +62,10 @@ const ESPECIALIDADES: Especialidad[] = [
             "Escisión local de lesión de cuello / Electrocoagulación / Cauterización química"
         ]
     },
+    { nombre: "Neumonología", procedimientos: ["Espirometría computada"] },
+    { nombre: "Neurología" },
     { nombre: "Nutrición", procedimientos: ["Dieta"] },
-    {
-        nombre: "Rehabilitación",
-        procedimientos: [
-            "Fisiokinesioterapia con Láser, Magneto, Ultrasonido, Electroanalgesia, Ejercicios"
-        ]
-    },
+    { nombre: "Osteopatía" },
     {
         nombre: "Otorrinolaringología",
         procedimientos: [
@@ -79,30 +73,38 @@ const ESPECIALIDADES: Especialidad[] = [
             "Rinofibrolaringoscopía"
         ]
     },
-    { nombre: "Urología", procedimientos: ["Colocación y recambio de sonda"] },
-    { nombre: "Cirugía General" },
-    { nombre: "Diabetología" },
-    { nombre: "Endocrinología" },
-    { nombre: "Gastroenterología" },
-    { nombre: "Neurología" },
-    { nombre: "Osteopatía" },
     { nombre: "Pediatría" },
+    {
+        nombre: "Rehabilitación",
+        procedimientos: [
+            "Fisiokinesioterapia con Láser, Magneto, Ultrasonido, Electroanalgesia, Ejercicios"
+        ]
+    },
     { nombre: "Reumatología", procedimientos: ["Capilaroscopía"] },
+    {
+        nombre: "Traumatología",
+        procedimientos: [
+            "Infiltraciones de Traumatología, con o sin medicación incluida (Corticoides / Ácido Hialurónico)",
+            "Curaciones",
+            "Extracción de puntos"
+        ]
+    },
+    { nombre: "Urología", procedimientos: ["Colocación y recambio de sonda"] },
 ];
 
 const ODONTOLOGIA = [
-    "Consultas",
-    "Operatoria Dental",
-    "Endodoncia",
-    "Prótesis",
-    "Rehabilitaciones sobre Implantes",
-    "Prevención / Ortodoncia",
-    "Ortopedia",
-    "Odontopediatría",
-    "Periodoncia",
-    "Radiología Odontológica",
+    "Blanqueamiento",
     "Cirugía",
-    "Blanqueamiento"
+    "Consultas",
+    "Endodoncia",
+    "Odontopediatría",
+    "Operatoria Dental",
+    "Ortopedia",
+    "Periodoncia",
+    "Prevención / Ortodoncia",
+    "Prótesis",
+    "Radiología Odontológica",
+    "Rehabilitaciones sobre Implantes",
 ];
 
 const PRESTACIONES_MEDICAS = ESPECIALIDADES.filter(e => e.procedimientos && e.procedimientos.length > 0);
@@ -125,6 +127,9 @@ export const CentroMedico: React.FC<CentroMedicoProps> = ({ onNoticiasClick }) =
     const [prestacionesOpen, setPrestacionesOpen] = useState(false);
     const [noticias, setNoticias] = useState<Noticia[]>([]);
     const [loadingNoticias, setLoadingNoticias] = useState(true);
+    const sliderRef = useRef<HTMLDivElement>(null);
+    const [sliderAtStart, setSliderAtStart] = useState(true);
+    const [sliderAtEnd, setSliderAtEnd] = useState(true);
 
     useEffect(() => {
         apiService.getNoticias(4)
@@ -132,6 +137,27 @@ export const CentroMedico: React.FC<CentroMedicoProps> = ({ onNoticiasClick }) =
             .catch(() => setNoticias([]))
             .finally(() => setLoadingNoticias(false));
     }, []);
+
+    useEffect(() => {
+        const el = sliderRef.current;
+        if (!el) return;
+        setSliderAtEnd(el.scrollWidth <= el.clientWidth + 4);
+    }, [noticias]);
+
+    const handleSliderScroll = () => {
+        const el = sliderRef.current;
+        if (!el) return;
+        setSliderAtStart(el.scrollLeft <= 4);
+        setSliderAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 4);
+    };
+
+    const slideBy = (dir: 1 | -1) => {
+        const el = sliderRef.current;
+        if (!el) return;
+        const card = el.querySelector('[data-card]') as HTMLElement;
+        const step = card ? card.clientWidth + 24 : el.clientWidth * 0.9;
+        el.scrollBy({ left: dir * step, behavior: 'smooth' });
+    };
 
     return (
         <section id="centro-medico" className="pt-20 bg-white font-sans text-[#1C75BB] animate-in fade-in duration-700">
@@ -435,21 +461,48 @@ export const CentroMedico: React.FC<CentroMedicoProps> = ({ onNoticiasClick }) =
                 ) : noticias.length === 0 ? (
                     <p className="text-gray-400 text-sm font-bold uppercase tracking-widest">No hay novedades publicadas aún.</p>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {noticias.map(n => (
-                            <div key={n.idNoticia} onClick={onNoticiasClick} className="bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-                                <div className="aspect-[16/9] overflow-hidden">
-                                    <img src={getNoticiaImg(n)} alt={n.titulo} className="w-full h-full object-cover" />
+                    <div className="relative">
+                        {!sliderAtStart && (
+                            <button
+                                onClick={() => slideBy(-1)}
+                                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center text-[#1C75BB] hover:bg-[#1C75BB] hover:text-white transition-all border border-gray-100"
+                            >
+                                <ChevronLeft size={20} />
+                            </button>
+                        )}
+                        <div
+                            ref={sliderRef}
+                            onScroll={handleSliderScroll}
+                            className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-2 [&::-webkit-scrollbar]:hidden"
+                        >
+                            {noticias.map(n => (
+                                <div
+                                    key={n.idNoticia}
+                                    data-card
+                                    onClick={onNoticiasClick}
+                                    className="flex-shrink-0 w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] snap-start bg-white border border-gray-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                                >
+                                    <div className="aspect-[16/9] overflow-hidden">
+                                        <img src={getNoticiaImg(n)} alt={n.titulo} className="w-full h-full object-cover" />
+                                    </div>
+                                    <div className="p-6">
+                                        <p className="text-[12px] font-black uppercase tracking-widest text-[#00AEEF] mb-2">
+                                            {formatFecha(n.vigenciaDesde)}
+                                        </p>
+                                        <h3 className="font-black text-[#1C75BB] text-base uppercase tracking-tight leading-tight mb-2 line-clamp-2">{n.titulo}</h3>
+                                        <p className="text-gray-400 text-sm leading-relaxed line-clamp-3">{stripHtml(n.copete)}</p>
+                                    </div>
                                 </div>
-                                <div className="p-6">
-                                    <p className="text-[12px] font-black uppercase tracking-widest text-[#00AEEF] mb-2">
-                                        {formatFecha(n.vigenciaDesde)}
-                                    </p>
-                                    <h3 className="font-black text-[#1C75BB] text-base uppercase tracking-tight leading-tight mb-2 line-clamp-2">{n.titulo}</h3>
-                                    <p className="text-gray-400 text-sm leading-relaxed line-clamp-3">{stripHtml(n.copete)}</p>
-                                </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
+                        {!sliderAtEnd && (
+                            <button
+                                onClick={() => slideBy(1)}
+                                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 bg-white shadow-lg rounded-full flex items-center justify-center text-[#1C75BB] hover:bg-[#1C75BB] hover:text-white transition-all border border-gray-100"
+                            >
+                                <ChevronRight size={20} />
+                            </button>
+                        )}
                     </div>
                 )}
             </div>

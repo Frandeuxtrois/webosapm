@@ -214,7 +214,7 @@ export const apiService = {
   },
 
   olvideClavePrestador: async (cuit: string, email: string) => {
-    const r = await fetch(`${PRESTADOR_BASE}/api/AuthPrestador/olvideClave`, {
+    const r = await fetch(`${PRESTADOR_BASE}/api/AuthPrestador/olvide-clave`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ CUIT: cuit, Email: email })
     });
@@ -223,7 +223,7 @@ export const apiService = {
   },
 
   resetClavePrestador: async (cuit: string, token: string, nuevaPassword: string) => {
-    const r = await fetch(`${PRESTADOR_BASE}/api/AuthPrestador/resetClave`, {
+    const r = await fetch(`${PRESTADOR_BASE}/api/AuthPrestador/reset-clave`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ CUIT: cuit, Token: token, NuevaPassword: nuevaPassword })
     });

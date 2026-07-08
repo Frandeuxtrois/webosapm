@@ -154,14 +154,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSectionClick }) =>
           </div>
         </div>
 
-        <div className="flex items-center gap-4 mt-6 text-[10px] text-gray-600 uppercase tracking-[0.3em]">
-          {SSS_DOCS.map(({ nombre, tipo, url }) => (
-            <a key={nombre} href={url} target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-1 hover:text-gray-400 transition-colors">
-              <Download size={9} />
-              {nombre} ({tipo})
-            </a>
-          ))}
+        <div className="mt-6 text-[10px] text-gray-600 uppercase tracking-[0.3em]">
+          <p className="text-gray-400 mb-2">Cartilla prestacional 2026 aprobada</p>
+          <div className="flex items-center gap-4">
+            {SSS_DOCS.map(({ nombre, tipo, url }) => (
+              <a key={nombre} href={url} target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-1 hover:text-gray-400 transition-colors">
+                <Download size={9} />
+                {nombre} ({tipo})
+              </a>
+            ))}
+          </div>
         </div>
 
         <div className="mt-6 text-center text-[10px] text-gray-600 uppercase tracking-[0.3em] flex flex-col items-center gap-2">

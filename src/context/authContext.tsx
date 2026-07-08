@@ -23,9 +23,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const initAuth = async () => {
             const token = authService.getToken();
             if (token) {
+                const decoded = authService.decodeToken(token);
+                if (!decoded || decoded.exp < Date.now() / 1000) {
+                    authService.logout();
+                    setLoading(false);
+                    return;
+                }
                 const perfil = await afiliadoService.getPerfil();
                 const identity = authService.processIdentity(token, perfil);
-                setUser(identity);
+                if (identity) setUser(identity);
+                else authService.logout();
             }
             setLoading(false);
         };
