@@ -262,6 +262,17 @@ export const apiService = {
     return r.json();
   },
 
+  // Solicitud de acceso al portal (el prestador no se auto-registra).
+  // Devuelve { estado: 'OK'|'NO_ACTIVO'|'YA_TIENE_CUENTA'|'YA_SOLICITADO', mensaje: string }
+  solicitarAccesoPrestador: async (cuit: string, email: string): Promise<{ estado: string; mensaje: string }> => {
+    const r = await fetch(`${PRESTADOR_BASE}/api/AuthPrestador/solicitar-acceso`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ CUIT: cuit, Email: email })
+    });
+    if (!r.ok) throw new Error(`${r.status}`);
+    return r.json();
+  },
+
   getDatosPrestador: async (): Promise<DatosPrestador> => {
     const r = await pfetch(`${PRESTADOR_BASE}/api/Prestador/getDatosPrestador`);
     if (!r.ok) throw new Error(`${r.status}`);

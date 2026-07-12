@@ -8,7 +8,7 @@ interface LoginPrestadorProps {
   onBack: () => void;
 }
 
-type Step = 'login' | 'olvide' | 'reset';
+type Step = 'login' | 'olvide' | 'reset' | 'solicitar';
 
 export const LoginPrestador: React.FC<LoginPrestadorProps> = ({ onLoginSuccess, onBack }) => {
   const [step, setStep] = useState<Step>('login');
@@ -28,6 +28,10 @@ export const LoginPrestador: React.FC<LoginPrestadorProps> = ({ onLoginSuccess, 
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [solicitarCuit, setSolicitarCuit] = useState('');
+  const [solicitarEmail, setSolicitarEmail] = useState('');
+  const [solicitarResult, setSolicitarResult] = useState<{ estado: string; mensaje: string } | null>(null);
 
   const formatCuit = (value: string) => {
     const digits = value.replace(/\D/g, '').slice(0, 11);
@@ -90,6 +94,21 @@ export const LoginPrestador: React.FC<LoginPrestadorProps> = ({ onLoginSuccess, 
       const code = err.message;
       if (code === '400') setError('El código ingresado es inválido o ha expirado');
       else setError('Error de conexión con el servidor');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSolicitar = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+    setSolicitarResult(null);
+    try {
+      const res = await apiService.solicitarAccesoPrestador(solicitarCuit.replace(/\D/g, ''), solicitarEmail.trim());
+      setSolicitarResult(res);
+    } catch {
+      setError('Error de conexión con el servidor');
     } finally {
       setIsLoading(false);
     }
@@ -206,8 +225,16 @@ export const LoginPrestador: React.FC<LoginPrestadorProps> = ({ onLoginSuccess, 
                 </button>
               </form>
 
+              <div className="mt-6 pt-5 border-t border-slate-100 text-center">
+                <p className="text-xs text-slate-500 mb-2">¿Sos prestador y todavía no tenés cuenta?</p>
+                <button onClick={() => { setStep('solicitar'); setError(null); setSolicitarResult(null); setSolicitarCuit(cuit); }}
+                  className="text-sm text-[#1C75BB] hover:text-[#00AEEF] font-bold hover:underline transition-colors">
+                  Solicitar acceso al portal
+                </button>
+              </div>
+
               <button onClick={onBack}
-                className="mt-8 w-full text-center text-sm text-slate-400 hover:text-slate-600 font-semibold transition-colors">
+                className="mt-6 w-full text-center text-sm text-slate-400 hover:text-slate-600 font-semibold transition-colors">
                 ← Volver al sitio web
               </button>
             </>
@@ -334,6 +361,79 @@ export const LoginPrestador: React.FC<LoginPrestadorProps> = ({ onLoginSuccess, 
                 className="mt-6 text-sm text-slate-400 hover:text-slate-600 font-semibold flex items-center gap-1.5 transition-colors">
                 ← Volver
               </button>
+            </>
+          )}
+
+          {step === 'solicitar' && (
+            <>
+              <div className="mb-8">
+                <h1 className="text-2xl font-black text-[#1C75BB] mb-1">Solicitar acceso</h1>
+                <p className="text-sm text-slate-500 font-medium">Ingresá tu CUIT y un email de contacto. Verificaremos tu condición de prestador y te contactaremos.</p>
+              </div>
+
+              {errorBanner}
+
+              {solicitarResult ? (
+                <div className="space-y-5">
+                  <div className={`p-4 rounded-xl text-sm font-medium border ${
+                    solicitarResult.estado === 'OK'
+                      ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                      : solicitarResult.estado === 'NO_ACTIVO'
+                        ? 'bg-red-50 border-red-200 text-red-700'
+                        : 'bg-sky-50 border-sky-200 text-sky-800'
+                  }`}>
+                    {solicitarResult.mensaje}
+                  </div>
+                  <button onClick={() => { setStep('login'); setError(null); setSolicitarResult(null); }}
+                    className="w-full bg-[#1C75BB] hover:bg-[#1565a8] text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+                    Volver al inicio de sesión
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <form onSubmit={handleSolicitar} className="space-y-5">
+                    <div className="space-y-1.5">
+                      <label className="block text-sm font-semibold text-[#111111]">CUIT</label>
+                      <input
+                        type="text" inputMode="numeric" required
+                        className={inputCls('solicitarCuit')}
+                        placeholder="20-12345678-9"
+                        value={solicitarCuit}
+                        onChange={(e) => setSolicitarCuit(formatCuit(e.target.value))}
+                        onFocus={() => setFocusedField('solicitarCuit')}
+                        onBlur={() => setFocusedField(null)}
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="block text-sm font-semibold text-[#111111]">Email de contacto</label>
+                      <div className="relative">
+                        <input
+                          type="email" required
+                          className={`${inputCls('solicitarEmail')} pr-11`}
+                          placeholder="tu@email.com"
+                          value={solicitarEmail}
+                          onChange={(e) => setSolicitarEmail(e.target.value)}
+                          onFocus={() => setFocusedField('solicitarEmail')}
+                          onBlur={() => setFocusedField(null)}
+                        />
+                        <Mail size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                      </div>
+                    </div>
+                    <button type="submit" disabled={isLoading || solicitarCuit.replace(/\D/g, '').length !== 11 || !solicitarEmail}
+                      className="w-full bg-[#1C75BB] hover:bg-[#1565a8] text-white font-bold py-3.5 rounded-xl transition-all disabled:opacity-50 flex items-center justify-center gap-2 text-sm">
+                      {isLoading
+                        ? <Loader2 className="animate-spin" size={18} />
+                        : <><span>Enviar solicitud</span><ArrowRight size={16} /></>
+                      }
+                    </button>
+                  </form>
+
+                  <button onClick={() => { setStep('login'); setError(null); }}
+                    className="mt-6 text-sm text-slate-400 hover:text-slate-600 font-semibold flex items-center gap-1.5 transition-colors">
+                    ← Volver al inicio de sesión
+                  </button>
+                </>
+              )}
             </>
           )}
 
