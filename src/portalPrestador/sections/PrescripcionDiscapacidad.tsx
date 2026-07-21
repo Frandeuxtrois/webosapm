@@ -279,6 +279,7 @@ export const PrescripcionDiscapacidad: React.FC<Props> = ({ onSessionExpired }) 
                     value={medQuery}
                     onChange={e => onMedQuery(e.target.value)}
                     onFocus={() => { if (medResults.length) setMedOpen(true); }}
+                    onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); if (medResults.length > 0) pickMed(medResults[0]); } }}
                     placeholder="Buscar por droga o nombre comercial…"
                     className="flex-1 text-sm outline-none"
                   />
@@ -299,7 +300,7 @@ export const PrescripcionDiscapacidad: React.FC<Props> = ({ onSessionExpired }) 
                   <div className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg px-3 py-2 text-sm text-gray-500">Sin resultados</div>
                 )}
               </div>
-              <p className="text-xs text-gray-400 mt-1">Elegí el medicamento de la lista; el nombre y la presentación salen del vademécum.</p>
+              <p className="text-xs text-gray-400 mt-1">Elegí el medicamento de la lista (o Enter para el primero); el nombre y la presentación salen del vademécum.</p>
 
               {/* Medicamentos elegidos */}
               {meds.length > 0 ? (
