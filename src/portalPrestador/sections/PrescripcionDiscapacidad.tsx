@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Search, Loader2, AlertTriangle, Send, Trash2, CheckCircle2, Pill } from 'lucide-react';
-import { AfiliadoPrescripcion, MedicamentoVademecum, apiService } from '../../services/api';
+import { Search, Loader2, AlertTriangle, Send, Trash2, CheckCircle2, Pill, HelpCircle, X, Users } from 'lucide-react';
+import { AfiliadoPrescripcion, CandidatoAfiliado, MedicamentoVademecum, apiService } from '../../services/api';
 
 interface Props { onSessionExpired: () => void; }
 
@@ -21,6 +21,8 @@ export const PrescripcionDiscapacidad: React.FC<Props> = ({ onSessionExpired }) 
   const [buscando, setBuscando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [afil, setAfil] = useState<AfiliadoPrescripcion | null>(null);
+  const [candidatos, setCandidatos] = useState<CandidatoAfiliado[] | null>(null); // modal cuando hay >1
+  const [showHelp, setShowHelp] = useState(false);
 
   // Campos editables
   const [observaciones, setObservaciones] = useState('');
@@ -38,28 +40,34 @@ export const PrescripcionDiscapacidad: React.FC<Props> = ({ onSessionExpired }) 
   const [enviando, setEnviando] = useState(false);
   const [okMsg, setOkMsg] = useState<string | null>(null);
 
+  // Trae los datos completos de un afiliado por su N° (titular = cod, beneficiario = cod+parentesco).
+  const cargarAfiliado = async (nroAfiliado: number) => {
+    setCandidatos(null); setError(null); setBuscando(true);
+    try {
+      const res = await apiService.buscarAfiliadoPrescripcion(undefined, String(nroAfiliado));
+      setAfil(res); setObservaciones(''); setMeds([]);
+    } catch (err: any) {
+      if (String(err?.message) === '401') { onSessionExpired(); return; }
+      setError('No se pudieron traer los datos del afiliado.');
+    } finally {
+      setBuscando(false);
+    }
+  };
+
   const buscar = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null); setOkMsg(null); setAfil(null);
+    setError(null); setOkMsg(null); setAfil(null); setCandidatos(null);
     const q = query.trim().replace(/[.\-\s]/g, '');
     if (!/^\d+$/.test(q)) { setError('Ingresá el DNI o el N° de afiliado (solo números).'); return; }
     setBuscando(true);
     try {
-      // Heurística: <=8 dígitos → DNI; si no matchea, se prueba como afiliado
-      const esDni = q.length <= 8;
-      let res: AfiliadoPrescripcion;
-      try {
-        res = await apiService.buscarAfiliadoPrescripcion(esDni ? q : undefined, esDni ? undefined : q);
-      } catch {
-        // fallback al otro criterio
-        res = await apiService.buscarAfiliadoPrescripcion(esDni ? undefined : q, esDni ? q : undefined);
-      }
-      setAfil(res);
-      setObservaciones('');
-      setMeds([]);
+      const cands = await apiService.buscarCandidatosPrescripcion(q);
+      if (cands.length === 0) { setError('No se encontró un afiliado con discapacidad para ese DNI o N° de afiliado.'); return; }
+      if (cands.length === 1) { await cargarAfiliado(cands[0].nroAfiliado); return; }
+      setCandidatos(cands); // más de uno en el grupo → elegir en el modal
     } catch (err: any) {
       if (String(err?.message) === '401') { onSessionExpired(); return; }
-      setError(err?.message === 'No se encontró el afiliado.' ? 'No se encontró un afiliado con ese DNI o N° de afiliado.' : 'Ocurrió un error al buscar el afiliado.');
+      setError('Ocurrió un error al buscar el afiliado.');
     } finally {
       setBuscando(false);
     }
@@ -148,12 +156,54 @@ export const PrescripcionDiscapacidad: React.FC<Props> = ({ onSessionExpired }) 
         )}
 
         {/* Buscador */}
-        <form onSubmit={buscar} className="flex gap-2 mb-4">
+        <form onSubmit={buscar} className="flex gap-2 mb-4 relative">
           <input value={query} onChange={e => setQuery(e.target.value)} placeholder="DNI o N° de afiliado" className={inputCls + ' max-w-xs'} />
           <button type="submit" disabled={buscando} className="flex items-center gap-2 bg-[#0078c2] hover:bg-[#005596] text-white font-bold px-4 py-2 rounded-lg text-sm disabled:opacity-50">
             {buscando ? <Loader2 className="animate-spin" size={16} /> : <Search size={16} />} Buscar
           </button>
+          <button type="button" onClick={() => setShowHelp(v => !v)} title="¿Cómo buscar?"
+            className="flex items-center justify-center w-10 h-10 rounded-lg border border-[#0078c2]/40 text-[#0078c2] hover:bg-[#0078c2]/10">
+            <HelpCircle size={18} />
+          </button>
+          {showHelp && (
+            <div className="absolute z-20 top-full left-0 mt-2 w-[440px] max-w-[92vw] bg-white border border-[#0078c2]/30 rounded-lg shadow-xl p-4 text-sm text-slate-700">
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-bold text-[#0a1f44]">¿Cómo buscar un afiliado?</span>
+                <button type="button" onClick={() => setShowHelp(false)} className="text-slate-400 hover:text-slate-600"><X size={16} /></button>
+              </div>
+              <ul className="list-disc pl-5 space-y-1">
+                <li>Por <b>DNI</b> del afiliado (titular o beneficiario).</li>
+                <li>Por <b>N° de titular</b> (ej. <b>5427</b>). Si el titular tiene beneficiarios con discapacidad, te deja <b>elegir cuál</b>.</li>
+                <li>Por <b>N° completo del beneficiario</b> = número del titular + los 2 dígitos del parentesco (ej. <b>16474</b> + <b>02</b> = <b>1647402</b>).</li>
+              </ul>
+              <p className="mt-2 text-xs text-slate-500">Solo aparecen afiliados con marca de discapacidad.</p>
+            </div>
+          )}
         </form>
+
+        {/* Modal: elegir entre varios afiliados con discapacidad del grupo */}
+        {candidatos && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-md">
+              <div className="flex items-center justify-between px-5 py-3 border-b border-slate-200">
+                <span className="flex items-center gap-2 font-bold text-[#0a1f44]"><Users size={18} className="text-[#0078c2]" /> Elegí el afiliado</span>
+                <button onClick={() => setCandidatos(null)} className="text-slate-400 hover:text-slate-600"><X size={18} /></button>
+              </div>
+              <div className="p-3 max-h-[60vh] overflow-y-auto">
+                <p className="text-xs text-slate-500 mb-2 px-1">Ese grupo familiar tiene varios afiliados con discapacidad. Elegí a quién prescribir:</p>
+                {candidatos.map(c => (
+                  <button key={c.nroAfiliado} onClick={() => cargarAfiliado(c.nroAfiliado)}
+                    className="w-full text-left px-3 py-2 rounded-lg hover:bg-[#0078c2]/10 border border-transparent hover:border-[#0078c2]/30 transition-colors">
+                    <div className="font-semibold text-[#0a1f44]">{c.nombre}</div>
+                    <div className="text-xs text-slate-500">
+                      N° {c.nroAfiliado} · DNI {c.dni} · {c.esTitular ? 'Titular' : `Beneficiario (parentesco ${c.nroParentesco})`}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         {error && (
           <div className="mb-4 flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm">

@@ -80,6 +80,15 @@ export interface AfiliadoPrescripcion {
   discapacidades: DiscapacidadItem[];
 }
 
+export interface CandidatoAfiliado {
+  codAfiliado: number;
+  nroParentesco: number;
+  nroAfiliado: number;
+  nombre: string | null;
+  dni: string | null;
+  esTitular: boolean;
+}
+
 export interface DatosPrestador {
   prestadorId: number;
   nombre: string;
@@ -292,6 +301,12 @@ export const apiService = {
     const qs = documento ? `?documento=${encodeURIComponent(documento)}` : `?nroAfiliado=${encodeURIComponent(nroAfiliado ?? '')}`;
     const r = await pfetch(`${PRESTADOR_BASE}/api/PrescripcionDiscapacidad/buscar-afiliado${qs}`);
     if (r.status === 404) throw new Error('No se encontró el afiliado.');
+    if (!r.ok) throw new Error(`${r.status}`);
+    return r.json();
+  },
+
+  buscarCandidatosPrescripcion: async (q: string): Promise<CandidatoAfiliado[]> => {
+    const r = await pfetch(`${PRESTADOR_BASE}/api/PrescripcionDiscapacidad/buscar-afiliado/candidatos?q=${encodeURIComponent(q)}`);
     if (!r.ok) throw new Error(`${r.status}`);
     return r.json();
   },
