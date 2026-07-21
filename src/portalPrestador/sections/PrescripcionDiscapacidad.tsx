@@ -98,7 +98,12 @@ export const PrescripcionDiscapacidad: React.FC<Props> = ({ onSessionExpired }) 
 
   const enviar = async () => {
     if (!afil) return;
+    if (meds.length === 0) { setError('Agregá al menos un medicamento.'); return; }
+    if (meds.some(m => !m.dosisDiaria.trim() || !m.cantidadMensual.trim() || !m.duracion.trim())) {
+      setError('Completá la dosis diaria, la cantidad mensual y la duración de cada medicamento.'); return;
+    }
     if (!profesional.trim()) { setError('Ingresá el profesional tratante.'); return; }
+    if (!matricula.trim()) { setError('Ingresá la matrícula del profesional.'); return; }
     setError(null); setEnviando(true); setOkMsg(null);
 
     try {
