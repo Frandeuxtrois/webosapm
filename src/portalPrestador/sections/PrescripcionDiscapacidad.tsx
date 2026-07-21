@@ -16,6 +16,15 @@ const fmtFecha = (s: string | null): string => {
   return d.toLocaleDateString('es-AR');
 };
 
+const esCudVencido = (vto: string | null): boolean => {
+  if (!vto) return false;
+  const d = new Date(vto);
+  if (isNaN(d.getTime())) return false;
+  const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+  d.setHours(0, 0, 0, 0);
+  return d < hoy;
+};
+
 export const PrescripcionDiscapacidad: React.FC<Props> = ({ onSessionExpired }) => {
   const [query, setQuery] = useState('');
   const [buscando, setBuscando] = useState(false);
@@ -39,13 +48,15 @@ export const PrescripcionDiscapacidad: React.FC<Props> = ({ onSessionExpired }) 
 
   const [enviando, setEnviando] = useState(false);
   const [okMsg, setOkMsg] = useState<string | null>(null);
+  const [reportandoCud, setReportandoCud] = useState(false);
+  const [cudReportado, setCudReportado] = useState(false);
 
   // Trae los datos completos de un afiliado por su N° (titular = cod, beneficiario = cod+parentesco).
   const cargarAfiliado = async (nroAfiliado: number) => {
     setCandidatos(null); setError(null); setBuscando(true);
     try {
       const res = await apiService.buscarAfiliadoPrescripcion(undefined, String(nroAfiliado));
-      setAfil(res); setObservaciones(''); setMeds([]);
+      setAfil(res); setObservaciones(''); setMeds([]); setCudReportado(false);
     } catch (err: any) {
       if (String(err?.message) === '401') { onSessionExpired(); return; }
       setError('No se pudieron traer los datos del afiliado.');
@@ -144,8 +155,26 @@ export const PrescripcionDiscapacidad: React.FC<Props> = ({ onSessionExpired }) 
     }
   };
 
+  const reportarCud = async () => {
+    if (!afil) return;
+    setReportandoCud(true); setError(null);
+    try {
+      await apiService.reportarCudVencido({
+        nroAfiliado: `${afil.codAfiliado ?? ''}${afil.nroParentesco > 0 ? '/' + afil.nroParentesco : ''}`,
+        nombre: afil.nombre ?? '', dni: afil.dni ?? '', vtoCUD: fmtFecha(afil.vtoCUD),
+      });
+      setCudReportado(true);
+    } catch (err: any) {
+      if (String(err?.message) === '401') { onSessionExpired(); return; }
+      setError('No se pudo enviar el reporte a OSAPM. Intentá nuevamente.');
+    } finally {
+      setReportandoCud(false);
+    }
+  };
+
   const inputCls = 'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0078c2] focus:border-[#0078c2] outline-none';
   const roCls = 'w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-700';
+  const cudVencido = !!afil && esCudVencido(afil.vtoCUD);
 
   return (
     <div className="max-w-5xl mx-auto h-full max-h-[calc(100vh-160px)] flex flex-col">
@@ -226,19 +255,38 @@ export const PrescripcionDiscapacidad: React.FC<Props> = ({ onSessionExpired }) 
         <div className="flex-1 min-h-0 overflow-y-auto pr-2 pb-4 space-y-6">
           {/* 1 - Datos del afiliado */}
           <section>
-            <h3 className="bg-[#0f2044] text-white font-bold text-sm px-3 py-2 rounded-t-lg">1. Datos del afiliado</h3>
-            <div className="border border-t-0 border-gray-200 rounded-b-lg p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-              <Campo label="N° Afiliado" value={`${afil.codAfiliado ?? ''}${afil.nroParentesco > 0 ? '/' + afil.nroParentesco : ''}`} cls={roCls} />
-              <Campo label="Plan" value={afil.plan} cls={roCls} />
-              <Campo label="Apellido y Nombre" value={afil.nombre} cls={roCls} />
-              <Campo label="DNI" value={afil.dni} cls={roCls} />
-              <Campo label="Fecha de Nacimiento" value={fmtFecha(afil.fechaNac)} cls={roCls} />
-              <Campo label="Teléfono" value={afil.telefono} cls={roCls} />
-              <Campo label="Domicilio" value={afil.domicilio} cls={roCls} />
-              <Campo label="Localidad" value={afil.localidad} cls={roCls} />
-              <Campo label="Provincia" value={afil.provincia} cls={roCls} />
-              <Campo label="Vencimiento del CUD" value={fmtFecha(afil.vtoCUD)} cls={roCls} />
-              <Campo label="Correo electrónico" value={afil.email} cls={roCls} />
+            <h3 className={`text-white font-bold text-sm px-3 py-2 rounded-t-lg ${cudVencido ? 'bg-red-700' : 'bg-[#0f2044]'}`}>1. Datos del afiliado</h3>
+            <div className={`border border-t-0 rounded-b-lg p-4 ${cudVencido ? 'border-red-400 border-2 bg-red-50/40' : 'border-gray-200'}`}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <Campo label="N° Afiliado" value={`${afil.codAfiliado ?? ''}${afil.nroParentesco > 0 ? '/' + afil.nroParentesco : ''}`} cls={roCls} />
+                <Campo label="Plan" value={afil.plan} cls={roCls} />
+                <Campo label="Apellido y Nombre" value={afil.nombre} cls={roCls} />
+                <Campo label="DNI" value={afil.dni} cls={roCls} />
+                <Campo label="Fecha de Nacimiento" value={fmtFecha(afil.fechaNac)} cls={roCls} />
+                <Campo label="Teléfono" value={afil.telefono} cls={roCls} />
+                <Campo label="Domicilio" value={afil.domicilio} cls={roCls} />
+                <Campo label="Localidad" value={afil.localidad} cls={roCls} />
+                <Campo label="Provincia" value={afil.provincia} cls={roCls} />
+                <Campo label="Vencimiento del CUD" value={fmtFecha(afil.vtoCUD)} cls={cudVencido ? 'w-full bg-red-50 border-2 border-red-400 rounded-lg px-3 py-2 text-sm text-red-700 font-bold' : roCls} />
+                <Campo label="Correo electrónico" value={afil.email} cls={roCls} />
+              </div>
+              {cudVencido && (
+                <div className="mt-3 flex flex-wrap items-center gap-3 bg-red-100 border border-red-300 rounded-lg px-4 py-3">
+                  <span className="flex items-center gap-2 text-red-700 font-bold text-sm">
+                    <AlertTriangle size={18} /> Afiliado con CUD vencido
+                  </span>
+                  {cudReportado ? (
+                    <span className="flex items-center gap-1 text-emerald-700 text-sm font-semibold ml-auto">
+                      <CheckCircle2 size={16} /> Reportado a OSAPM
+                    </span>
+                  ) : (
+                    <button type="button" onClick={reportarCud} disabled={reportandoCud}
+                      className="ml-auto flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-sm disabled:opacity-50">
+                      {reportandoCud ? <Loader2 className="animate-spin" size={16} /> : <Send size={16} />} Reportar a OSAPM
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           </section>
 

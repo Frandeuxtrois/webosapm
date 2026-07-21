@@ -325,6 +325,14 @@ export const apiService = {
     return r.json();
   },
 
+  reportarCudVencido: async (data: { nroAfiliado: string; nombre: string; dni: string; vtoCUD: string }): Promise<{ mensaje: string }> => {
+    const r = await pfetch(`${PRESTADOR_BASE}/api/PrescripcionDiscapacidad/reportar-cud-vencido`, {
+      method: 'POST', body: JSON.stringify(data)
+    });
+    if (!r.ok) throw new Error(`${r.status}`);
+    return r.json();
+  },
+
   getLiquidaciones: async (fechaDesde?: string): Promise<Liquidacion[]> => {
     const qs = fechaDesde ? `?fechaDesde=${fechaDesde}` : '';
     const r = await pfetch(`${PRESTADOR_BASE}/api/Prestador/getLiquidaciones${qs}`);
