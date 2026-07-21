@@ -6,7 +6,7 @@ interface Props { onSessionExpired: () => void; }
 
 interface MedRow {
   nombreComercial: string; principioActivo: string; presentacion: string; laboratorio: string;
-  dosisDiaria: string; cantidadMensual: string; duracion: string;
+  dosisDiaria: string; cantidadMensual: string; duracion: string; duracionUnidad: string;
 }
 
 const fmtFecha = (s: string | null): string => {
@@ -91,7 +91,7 @@ export const PrescripcionDiscapacidad: React.FC<Props> = ({ onSessionExpired }) 
   const pickMed = (m: MedicamentoVademecum) => {
     setMeds(prev => [...prev, {
       nombreComercial: m.nombre ?? '', principioActivo: m.droga ?? '', presentacion: m.presentacion ?? '',
-      laboratorio: m.laboratorio ?? '', dosisDiaria: '', cantidadMensual: '', duracion: '',
+      laboratorio: m.laboratorio ?? '', dosisDiaria: '', cantidadMensual: '', duracion: '', duracionUnidad: 'Meses',
     }]);
     setMedQuery(''); setMedResults([]); setMedOpen(false);
   };
@@ -122,7 +122,12 @@ export const PrescripcionDiscapacidad: React.FC<Props> = ({ onSessionExpired }) 
         vtoCUD: fmtFecha(afil.vtoCUD),
         discapacidades: afil.discapacidades,
         observaciones,
-        medicacion: meds,
+        medicacion: meds.map(m => ({
+          nombreComercial: m.nombreComercial, principioActivo: m.principioActivo,
+          presentacion: m.presentacion, laboratorio: m.laboratorio,
+          dosisDiaria: m.dosisDiaria, cantidadMensual: m.cantidadMensual,
+          duracion: `${m.duracion} ${m.duracionUnidad}`.trim(),
+        })),
         profesional: profesional.trim().slice(0, 100),
         matricula: matricula.trim().slice(0, 12),
       };
@@ -315,7 +320,7 @@ export const PrescripcionDiscapacidad: React.FC<Props> = ({ onSessionExpired }) 
                       <tr className="text-left text-gray-600 border-b border-gray-200">
                         <th className="pb-2 pr-2">Medicamento</th>
                         <th className="pb-2 pr-2 w-24">Dosis diaria</th><th className="pb-2 pr-2 w-24">Cant. mensual</th>
-                        <th className="pb-2 pr-2 w-28">Duración</th><th className="w-8"></th>
+                        <th className="pb-2 pr-2 w-44">Duración</th><th className="w-8"></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -327,7 +332,16 @@ export const PrescripcionDiscapacidad: React.FC<Props> = ({ onSessionExpired }) 
                           </td>
                           <td className="py-2 pr-2"><input value={m.dosisDiaria} onChange={e => setMed(i, 'dosisDiaria', e.target.value)} className={inputCls} /></td>
                           <td className="py-2 pr-2"><input value={m.cantidadMensual} onChange={e => setMed(i, 'cantidadMensual', e.target.value)} className={inputCls} /></td>
-                          <td className="py-2 pr-2"><input value={m.duracion} onChange={e => setMed(i, 'duracion', e.target.value)} className={inputCls} /></td>
+                          <td className="py-2 pr-2">
+                            <div className="flex gap-1">
+                              <input value={m.duracion} onChange={e => setMed(i, 'duracion', e.target.value)} className={inputCls + ' w-16'} placeholder="Ej. 3" />
+                              <select value={m.duracionUnidad} onChange={e => setMed(i, 'duracionUnidad', e.target.value)} className={inputCls + ' w-24'}>
+                                <option>Días</option>
+                                <option>Semanas</option>
+                                <option>Meses</option>
+                              </select>
+                            </div>
+                          </td>
                           <td className="py-2"><button onClick={() => delMed(i)} className="text-red-500 hover:text-red-700"><Trash2 size={16} /></button></td>
                         </tr>
                       ))}
@@ -335,7 +349,10 @@ export const PrescripcionDiscapacidad: React.FC<Props> = ({ onSessionExpired }) 
                   </table>
                 </div>
               ) : (
-                <p className="mt-4 text-sm text-gray-400 italic">No hay medicamentos agregados todavía.</p>
+                <div className="mt-4 flex items-center gap-2 text-sm text-gray-500 bg-gray-50 border border-dashed border-gray-300 rounded-lg px-4 py-3">
+                  <Search size={16} className="text-gray-400 shrink-0" />
+                  <span>Todavía no agregaste medicamentos. Escribí la droga o el nombre comercial en el <b>buscador de arriba</b> y elegilo de la lista (o Enter) para agregarlo a la receta.</span>
+                </div>
               )}
             </div>
           </section>
