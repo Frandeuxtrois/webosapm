@@ -90,11 +90,8 @@ export const TelefonosUtiles: React.FC = () => {
                                 <p className="font-bold opacity-80 max-w-xl text-sm md:text-base">Mesa de ayuda y derivaciones para todo el territorio argentino. Atención inmediata.</p>
                             </div>
                             <div className="flex flex-col sm:flex-row gap-4">
-                                <a href="tel:08102207673" className="bg-white text-[#1C75BB] px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all text-center">
-                                    0810-220-7673
-                                </a>
-                                <a href="tel:08006667276" className="bg-[#1C75BB] text-white border-2 border-white/20 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl hover:bg-white hover:text-[#1C75BB] transition-all text-center">
-                                    0800-666-7276
+                                <a href="tel:08006667276" className="bg-white text-[#1C75BB] px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all text-center">
+                                    0800-666-7276 — Mesa de Ayuda
                                 </a>
                             </div>
                         </div>
