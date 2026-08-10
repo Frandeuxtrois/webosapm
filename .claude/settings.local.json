@@ -8,7 +8,9 @@
       "Bash(npm uninstall:*)",
       "Bash(node -e ' *)",
       "Bash(node -e \"const lr = require\\('lucide-react'\\); console.log\\(['Banknote','QrCode','Mail','ExternalLink','Instagram','Linkedin'].filter\\(k => k in lr\\).join\\(', '\\)\\)\")",
-      "Bash(findstr /i \"router\")"
+      "Bash(findstr /i \"router\")",
+      "Bash(git fetch *)",
+      "Bash(git pull *)"
     ]
   }
 }
