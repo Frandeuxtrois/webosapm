@@ -172,6 +172,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSectionClick }) =>
           <a href="/privacidad.html" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-400 transition-colors underline underline-offset-2">
             Política de Privacidad
           </a>
+          <div className="flex flex-col items-center gap-2 mt-4">
+            <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Descargá la app</p>
+            <div className="flex gap-3 items-center">
+              <a href="https://apps.apple.com/app/mi-osapm/id6787977223" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
+                <img src="/app-store-badge.svg" alt="Download on the App Store" style={{ height: '32px', width: 'auto' }} />
+              </a>
+              <a href="https://play.google.com/store/apps/details?id=ar.org.apm.miosapm" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
+                <img src="/google-play-badge.svg" alt="Get it on Google Play" style={{ height: '32px', width: 'auto' }} />
+              </a>
+            </div>
+          </div>
           <button
             onClick={() => window.location.href = '/admin-dashboard'}
             className="opacity-0 hover:opacity-10 transition-opacity text-[8px]"
