@@ -16,7 +16,7 @@ interface HeaderProps {
   onNoticiasClick?: () => void;
 }
 
-const INFO_VIEWS = ['tramites', 'preguntas-frecuentes', 'quiero-afiliarme', 'formulario-salud', 'formulario-prestador', 'cartilla'];
+const INFO_VIEWS = ['tramites', 'discapacidad', 'preguntas-frecuentes', 'quiero-afiliarme', 'formulario-salud', 'formulario-prestador', 'cartilla'];
 const CONTACTO_VIEWS = ['seccionales', 'telefonos-utiles'];
 
 export const Header: React.FC<HeaderProps> = ({

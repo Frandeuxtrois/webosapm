@@ -15,6 +15,7 @@ import { NovedadesCM } from './components/NovedadesCM';
 import { Seccionales } from './components/Seccionales';
 import { TelefonosUtiles } from './components/TelefonosUtiles';
 import { Tramites } from './components/Tramites';
+import { Discapacidad } from './components/Discapacidad';
 import { PreguntasFrecuentes } from './components/PreguntasFrecuentes';
 import { QuieroAfiliarme } from './components/QuieroAfiliarme';
 import { NoticiaDetalle } from './components/NoticiaDetalle';
@@ -149,6 +150,7 @@ function AppContent() {
         onHomeClick={() => navigateTo('home')}
         onSectionClick={(hash) => {
           if (hash === '#tramites') return navigateTo('tramites');
+          if (hash === '#discapacidad') return navigateTo('discapacidad');
           if (hash === '#seccionales') return navigateTo('seccionales');
           if (hash === '#telefonos') return navigateTo('telefonos-utiles');
           if (hash === '#faq') return navigateTo('preguntas-frecuentes');
@@ -183,6 +185,7 @@ function AppContent() {
         {currentView === 'seccionales' && <Seccionales />}
         {currentView === 'telefonos-utiles' && <TelefonosUtiles />}
         {currentView === 'tramites' && <Tramites />}
+        {currentView === 'discapacidad' && <Discapacidad />}
         {currentView === 'preguntas-frecuentes' && <PreguntasFrecuentes />}
         {currentView === 'quiero-afiliarme' && <QuieroAfiliarme />}
         {currentView === 'noticias' && (

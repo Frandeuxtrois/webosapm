@@ -1,8 +1,8 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import {
     FileText, CheckCircle2, Stethoscope, Pill, Activity, Heart, UserCheck,
-    AlertTriangle, ShieldCheck, Microscope, Navigation, Users, Clock,
-    ShieldAlert, Info, Download, AlertCircle, Star, Search, X,
+    AlertTriangle, ShieldCheck, Microscope, Navigation, Clock,
+    ShieldAlert, Info, AlertCircle, Star, Search, X,
     ZoomIn, ZoomOut, HelpCircle
 } from 'lucide-react';
 
@@ -30,7 +30,6 @@ const TRAMITES_DATA = [
     { id: "guia", label: "Cómo efectuar trámites", icon: <FileText size={18} /> },
     { id: "identidad", label: "Identidad de Género", icon: <UserCheck size={18} /> },
     { id: "violencia", label: "Violencia de género", icon: <AlertTriangle size={18} /> },
-    { id: "discapacidad", label: "Discapacidad", icon: <Users size={18} /> },
 ];
 
 
@@ -688,67 +687,6 @@ export const Tramites: React.FC = () => {
                             "Asumir que quien ejerce violencia puede vigilar y controlar las comunicaciones",
                             "Al comunicarte, verificar si el agresor está presente ya que los horarios pueden variar"
                         ]} />
-                    </div>
-                );
-
-            case "discapacidad":
-                return (
-                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <h3 className="text-3xl font-black uppercase tracking-tighter text-[#1C75BB] mb-6">Discapacidad</h3>
-                        <TextP>Ofrecemos una herramienta esencial para quienes requieren información actualizada y detallada sobre prestadores relacionados con servicios de discapacidad.</TextP>
-                        <div className="grid md:grid-cols-2 gap-6 mt-8 mb-8">
-                            <a
-                                href="/formularios/prestadores_discapacidad.pdf"
-                                download
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="p-8 bg-[#1C75BB] text-white rounded-[2.5rem] flex flex-col justify-between hover:bg-[#00AEEF] transition-colors group"
-                            >
-                                <Download size={32} className="text-[#00AEEF] group-hover:text-white mb-4 transition-colors" />
-                                <div>
-                                    <h4 style={{ fontSize }} className="font-black uppercase mb-2">Lista de Prestadores</h4>
-                                    <p style={{ fontSize }} className="opacity-80 mb-2">Organizados por provincia y localidad con contactos directos.</p>
-                                    <ul style={{ fontSize: fontSize * 0.85 }} className="opacity-70 mb-6 space-y-1">
-                                        <li>• Nombres y ubicaciones por provincia y localidad</li>
-                                        <li>• Contactos y correos electrónicos para consultas</li>
-                                        <li>• Tipos de servicios por institución o profesional</li>
-                                    </ul>
-                                    <span style={{ fontSize: fontSize * 0.8 }} className="inline-block bg-white text-[#1C75BB] px-6 py-3 rounded-xl font-black uppercase tracking-widest group-hover:bg-white/90 transition-all">Descargar Lista</span>
-                                </div>
-                            </a>
-                            <div className="space-y-4">
-                                <a
-                                    href="/formularios/instructivo_discapacidad.pdf"
-                                    download
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="p-6 bg-slate-50 rounded-3xl border border-gray-100 flex items-center justify-between hover:border-[#00AEEF] hover:shadow-md transition-all group"
-                                >
-                                    <div>
-                                        <h5 style={{ fontSize }} className="font-bold uppercase text-[#1C75BB] group-hover:text-[#00AEEF] transition-colors">Instructivo de Discapacidad</h5>
-                                        <p style={{ fontSize: fontSize * 0.85 }} className="text-gray-500 mt-1">Guía de acceso a servicios. Leer atentamente antes de gestionar.</p>
-                                    </div>
-                                    <Download size={18} className="text-[#00AEEF] shrink-0 ml-4" />
-                                </a>
-                                <a
-                                    href="/formularios/medicamentos_discapacidad.pdf"
-                                    download
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="p-6 bg-slate-50 rounded-3xl border border-gray-100 flex items-center justify-between hover:border-[#00AEEF] hover:shadow-md transition-all group"
-                                >
-                                    <div>
-                                        <h5 style={{ fontSize }} className="font-bold uppercase text-[#1C75BB] group-hover:text-[#00AEEF] transition-colors">Formulario de Medicación</h5>
-                                        <p style={{ fontSize: fontSize * 0.85 }} className="text-gray-500 mt-1">Para requerir medicación específica para la discapacidad.</p>
-                                    </div>
-                                    <Download size={18} className="text-[#00AEEF] shrink-0 ml-4" />
-                                </a>
-                                <div className="p-6 bg-blue-50 rounded-3xl border border-blue-100">
-                                    <p style={{ fontSize: fontSize * 0.85 }} className="text-[#1C75BB] font-bold uppercase mb-1">Tipos de Servicios Incluidos</p>
-                                    <p style={{ fontSize }} className="text-gray-500">Centros de día, rehabilitación, educación terapéutica, entre otros.</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 );
 

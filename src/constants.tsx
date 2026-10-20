@@ -8,6 +8,7 @@ export const NAV_STRUCTURE: NavGroup[] = [
     label: 'Información',
     items: [
       { label: 'Trámites', href: '#tramites' },
+      { label: 'Discapacidad', href: '#discapacidad' },
       { label: 'Formulario de Afiliación', href: '#afiliacion' },
       { label: 'Formulario de Salud', href: '#salud' },
       { label: 'Formulario de Prestador', href: '#prestador' },
