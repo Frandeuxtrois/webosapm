@@ -15,7 +15,7 @@ const TELEFONO = '4633-7878 int. 114';
 const HORARIO = 'Lunes a viernes de 9:00 a 16:00 hs';
 const INSTRUCTIVO_URL = '/formularios/instructivo_discapacidad.pdf';
 const ANEXOS_PATH = '/formularios/discapacidad';
-const MODELOS_PATH = '/discapacidad/modelos';
+const MODELOS_PATH = '/img/discapacidad/modelos';
 
 type TabId = 'general' | 'afiliado' | 'prestador' | 'documentacion' | 'modelos' | 'faq' | 'atencion';
 

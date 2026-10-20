@@ -41,7 +41,7 @@ src/
   context/authContext.tsx sesión afiliado
 public/
   formularios/            PDFs descargables (discapacidad/ = anexos 2027)
-  discapacidad/modelos/   modelos de prescripción (.webp, solo visualización)
+  img/discapacidad/modelos/ modelos de prescripción (.webp, solo visualización)
   web.config              reglas IIS (SPA fallback, cache). NO pisar en deploy
 sql/                      scripts de datos (FAQ web = TipoAppId 3)
 ```
@@ -88,6 +88,7 @@ Para agregar una entrada en **Información** o **Contacto**:
 - La ruta de origen del script es `C:\GyF\Pagina OSAPM\OSAPM FrontEnd`. Desde este clon (`Desktop\OSAPMweb`), ajustar `$src`.
 - Para verificar: `curl -sk https://www.osapm.org/ | grep index-` (el hash tiene que coincidir).
 - El IIS no trae tipos MIME modernos: cada extensión nueva (ej. `.webp`) hay que agregarla en `public/web.config`. Si no, devuelve 404.
+- Ninguna carpeta de `public/` puede llamarse igual que una vista (ej. `/discapacidad`): IIS la trata como directorio y el F5 da 403. Assets en `public/img/<seccion>/`.
 
 ## Convenciones del repo
 - Commits en español, describiendo el cambio (ej.: "SESAM Prescripción: ...").
