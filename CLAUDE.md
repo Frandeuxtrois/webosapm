@@ -80,6 +80,7 @@ Para agregar una entrada en **Información** o **Contacto**:
 
 ## Contactos que aparecen en el sitio
 - Mesa de Ayuda: 0800-666-7276. Central: 4633-7878 (es línea fija: no usar el formato +54 9).
+- Urgencias de Salud Mental (SESAM): 4019-7700, int. guardia 146, 24 hs los 365 días (banner en Teléfonos Útiles).
 - Discapacidad: int. 114, de lunes a viernes de 9 a 16 hs, prestacionesespeciales@apm.org.ar.
 - Facturación de prestadores: comprobantes@apm.org.ar. Datos para facturar: OSAPM, CUIT 30-62311465-9, Av. Avellaneda 2144, CABA.
 

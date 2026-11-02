@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, MapPin, Globe, Download } from 'lucide-react';
+import { Phone, MapPin, Download } from 'lucide-react';
 
 const SSS_DOCS = [
   { nombre: 'SSS 2026', tipo: 'PDF', url: '/cartilla-docs/SSS 2026.pdf' },
@@ -129,10 +129,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSectionClick }) =>
               <li className="flex items-center gap-3">
                 <Phone className="text-celeste shrink-0" size={18} />
                 <span>(54-11) 4633-7878 / 9336</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Globe className="text-celeste shrink-0" size={18} />
-                <span>www.osapm.org</span>
               </li>
             </ul>
           </div>
