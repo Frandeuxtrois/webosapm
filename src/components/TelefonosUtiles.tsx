@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Phone, Search, AlertCircle, MapPin, Activity, Headphones, ChevronRight, Brain } from 'lucide-react';
+import { Phone, Search, AlertCircle, MapPin, Activity, Headphones, ChevronRight, Brain, Ambulance } from 'lucide-react';
 
 const TELEFONOS_DATA = [
     { region: "TODO EL PAIS", servicio: "CALL CENTER NACIONAL DE EMERGENCIAS Y MESA DE AYUDA", numeros: ["0810-220-7673 (Urgencias)", "0800-666-7276 (Mesa de Ayuda)"], destacado: true },
-    { region: "AMBA", servicio: "AYUDA MEDICA", numeros: ["4860-7100"] },
+    { region: "AMBA", servicio: "AYUDA MEDICA", numeros: ["4860-7100"], destacado: true },
     { region: "AZUL", servicio: "EMERGENCIAS MEDICAS AZUL", numeros: ["02281-433078"] },
     { region: "BAHIA BLANCA", servicio: "EMERGENCIAS ALERTA", numeros: ["0291-4560000", "0291-4562076"] },
     { region: "CATAMARCA", servicio: "EMERGENCIAS ECA CATAMARCA", numeros: ["0383-4430845", "0383-4425000"] },
@@ -36,7 +36,41 @@ const TELEFONOS_DATA = [
     { region: "ZARATE / CHIVILCOY", servicio: "EMERGENCIAS CHIVILCOY", numeros: ["03487-430911", "422898", "421644"] },
 ];
 
-const SALUD_MENTAL_KEYWORDS = ["salud mental", "sesam", "urgencias", "guardia", "psiquiatr"];
+const DESTACADOS = [
+    {
+        id: 'call-center',
+        titulo: 'Call Center Nacional',
+        bajada: 'Mesa de ayuda y derivaciones para todo el territorio argentino. Atención inmediata.',
+        numero: '0800-666-7276',
+        detalle: 'Mesa de Ayuda',
+        tel: '08006667276',
+        icon: Headphones,
+        fondo: 'bg-gradient-to-br from-[#1C75BB] to-[#00AEEF]',
+        keywords: ['todo el pais', 'call center', 'mesa de ayuda', 'nacional'],
+    },
+    {
+        id: 'salud-mental',
+        titulo: 'Urgencias de Salud Mental',
+        bajada: 'SESAM · Guardia disponible las 24 hs, los 365 días del año.',
+        numero: '4019-7700',
+        detalle: 'Int. Guardia 146',
+        tel: '+541140197700',
+        icon: Brain,
+        fondo: 'bg-[#1C75BB]',
+        keywords: ['salud mental', 'sesam', 'urgencias', 'guardia', 'psiquiatr'],
+    },
+    {
+        id: 'ayuda-medica',
+        titulo: 'Ayuda Médica',
+        bajada: 'Emergencias y urgencias médicas domiciliarias en AMBA, las 24 hs.',
+        numero: '4860-7100',
+        detalle: 'AMBA',
+        tel: '+541148607100',
+        icon: Ambulance,
+        fondo: 'bg-gradient-to-br from-[#00AEEF] to-[#1C75BB]',
+        keywords: ['amba', 'ayuda medica', 'ayuda médica', 'emergencias', 'urgencias'],
+    },
+];
 
 export const TelefonosUtiles: React.FC = () => {
     const [search, setSearch] = useState("");
@@ -48,7 +82,7 @@ export const TelefonosUtiles: React.FC = () => {
     );
 
     const q = search.toLowerCase();
-    const showSaludMental = q === "" || SALUD_MENTAL_KEYWORDS.some(k => k.includes(q) || q.includes(k));
+    const destacadosVisibles = DESTACADOS.filter(d => q === "" || d.keywords.some(k => k.includes(q) || q.includes(k)));
     const nonDestacados = filteredData.filter(i => !i.destacado);
     const visibleData = search || expanded ? nonDestacados : nonDestacados.slice(0, 6);
 
@@ -82,46 +116,26 @@ export const TelefonosUtiles: React.FC = () => {
                 </div>
 
 
-                {(search === "" || "todo el pais".includes(search.toLowerCase())) && (
-                    <div className="mb-12 bg-gradient-to-r from-[#1C75BB] to-[#00AEEF] rounded-[2.5rem] p-8 md:p-12 text-white shadow-2xl relative overflow-hidden group">
-                        <Activity className="absolute -right-10 -bottom-10 w-64 h-64 opacity-10 group-hover:scale-110 transition-transform duration-1000" />
-                        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-3">
-                                    <Headphones size={32} className="text-white" />
-                                    <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tighter leading-none">Call Center Nacional</h3>
+                {destacadosVisibles.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                        {destacadosVisibles.map(({ id, titulo, bajada, numero, detalle, tel, icon: Icon, fondo }) => (
+                            <div key={id} className={`${fondo} xl:aspect-square rounded-[2.5rem] p-8 text-white shadow-2xl relative overflow-hidden group flex flex-col justify-between gap-8`}>
+                                <Icon className="absolute -right-10 -bottom-10 w-56 h-56 opacity-10 group-hover:scale-110 transition-transform duration-1000" />
+                                <div className="relative z-10 space-y-4">
+                                    <div className="w-14 h-14 bg-white/15 rounded-2xl flex items-center justify-center">
+                                        <Icon size={28} className="text-white" />
+                                    </div>
+                                    <h3 className="text-2xl font-black uppercase tracking-tighter leading-none">{titulo}</h3>
+                                    <p className="font-bold opacity-80 text-sm">{bajada}</p>
                                 </div>
-                                <p className="font-bold opacity-80 max-w-xl text-sm md:text-base">Mesa de ayuda y derivaciones para todo el territorio argentino. Atención inmediata.</p>
-                            </div>
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <a href="tel:08006667276" className="bg-white text-[#1C75BB] px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all text-center">
-                                    0800-666-7276 — Mesa de Ayuda
+                                <a href={`tel:${tel}`} className="relative z-10 bg-white text-[#1C75BB] px-6 py-4 rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all text-center">
+                                    <span className="block font-black text-xl tracking-tight">{numero}</span>
+                                    <span className="block font-black text-[10px] uppercase tracking-widest opacity-70">{detalle}</span>
                                 </a>
                             </div>
-                        </div>
+                        ))}
                     </div>
                 )}
-
-                {showSaludMental && (
-                    <div className="mb-12 bg-[#1C75BB] rounded-[2.5rem] p-8 md:p-12 text-white shadow-2xl relative overflow-hidden group">
-                        <Brain className="absolute -right-10 -bottom-10 w-64 h-64 opacity-10 group-hover:scale-110 transition-transform duration-1000" />
-                        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-3">
-                                    <Brain size={32} className="text-[#00AEEF]" />
-                                    <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tighter leading-none">Urgencias de Salud Mental</h3>
-                                </div>
-                                <p className="font-bold opacity-80 max-w-xl text-sm md:text-base">SESAM · Guardia disponible las 24 hs, los 365 días del año.</p>
-                            </div>
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <a href="tel:+541140197700" className="bg-white text-[#1C75BB] px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all text-center">
-                                    4019-7700 — Int. Guardia 146
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {visibleData.map((item, idx) => (
@@ -163,7 +177,7 @@ export const TelefonosUtiles: React.FC = () => {
                 </div>
 
 
-                {filteredData.length === 0 && !showSaludMental && (
+                {filteredData.length === 0 && destacadosVisibles.length === 0 && (
                     <div className="py-20 text-center">
                         <p className="text-xl font-bold opacity-20 uppercase tracking-widest">No se encontraron resultados para "{search}"</p>
                     </div>
